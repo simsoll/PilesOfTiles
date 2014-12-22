@@ -21,8 +21,11 @@ namespace PilesOfTiles.Brick
         {
             switch (action)
             {
-                case Action.Rotate:
-                    Rotate();
+                case Action.RotateClockWise:
+                    RotateClockWise();
+                    break;
+                case Action.RotateCounterClockWise:
+                    RotateCounterClockWise();
                     break;
                 case Action.MoveLeft:
                     Move(new Vector2(-1, 0));
@@ -49,25 +52,44 @@ namespace PilesOfTiles.Brick
             Position += position;
         }
 
-        public void Rotate()
+        public void RotateClockWise()
         {
-            if (PointsAt == Direction.Up)
+            switch (PointsAt)
             {
-                PointsAt = Direction.Right;
-            }
-            if (PointsAt == Direction.Right)
-            {
-                PointsAt = Direction.Down;
-            }
-            if (PointsAt == Direction.Down)
-            {
-                PointsAt = Direction.Left;
-            }
-            if (PointsAt == Direction.Left)
-            {
-                PointsAt = Direction.Up;
+                case Direction.Up:
+                    PointsAt = Direction.Right;
+                    break;
+                case Direction.Right:
+                    PointsAt = Direction.Down;
+                    break;
+                case Direction.Down:
+                    PointsAt = Direction.Left;
+                    break;
+                case Direction.Left:
+                    PointsAt = Direction.Up;
+                    break;
             }
         }
+
+        public void RotateCounterClockWise()
+        {
+            switch (PointsAt)
+            {
+                case Direction.Up:
+                    PointsAt = Direction.Left;
+                    break;
+                case Direction.Right:
+                    PointsAt = Direction.Up;
+                    break;
+                case Direction.Down:
+                    PointsAt = Direction.Right;
+                    break;
+                case Direction.Left:
+                    PointsAt = Direction.Down;
+                    break;
+            }
+        }
+
     }
 
     public enum Direction
