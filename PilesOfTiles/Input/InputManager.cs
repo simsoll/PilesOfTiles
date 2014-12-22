@@ -6,7 +6,7 @@ using Action = PilesOfTiles.Input.Messages.Action;
 
 namespace PilesOfTiles.Input
 {
-    public class InputManager : IHandle<KeyPressed>
+    public class InputManager : IHandle<KeyPressed>, IHandle<KeyHeld>
     {
         private IEventAggregator _eventAggregator;
 
@@ -31,7 +31,25 @@ namespace PilesOfTiles.Input
                     _eventAggregator.PublishOnUIThread(new ActionRequested {Action = Action.MoveDown});
                     break;
                 case Keys.Space:
-                    _eventAggregator.PublishOnUIThread(new ActionRequested {Action = Action.Rotate});
+                    _eventAggregator.PublishOnUIThread(new ActionRequested {Action = Action.RotateClockWise});
+                    break;
+            }
+        }
+
+
+        public void Handle(KeyHeld message)
+        {
+            //TODO: get mapping from configuration
+            switch (message.Key)
+            {
+                case Keys.Left:
+                    _eventAggregator.PublishOnUIThread(new ActionRequested { Action = Action.MoveLeft });
+                    break;
+                case Keys.Right:
+                    _eventAggregator.PublishOnUIThread(new ActionRequested { Action = Action.MoveRight });
+                    break;
+                case Keys.Down:
+                    _eventAggregator.PublishOnUIThread(new ActionRequested { Action = Action.MoveDown });
                     break;
             }
         }
