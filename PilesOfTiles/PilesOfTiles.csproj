@@ -39,6 +39,10 @@
   <ItemGroup>
     <Compile Include="Brick\BrickManager.cs" />
     <Compile Include="Brick\BrickMap.cs" />
+    <Compile Include="Brick\Messages\BrickCreated.cs" />
+    <Compile Include="Brick\Messages\BrickMoved.cs" />
+    <Compile Include="Collision\CollisionManager.cs" />
+    <Compile Include="Collision\Messages\BrickCollided.cs" />
     <Compile Include="Core\Profiler\ProfileManager.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Input\InputManager.cs" />
@@ -50,6 +54,7 @@
     <Compile Include="Level\Level.cs" />
     <Compile Include="Level\LevelManager.cs" />
     <Compile Include="Brick\Brick.cs" />
+    <Compile Include="Level\Messages\LevelCreated.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
