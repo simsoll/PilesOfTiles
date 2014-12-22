@@ -36,14 +36,14 @@ namespace PilesOfTiles.Level
             //add bottom
             for (var x = 0; x < Width; x++)
             {
-                yield return Tile.Create(new Vector2(x, Height - 1), WallColor);
+                yield return Tile.Create(new Vector2(x, Height - 1) + Position, WallColor);
             }
 
             //add sides
             for (var y = 0; y < Height; y++)
             {
-                yield return Tile.Create(new Vector2(0, y), WallColor);
-                yield return Tile.Create(new Vector2(Width - 1, y), WallColor);
+                yield return Tile.Create(new Vector2(0, y) + Position, WallColor);
+                yield return Tile.Create(new Vector2(Width - 1, y) + Position, WallColor);
             }
         }
 
@@ -51,7 +51,7 @@ namespace PilesOfTiles.Level
         {
             foreach (var tile in Tiles)
             {
-                tile.Add(Position).Draw(spriteBatch, texture, TileSize);
+                tile.Draw(spriteBatch, texture, TileSize);
             }
         }
     }
