@@ -4,13 +4,16 @@ using System.Linq;
 using Caliburn.Micro;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using PilesOfTiles.Brick.Messages;
+using PilesOfTiles.Collision.Messages;
 using PilesOfTiles.Input.Messages;
 using Vector2 = Microsoft.Xna.Framework.Vector2;
 
 namespace PilesOfTiles.Brick
 {
-    public class BrickManager : IHandle<ActionRequested>
+    public class BrickManager : IHandle<ActionRequested>, IHandle<BrickCollided>
     {
+        private Vector2 _spawnPosition;
         private readonly Random _random;
         private IEventAggregator _eventAggregator;
 
@@ -22,9 +25,10 @@ namespace PilesOfTiles.Brick
             _eventAggregator = eventAggregator;
             _eventAggregator.Subscribe(this);
 
+            _spawnPosition = new Vector2(15, 5);
             _random = new Random(); 
             InitializeBrickMaps();
-            SpawnRandomBrickAt(new Vector2(5, 5));
+            SpawnRandomBrickAt(_spawnPosition);
         }
 
         public void Handle(ActionRequested message)
@@ -106,6 +110,11 @@ namespace PilesOfTiles.Brick
 
                 })
             };
+        }
+
+        public void Handle(BrickCollided message)
+        {
+            SpawnRandomBrickAt(_spawnPosition);
         }
     }
 }
