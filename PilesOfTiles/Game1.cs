@@ -11,6 +11,7 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Storage;
 using Microsoft.Xna.Framework.GamerServices;
 using PilesOfTiles.Brick;
+using PilesOfTiles.Collision;
 using PilesOfTiles.Core.Input;
 using PilesOfTiles.Core.Input.Keyboard;
 using PilesOfTiles.Core.Input.Keyboard.Messages;
@@ -36,6 +37,7 @@ namespace PilesOfTiles
         private InputManager _inputManager;
         private LevelManager _levelManager;
         private BrickManager _brickManager;
+        private CollisionManager _collisionManager;
         private IEventAggregator _eventAggregator;
         private int _tileSize;
 
@@ -80,6 +82,7 @@ namespace PilesOfTiles
             _profileManager = new ProfileManager(_eventAggregator);
             _keyboardManager = new KeyboardManager(_eventAggregator, TimeSpan.FromMilliseconds(500));
             _inputManager = new InputManager(_eventAggregator);
+            _collisionManager = new CollisionManager(_eventAggregator);
             _levelManager = new LevelManager(_eventAggregator, TimeSpan.FromMilliseconds(500));
             _brickManager = new BrickManager(_eventAggregator);
         }

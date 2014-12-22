@@ -30,6 +30,13 @@ namespace PilesOfTiles.Brick
         public void Handle(ActionRequested message)
         {
             Brick.Update(message.Action);
+            _eventAggregator.PublishOnUIThread(new BrickMoved
+            {
+                Action = message.Action,
+                PointsAt = Brick.PointsAt,
+                Position = Brick.Position,
+                Tiles = Brick.BrickMap.GetTilesWhenPointingAt(Brick.PointsAt)
+            });
         }
 
 
@@ -42,6 +49,12 @@ namespace PilesOfTiles.Brick
         {
             var brickMap = BrickMaps.ElementAt(_random.Next(BrickMaps.Count()));
             Brick = new Brick(position, Direction.Up, brickMap);
+            _eventAggregator.PublishOnUIThread(new BrickCreated
+            {
+                PointsAt = Brick.PointsAt,
+                Position = Brick.Position,
+                Tiles = Brick.BrickMap.GetTilesWhenPointingAt(Brick.PointsAt)
+            });
         }
 
         private void InitializeBrickMaps()
