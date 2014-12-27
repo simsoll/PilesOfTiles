@@ -89,8 +89,8 @@ namespace PilesOfTiles
             _brickManager = new BrickManager(_eventAggregator);
             _highScoreManager = new HighScoreManager(_eventAggregator);
 
-            _tileTexture = GetTexture2D(_tileSize);
-            _textTexture = GetTexture2D(_textSize);
+            _tileTexture = GetPlain2DTexture(_tileSize);
+            _textTexture = GetPlain2DTexture(_textSize);
         }
 
         /// <summary>
@@ -138,7 +138,7 @@ namespace PilesOfTiles
             base.Draw(gameTime);
         }
 
-        private Texture2D GetTexture2D(int textureSize)
+        private Texture2D GetPlain2DTexture(int textureSize)
         {
             var texture = new Texture2D(GraphicsDevice, textureSize, textureSize);
             var color = new Color[textureSize * textureSize];
