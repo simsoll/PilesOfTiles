@@ -30,7 +30,6 @@ namespace PilesOfTiles
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
-        private Texture2D _texture;
         private SpriteFont _font;
         private ProfileManager _profileManager;
         private KeyboardManager _keyboardManager;
@@ -40,6 +39,9 @@ namespace PilesOfTiles
         private CollisionManager _collisionManager;
         private IEventAggregator _eventAggregator;
         private int _tileSize;
+        private int _textSize;
+        private Texture2D _tileTexture;
+        private Texture2D _textTexture;
 
         public Game1()
             : base()
@@ -74,17 +76,21 @@ namespace PilesOfTiles
             _eventAggregator = new EventAggregator();
 
             _tileSize = 8;
+            _textSize = 4;
 
             // Create a new SpriteBatch, which can be used to draw textures.
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-            _texture = Content.Load<Texture2D>("particle");
             _font = Content.Load<SpriteFont>("Default");
             _profileManager = new ProfileManager(_eventAggregator);
             _keyboardManager = new KeyboardManager(_eventAggregator, TimeSpan.FromMilliseconds(500));
             _inputManager = new InputManager(_eventAggregator);
             _collisionManager = new CollisionManager(_eventAggregator);
-            _levelManager = new LevelManager(_eventAggregator, TimeSpan.FromMilliseconds(500));
+            _levelManager = new LevelManager(_eventAggregator, _tileSize, TimeSpan.FromMilliseconds(500));
             _brickManager = new BrickManager(_eventAggregator);
+            _highScoreManager = new HighScoreManager(_eventAggregator);
+
+            _tileTexture = GetTexture2D(_tileSize);
+            _textTexture = GetTexture2D(_textSize);
         }
 
         /// <summary>
@@ -124,13 +130,25 @@ namespace PilesOfTiles
             _spriteBatch.Begin();
 
             _profileManager.Draw(_spriteBatch, _font, Vector2.Zero);
-            _levelManager.Draw(_spriteBatch, _texture);
-            _brickManager.Draw(_spriteBatch, _texture, _tileSize);
+            _levelManager.Draw(_spriteBatch, _tileTexture);
+            _brickManager.Draw(_spriteBatch, _tileTexture, _tileSize);
 
             _spriteBatch.End();
 
             base.Draw(gameTime);
         }
 
+        private Texture2D GetTexture2D(int textureSize)
+        {
+            var texture = new Texture2D(GraphicsDevice, textureSize, textureSize);
+            var color = new Color[textureSize * textureSize];
+            for (var i = 0; i < color.Length; i++)
+            {
+                color[i] = Color.White;
+            }
+            texture.SetData(color);
+
+            return texture;
+        }
     }
 }

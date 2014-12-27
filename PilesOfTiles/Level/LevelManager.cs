@@ -16,13 +16,13 @@ namespace PilesOfTiles.Level
         private TimeSpan _moveDownThreshold;
         private TimeSpan _timeSinceDownMovement;
 
-        public LevelManager(IEventAggregator eventAggregator, TimeSpan moveDownThreshold)
+        public LevelManager(IEventAggregator eventAggregator, int tileSize, TimeSpan moveDownThreshold)
         {
             _eventAggregator = eventAggregator;
             _eventAggregator.Subscribe(this);
 
             _moveDownThreshold = moveDownThreshold;
-            InitializeLevel(new Vector2(5, 5), 30, 20, 8, Color.Gray);
+            InitializeLevel(new Vector2(5, 5), 30, 20, tileSize, Color.Gray);
             _timeSinceDownMovement = TimeSpan.Zero;
         }
 
