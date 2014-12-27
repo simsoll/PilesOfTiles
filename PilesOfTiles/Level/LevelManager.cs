@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Caliburn.Micro;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -21,7 +22,7 @@ namespace PilesOfTiles.Level
             _eventAggregator.Subscribe(this);
 
             _moveDownThreshold = moveDownThreshold;
-            InitializeLevel(new Vector2(5, 5), 50, 35, 8, Color.Gray);
+            InitializeLevel(new Vector2(5, 5), 30, 20, 8, Color.Gray);
             _timeSinceDownMovement = TimeSpan.Zero;
         }
 
@@ -55,7 +56,48 @@ namespace PilesOfTiles.Level
 
         public void Handle(BrickCollided message)
         {
-            Level.Tiles.AddRange(message.Tiles);
+            Level.AddTiles(message.Tiles);
+            CheckFullRows();
+        }
+
+        public void CheckFullRows()
+        {
+            var bottom = (int)Level.Tiles.Where(tile => tile.State == State.Removable).Select(tile => tile.Position.Y).Max();
+
+            for (var i = bottom; 0 <= i; i--)
+            {
+                var tiles = Level.Tiles.Where(tile => tile.Position.Y == i && tile.State == State.Removable).ToList();
+                var numberOfSolidTiles = Level.Tiles.Count(tile => tile.Position.Y == i && tile.State == State.Solid);
+
+                if (tiles.Count() == Level.Width - numberOfSolidTiles)
+                {
+                    foreach (var tile in tiles)
+                    {
+                        Level.RemoveTile(tile);
+                    }
+
+                    MovesTilesDownAboveRow(i);
+                    _eventAggregator.PublishOnUIThread(new RowCleared
+                    {
+                        Tiles = Level.Tiles
+                    });
+                    CheckFullRows();
+                    return;
+                }
+            }
+        }
+
+        private void MovesTilesDownAboveRow(int i)
+        {
+            var resultList = Level.Tiles.Where(tile => tile.State == State.Solid).ToList();
+
+            resultList.AddRange(Level.Tiles.Where(tile => tile.Position.Y > i && tile.State != State.Solid));
+
+            resultList.AddRange(
+                Level.Tiles.Where(tile => tile.Position.Y < i && tile.State != State.Solid)
+                    .Select(tile => Tile.Create(tile.Position + new Vector2(0, 1), tile.Color, State.Removable)));
+
+            Level.ResetTiles(resultList);
         }
     }
 }

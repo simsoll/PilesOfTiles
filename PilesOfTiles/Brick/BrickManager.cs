@@ -75,40 +75,40 @@ namespace PilesOfTiles.Brick
                         Direction.Up,
                         new List<Tile>
                         {
-                            Tile.Create(new Vector2(0, 1), Color.MediumPurple),
-                            Tile.Create(new Vector2(1, 0), Color.MediumPurple),
-                            Tile.Create(new Vector2(1, 1), Color.MediumPurple),
-                            Tile.Create(new Vector2(2, 1), Color.MediumPurple)
+                            Tile.Create(new Vector2(0, 1), Color.MediumPurple, State.Removable),
+                            Tile.Create(new Vector2(1, 0), Color.MediumPurple, State.Removable),
+                            Tile.Create(new Vector2(1, 1), Color.MediumPurple, State.Removable),
+                            Tile.Create(new Vector2(2, 1), Color.MediumPurple, State.Removable)
                         }
                     },
                     {
                         Direction.Right,
                         new List<Tile>
                         {
-                            Tile.Create(new Vector2(1, 0), Color.MediumPurple),
-                            Tile.Create(new Vector2(1, 1), Color.MediumPurple),
-                            Tile.Create(new Vector2(2, 1), Color.MediumPurple),
-                            Tile.Create(new Vector2(1, 2), Color.MediumPurple)
+                            Tile.Create(new Vector2(1, 0), Color.MediumPurple, State.Removable),
+                            Tile.Create(new Vector2(1, 1), Color.MediumPurple, State.Removable),
+                            Tile.Create(new Vector2(2, 1), Color.MediumPurple, State.Removable),
+                            Tile.Create(new Vector2(1, 2), Color.MediumPurple, State.Removable)
                         }
                     },
                     {
                         Direction.Down,
                         new List<Tile>
                         {
-                            Tile.Create(new Vector2(0, 1), Color.MediumPurple),
-                            Tile.Create(new Vector2(1, 1), Color.MediumPurple),
-                            Tile.Create(new Vector2(2, 1), Color.MediumPurple),
-                            Tile.Create(new Vector2(1, 2), Color.MediumPurple)
+                            Tile.Create(new Vector2(0, 1), Color.MediumPurple, State.Removable),
+                            Tile.Create(new Vector2(1, 1), Color.MediumPurple, State.Removable),
+                            Tile.Create(new Vector2(2, 1), Color.MediumPurple, State.Removable),
+                            Tile.Create(new Vector2(1, 2), Color.MediumPurple, State.Removable)
                         }
                     },
                     {
                         Direction.Left,
                         new List<Tile>
                         {
-                            Tile.Create(new Vector2(1, 0), Color.MediumPurple),
-                            Tile.Create(new Vector2(0, 1), Color.MediumPurple),
-                            Tile.Create(new Vector2(1, 1), Color.MediumPurple),
-                            Tile.Create(new Vector2(1, 2), Color.MediumPurple)
+                            Tile.Create(new Vector2(1, 0), Color.MediumPurple, State.Removable),
+                            Tile.Create(new Vector2(0, 1), Color.MediumPurple, State.Removable),
+                            Tile.Create(new Vector2(1, 1), Color.MediumPurple, State.Removable),
+                            Tile.Create(new Vector2(1, 2), Color.MediumPurple, State.Removable)
                         }
                     }
 
@@ -119,40 +119,40 @@ namespace PilesOfTiles.Brick
                         Direction.Up,
                         new List<Tile>
                         {
-                            Tile.Create(new Vector2(0, 0), Color.Yellow),
-                            Tile.Create(new Vector2(1, 0), Color.Yellow),
-                            Tile.Create(new Vector2(0, 1), Color.Yellow),
-                            Tile.Create(new Vector2(1, 1), Color.Yellow)
+                            Tile.Create(new Vector2(0, 0), Color.Yellow, State.Removable),
+                            Tile.Create(new Vector2(1, 0), Color.Yellow, State.Removable),
+                            Tile.Create(new Vector2(0, 1), Color.Yellow, State.Removable),
+                            Tile.Create(new Vector2(1, 1), Color.Yellow, State.Removable)
                         }
                     },
                     {
                         Direction.Right,
                         new List<Tile>
                         {
-                            Tile.Create(new Vector2(0, 0), Color.Yellow),
-                            Tile.Create(new Vector2(1, 0), Color.Yellow),
-                            Tile.Create(new Vector2(0, 1), Color.Yellow),
-                            Tile.Create(new Vector2(1, 1), Color.Yellow)
+                            Tile.Create(new Vector2(0, 0), Color.Yellow, State.Removable),
+                            Tile.Create(new Vector2(1, 0), Color.Yellow, State.Removable),
+                            Tile.Create(new Vector2(0, 1), Color.Yellow, State.Removable),
+                            Tile.Create(new Vector2(1, 1), Color.Yellow, State.Removable)
                         }
                     },
                     {
                         Direction.Down,
                         new List<Tile>
                         {
-                            Tile.Create(new Vector2(0, 0), Color.Yellow),
-                            Tile.Create(new Vector2(1, 0), Color.Yellow),
-                            Tile.Create(new Vector2(0, 1), Color.Yellow),
-                            Tile.Create(new Vector2(1, 1), Color.Yellow)
+                            Tile.Create(new Vector2(0, 0), Color.Yellow, State.Removable),
+                            Tile.Create(new Vector2(1, 0), Color.Yellow, State.Removable),
+                            Tile.Create(new Vector2(0, 1), Color.Yellow, State.Removable),
+                            Tile.Create(new Vector2(1, 1), Color.Yellow, State.Removable)
                         }
                     },
                     {
                         Direction.Left,
                         new List<Tile>
                         {
-                            Tile.Create(new Vector2(0, 0), Color.Yellow),
-                            Tile.Create(new Vector2(1, 0), Color.Yellow),
-                            Tile.Create(new Vector2(0, 1), Color.Yellow),
-                            Tile.Create(new Vector2(1, 1), Color.Yellow)
+                            Tile.Create(new Vector2(0, 0), Color.Yellow, State.Removable),
+                            Tile.Create(new Vector2(1, 0), Color.Yellow, State.Removable),
+                            Tile.Create(new Vector2(0, 1), Color.Yellow, State.Removable),
+                            Tile.Create(new Vector2(1, 1), Color.Yellow, State.Removable)
                         }
                     }
                 }),
@@ -162,40 +162,40 @@ namespace PilesOfTiles.Brick
                         Direction.Up,
                         new List<Tile>
                         {
-                            Tile.Create(new Vector2(-1, 0), Color.LightBlue),
-                            Tile.Create(new Vector2(0, 0), Color.LightBlue),
-                            Tile.Create(new Vector2(1, 0), Color.LightBlue),
-                            Tile.Create(new Vector2(2, 0), Color.LightBlue)
+                            Tile.Create(new Vector2(-1, 0), Color.LightBlue, State.Removable),
+                            Tile.Create(new Vector2(0, 0), Color.LightBlue, State.Removable),
+                            Tile.Create(new Vector2(1, 0), Color.LightBlue, State.Removable),
+                            Tile.Create(new Vector2(2, 0), Color.LightBlue, State.Removable)
                         }
                     },
                     {
                         Direction.Right,
                         new List<Tile>
                         {
-                            Tile.Create(new Vector2(0, -1), Color.LightBlue),
-                            Tile.Create(new Vector2(0, 0), Color.LightBlue),
-                            Tile.Create(new Vector2(0, 1), Color.LightBlue),
-                            Tile.Create(new Vector2(0, 2), Color.LightBlue)
+                            Tile.Create(new Vector2(0, -1), Color.LightBlue, State.Removable),
+                            Tile.Create(new Vector2(0, 0), Color.LightBlue, State.Removable),
+                            Tile.Create(new Vector2(0, 1), Color.LightBlue, State.Removable),
+                            Tile.Create(new Vector2(0, 2), Color.LightBlue, State.Removable)
                         }
                     },
                     {
                         Direction.Down,
                         new List<Tile>
                         {
-                            Tile.Create(new Vector2(-1, 0), Color.LightBlue),
-                            Tile.Create(new Vector2(0, 0), Color.LightBlue),
-                            Tile.Create(new Vector2(1, 0), Color.LightBlue),
-                            Tile.Create(new Vector2(2, 0), Color.LightBlue)
+                            Tile.Create(new Vector2(-1, 0), Color.LightBlue, State.Removable),
+                            Tile.Create(new Vector2(0, 0), Color.LightBlue, State.Removable),
+                            Tile.Create(new Vector2(1, 0), Color.LightBlue, State.Removable),
+                            Tile.Create(new Vector2(2, 0), Color.LightBlue, State.Removable)
                         }
                     },
                     {
                         Direction.Left,
                         new List<Tile>
                         {
-                            Tile.Create(new Vector2(0, -1), Color.LightBlue),
-                            Tile.Create(new Vector2(0, 0), Color.LightBlue),
-                            Tile.Create(new Vector2(0, 1), Color.LightBlue),
-                            Tile.Create(new Vector2(0, 2), Color.LightBlue)
+                            Tile.Create(new Vector2(0, -1), Color.LightBlue, State.Removable),
+                            Tile.Create(new Vector2(0, 0), Color.LightBlue, State.Removable),
+                            Tile.Create(new Vector2(0, 1), Color.LightBlue, State.Removable),
+                            Tile.Create(new Vector2(0, 2), Color.LightBlue, State.Removable)
                         }
                     }
                 }),
@@ -205,40 +205,40 @@ namespace PilesOfTiles.Brick
                         Direction.Up,
                         new List<Tile>
                         {
-                            Tile.Create(new Vector2(0, -1), Color.Orange),
-                            Tile.Create(new Vector2(0, 0), Color.Orange),
-                            Tile.Create(new Vector2(0, 1), Color.Orange),
-                            Tile.Create(new Vector2(1, 1), Color.Orange)
+                            Tile.Create(new Vector2(0, -1), Color.Orange, State.Removable),
+                            Tile.Create(new Vector2(0, 0), Color.Orange, State.Removable),
+                            Tile.Create(new Vector2(0, 1), Color.Orange, State.Removable),
+                            Tile.Create(new Vector2(1, 1), Color.Orange, State.Removable)
                         }
                     },
                     {
                         Direction.Right,
                         new List<Tile>
                         {
-                            Tile.Create(new Vector2(-1, 0), Color.Orange),
-                            Tile.Create(new Vector2(0, 0), Color.Orange),
-                            Tile.Create(new Vector2(1, 0), Color.Orange),
-                            Tile.Create(new Vector2(-1, 1), Color.Orange)
+                            Tile.Create(new Vector2(-1, 0), Color.Orange, State.Removable),
+                            Tile.Create(new Vector2(0, 0), Color.Orange, State.Removable),
+                            Tile.Create(new Vector2(1, 0), Color.Orange, State.Removable),
+                            Tile.Create(new Vector2(-1, 1), Color.Orange, State.Removable)
                         }
                     },
                     {
                         Direction.Down,
                         new List<Tile>
                         {
-                            Tile.Create(new Vector2(0, -1), Color.Orange),
-                            Tile.Create(new Vector2(0, 0), Color.Orange),
-                            Tile.Create(new Vector2(0, 1), Color.Orange),
-                            Tile.Create(new Vector2(-1, -1), Color.Orange)
+                            Tile.Create(new Vector2(0, -1), Color.Orange, State.Removable),
+                            Tile.Create(new Vector2(0, 0), Color.Orange, State.Removable),
+                            Tile.Create(new Vector2(0, 1), Color.Orange, State.Removable),
+                            Tile.Create(new Vector2(-1, -1), Color.Orange, State.Removable)
                         }
                     },
                     {
                         Direction.Left,
                         new List<Tile>
                         {
-                            Tile.Create(new Vector2(-1, 0), Color.Orange),
-                            Tile.Create(new Vector2(0, 0), Color.Orange),
-                            Tile.Create(new Vector2(1, 0), Color.Orange),
-                            Tile.Create(new Vector2(1, -1), Color.Orange)
+                            Tile.Create(new Vector2(-1, 0), Color.Orange, State.Removable),
+                            Tile.Create(new Vector2(0, 0), Color.Orange, State.Removable),
+                            Tile.Create(new Vector2(1, 0), Color.Orange, State.Removable),
+                            Tile.Create(new Vector2(1, -1), Color.Orange, State.Removable)
                         }
                     }
                 }),
@@ -248,40 +248,40 @@ namespace PilesOfTiles.Brick
                         Direction.Up,
                         new List<Tile>
                         {
-                            Tile.Create(new Vector2(1, -1), Color.Blue),
-                            Tile.Create(new Vector2(1, 0), Color.Blue),
-                            Tile.Create(new Vector2(1, 1), Color.Blue),
-                            Tile.Create(new Vector2(0, 1), Color.Blue)
+                            Tile.Create(new Vector2(1, -1), Color.Blue, State.Removable),
+                            Tile.Create(new Vector2(1, 0), Color.Blue, State.Removable),
+                            Tile.Create(new Vector2(1, 1), Color.Blue, State.Removable),
+                            Tile.Create(new Vector2(0, 1), Color.Blue, State.Removable)
                         }
                     },
                     {
                         Direction.Right,
                         new List<Tile>
                         {
-                            Tile.Create(new Vector2(0, 1), Color.Blue),
-                            Tile.Create(new Vector2(1, 1), Color.Blue),
-                            Tile.Create(new Vector2(2, 1), Color.Blue),
-                            Tile.Create(new Vector2(0, 0), Color.Blue)
+                            Tile.Create(new Vector2(0, 1), Color.Blue, State.Removable),
+                            Tile.Create(new Vector2(1, 1), Color.Blue, State.Removable),
+                            Tile.Create(new Vector2(2, 1), Color.Blue, State.Removable),
+                            Tile.Create(new Vector2(0, 0), Color.Blue, State.Removable)
                         }
                     },
                     {
                         Direction.Down,
                         new List<Tile>
                         {
-                            Tile.Create(new Vector2(1, -1), Color.Blue),
-                            Tile.Create(new Vector2(1, 0), Color.Blue),
-                            Tile.Create(new Vector2(1, 1), Color.Blue),
-                            Tile.Create(new Vector2(2, -1), Color.Blue)
+                            Tile.Create(new Vector2(1, -1), Color.Blue, State.Removable),
+                            Tile.Create(new Vector2(1, 0), Color.Blue, State.Removable),
+                            Tile.Create(new Vector2(1, 1), Color.Blue, State.Removable),
+                            Tile.Create(new Vector2(2, -1), Color.Blue, State.Removable)
                         }
                     },
                     {
                         Direction.Left,
                         new List<Tile>
                         {
-                            Tile.Create(new Vector2(0, 1), Color.Blue),
-                            Tile.Create(new Vector2(1, 1), Color.Blue),
-                            Tile.Create(new Vector2(2, 1), Color.Blue),
-                            Tile.Create(new Vector2(2, 2), Color.Blue)
+                            Tile.Create(new Vector2(0, 1), Color.Blue, State.Removable),
+                            Tile.Create(new Vector2(1, 1), Color.Blue, State.Removable),
+                            Tile.Create(new Vector2(2, 1), Color.Blue, State.Removable),
+                            Tile.Create(new Vector2(2, 2), Color.Blue, State.Removable)
                         }
                     }
                 }),
@@ -291,40 +291,40 @@ namespace PilesOfTiles.Brick
                         Direction.Up,
                         new List<Tile>
                         {
-                            Tile.Create(new Vector2(2, 0), Color.Green),
-                            Tile.Create(new Vector2(1, 0), Color.Green),
-                            Tile.Create(new Vector2(0, 1), Color.Green),
-                            Tile.Create(new Vector2(1, 1), Color.Green)
+                            Tile.Create(new Vector2(2, 0), Color.Green, State.Removable),
+                            Tile.Create(new Vector2(1, 0), Color.Green, State.Removable),
+                            Tile.Create(new Vector2(0, 1), Color.Green, State.Removable),
+                            Tile.Create(new Vector2(1, 1), Color.Green, State.Removable)
                         }
                     },
                     {
                         Direction.Right,
                         new List<Tile>
                         {
-                            Tile.Create(new Vector2(0, 0), Color.Green),
-                            Tile.Create(new Vector2(1, 2), Color.Green),
-                            Tile.Create(new Vector2(0, 1), Color.Green),
-                            Tile.Create(new Vector2(1, 1), Color.Green)
+                            Tile.Create(new Vector2(0, 0), Color.Green, State.Removable),
+                            Tile.Create(new Vector2(1, 2), Color.Green, State.Removable),
+                            Tile.Create(new Vector2(0, 1), Color.Green, State.Removable),
+                            Tile.Create(new Vector2(1, 1), Color.Green, State.Removable)
                         }
                     },
                     {
                         Direction.Down,
                         new List<Tile>
                         {
-                            Tile.Create(new Vector2(0, 0), Color.Green),
-                            Tile.Create(new Vector2(1, 0), Color.Green),
-                            Tile.Create(new Vector2(0, 1), Color.Green),
-                            Tile.Create(new Vector2(-1, 1), Color.Green)
+                            Tile.Create(new Vector2(0, 0), Color.Green, State.Removable),
+                            Tile.Create(new Vector2(1, 0), Color.Green, State.Removable),
+                            Tile.Create(new Vector2(0, 1), Color.Green, State.Removable),
+                            Tile.Create(new Vector2(-1, 1), Color.Green, State.Removable)
                         }
                     },
                     {
                         Direction.Left,
                         new List<Tile>
                         {
-                            Tile.Create(new Vector2(0, 0), Color.Green),
-                            Tile.Create(new Vector2(1, 0), Color.Green),
-                            Tile.Create(new Vector2(0, -1), Color.Green),
-                            Tile.Create(new Vector2(1, 1), Color.Green)
+                            Tile.Create(new Vector2(0, 0), Color.Green, State.Removable),
+                            Tile.Create(new Vector2(1, 0), Color.Green, State.Removable),
+                            Tile.Create(new Vector2(0, -1), Color.Green, State.Removable),
+                            Tile.Create(new Vector2(1, 1), Color.Green, State.Removable)
                         }
                     }
                 }),
@@ -334,40 +334,40 @@ new BrickMap(new Dictionary<Direction, IEnumerable<Tile>>
                         Direction.Up,
                         new List<Tile>
                         {
-                            Tile.Create(new Vector2(0, 0), Color.Red),
-                            Tile.Create(new Vector2(-1, 0), Color.Red),
-                            Tile.Create(new Vector2(0, 1), Color.Red),
-                            Tile.Create(new Vector2(1, 1), Color.Red)
+                            Tile.Create(new Vector2(0, 0), Color.Red, State.Removable),
+                            Tile.Create(new Vector2(-1, 0), Color.Red, State.Removable),
+                            Tile.Create(new Vector2(0, 1), Color.Red, State.Removable),
+                            Tile.Create(new Vector2(1, 1), Color.Red, State.Removable)
                         }
                     },
                     {
                         Direction.Right,
                         new List<Tile>
                         {
-                            Tile.Create(new Vector2(0, 0), Color.Red),
-                            Tile.Create(new Vector2(1, 0), Color.Red),
-                            Tile.Create(new Vector2(0, 1), Color.Red),
-                            Tile.Create(new Vector2(1, -1), Color.Red)
+                            Tile.Create(new Vector2(0, 0), Color.Red, State.Removable),
+                            Tile.Create(new Vector2(1, 0), Color.Red, State.Removable),
+                            Tile.Create(new Vector2(0, 1), Color.Red, State.Removable),
+                            Tile.Create(new Vector2(1, -1), Color.Red, State.Removable)
                         }
                     },
                     {
                         Direction.Down,
                         new List<Tile>
                         {
-                            Tile.Create(new Vector2(0, 0), Color.Red),
-                            Tile.Create(new Vector2(1, 0), Color.Red),
-                            Tile.Create(new Vector2(2, 1), Color.Red),
-                            Tile.Create(new Vector2(1, 1), Color.Red)
+                            Tile.Create(new Vector2(0, 0), Color.Red, State.Removable),
+                            Tile.Create(new Vector2(1, 0), Color.Red, State.Removable),
+                            Tile.Create(new Vector2(2, 1), Color.Red, State.Removable),
+                            Tile.Create(new Vector2(1, 1), Color.Red, State.Removable)
                         }
                     },
                     {
                         Direction.Left,
                         new List<Tile>
                         {
-                            Tile.Create(new Vector2(0, 2), Color.Red),
-                            Tile.Create(new Vector2(1, 0), Color.Red),
-                            Tile.Create(new Vector2(0, 1), Color.Red),
-                            Tile.Create(new Vector2(1, 1), Color.Red)
+                            Tile.Create(new Vector2(0, 2), Color.Red, State.Removable),
+                            Tile.Create(new Vector2(1, 0), Color.Red, State.Removable),
+                            Tile.Create(new Vector2(0, 1), Color.Red, State.Removable),
+                            Tile.Create(new Vector2(1, 1), Color.Red, State.Removable)
                         }
                     }
                 })

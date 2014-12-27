@@ -55,6 +55,7 @@
     <Compile Include="Level\LevelManager.cs" />
     <Compile Include="Brick\Brick.cs" />
     <Compile Include="Level\Messages\LevelCreated.cs" />
+    <Compile Include="Level\Messages\RowCleared.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

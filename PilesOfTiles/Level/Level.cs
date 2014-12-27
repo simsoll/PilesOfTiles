@@ -26,9 +26,20 @@ namespace PilesOfTiles.Level
         public Color WallColor { get; private set; }
         public List<Tile> Tiles { get; private set; }
 
+
         public void AddTiles(IEnumerable<Tile> tiles)
         {
             Tiles.AddRange(tiles);
+        }
+
+        public void RemoveTile(Tile tile)
+        {
+            Tiles.Remove(tile);
+        }
+
+        public void ResetTiles(IEnumerable<Tile> tiles)
+        {
+            Tiles = tiles.ToList();
         }
 
         private IEnumerable<Tile> AddWalls()
@@ -36,14 +47,14 @@ namespace PilesOfTiles.Level
             //add bottom
             for (var x = 0; x < Width; x++)
             {
-                yield return Tile.Create(new Vector2(x, Height - 1) + Position, WallColor);
+                yield return Tile.Create(new Vector2(x, Height - 1) + Position, WallColor, State.Solid);
             }
 
             //add sides
             for (var y = 0; y < Height; y++)
             {
-                yield return Tile.Create(new Vector2(0, y) + Position, WallColor);
-                yield return Tile.Create(new Vector2(Width - 1, y) + Position, WallColor);
+                yield return Tile.Create(new Vector2(0, y) + Position, WallColor, State.Solid);
+                yield return Tile.Create(new Vector2(Width - 1, y) + Position, WallColor, State.Solid);
             }
         }
 
