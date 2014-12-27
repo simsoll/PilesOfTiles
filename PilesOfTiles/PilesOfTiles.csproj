@@ -45,6 +45,7 @@
     <Compile Include="Collision\Messages\BrickCollided.cs" />
     <Compile Include="Core\Profiler\ProfileManager.cs" />
     <Compile Include="Game1.cs" />
+    <Compile Include="HighScore\PixelAlfabet.cs" />
     <Compile Include="Input\InputManager.cs" />
     <Compile Include="Core\Input\Keyboard\KeyboardManager.cs" />
     <Compile Include="Core\Input\Keyboard\Messages\KeyHeld.cs" />
