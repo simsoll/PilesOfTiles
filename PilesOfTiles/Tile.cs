@@ -24,11 +24,7 @@ namespace PilesOfTiles
 
         public void Draw(SpriteBatch spriteBatch, Texture2D texture, int tileSize)
         {
-            spriteBatch.Draw(
-                    texture,
-                    new Rectangle((int) Position.X * tileSize, (int) Position.Y * tileSize, tileSize, tileSize),
-                    new Rectangle(0, 0, tileSize, tileSize),
-                    Color);
+            spriteBatch.Draw(texture, Position*tileSize, Color);
         }
 
         public static Tile Create(Vector2 position, Color color, State state)
