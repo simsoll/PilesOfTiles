@@ -45,13 +45,13 @@ namespace PilesOfTiles.Level
         private IEnumerable<Tile> AddWalls()
         {
             //add bottom
-            for (var x = 0; x < Width; x++)
+            for (var x = 0; x < Width - 1; x++)
             {
-                yield return Tile.Create(new Vector2(x, Height - 1) + Position, WallColor, State.Solid);
+                yield return Tile.Create(new Vector2(x, Height) + Position, WallColor, State.Solid);
             }
 
             //add sides
-            for (var y = 0; y < Height; y++)
+            for (var y = 0; y <= Height; y++)
             {
                 yield return Tile.Create(new Vector2(0, y) + Position, WallColor, State.Solid);
                 yield return Tile.Create(new Vector2(Width - 1, y) + Position, WallColor, State.Solid);

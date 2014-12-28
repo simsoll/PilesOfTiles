@@ -36,13 +36,13 @@ namespace PilesOfTiles.Collision
 
         public void Handle(BrickCreated message)
         {
-            _brickTiles = message.Tiles.Select(x => new Tile(x.Position + message.Position, x.Color, State.Removable));
+            _brickTiles = message.Tiles.Select(x => Tile.Create(x.Position + message.Position, x.Color, State.Removable));
             CheckForGameOver();
         }
 
         public void Handle(BrickMoved message)
         {
-            _brickTiles = message.Tiles.Select(x => new Tile(x.Position + message.Position, x.Color, State.Removable));
+            _brickTiles = message.Tiles.Select(x => Tile.Create(x.Position + message.Position, x.Color, State.Removable));
             CheckBrickCollision(message.Action);
         }
 

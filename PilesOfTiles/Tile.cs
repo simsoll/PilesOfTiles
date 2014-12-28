@@ -19,7 +19,10 @@ namespace PilesOfTiles
 
         public Tile Add(Vector2 position)
         {
-            return new Tile(Position + position, Color, State);
+            var x = (int)position.X;
+            var y = (int)position.Y;
+            var correctedPosition = new Vector2(x, y);
+            return new Tile(Position + correctedPosition, Color, State);
         }
 
         public void Draw(SpriteBatch spriteBatch, Texture2D texture, int tileSize)
@@ -29,7 +32,10 @@ namespace PilesOfTiles
 
         public static Tile Create(Vector2 position, Color color, State state)
         {
-            return new Tile(position, color, state);
+            var x = (int) position.X;
+            var y = (int) position.Y;
+            var correctedPosition = new Vector2(x, y);
+            return new Tile(correctedPosition, color, state);
         }
     }
 
