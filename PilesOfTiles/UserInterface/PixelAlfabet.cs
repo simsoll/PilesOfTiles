@@ -5,20 +5,29 @@ namespace PilesOfTiles.HighScore
 {
     public class PixelAlfabet
     {
-        public IDictionary<string, IEnumerable<Vector2>> VectorMap { get; private set; }
+        private readonly IDictionary<string, IEnumerable<Vector2>> _vectorMapDictionary;
 
         public int Width { get { return 7; } }
         public int Height { get { return 9; } }
 
         public PixelAlfabet()
         {
-            VectorMap = InitializePixelMap();
+            _vectorMapDictionary = InitializePixelMap();
+        }
+
+        public IEnumerable<Vector2> GetVectorMap(string key)
+        {
+            return _vectorMapDictionary[key.ToUpper()];
         }
 
         private IDictionary<string, IEnumerable<Vector2>> InitializePixelMap()
         {
             return new Dictionary<string, IEnumerable<Vector2>>
             {
+                {
+                    " ",
+                    new List<Vector2>()
+                },
                 {
                     "A",
                     new List<Vector2>
