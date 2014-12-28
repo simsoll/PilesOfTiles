@@ -20,7 +20,7 @@ namespace PilesOfTiles
     /// <summary>
     /// This is the main type for your game
     /// </summary>
-    public class Game1 : Game
+    public class PilesOfTiles : Game
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
@@ -38,14 +38,18 @@ namespace PilesOfTiles
         private int _textSize;
         private Texture2D _tileTexture;
         private Texture2D _textTexture;
+        private int _screenWidth;
+        private int _screenHeight;
+        private int _levelWidth;
+        private int _levelHeight;
 
-        public Game1()
+        public PilesOfTiles()
             : base()
         {
             _graphics = new GraphicsDeviceManager(this)
             {
-                PreferredBackBufferHeight = 520,
-                PreferredBackBufferWidth = 520
+                PreferredBackBufferHeight = 568,
+                PreferredBackBufferWidth = 320
             };
             IsMouseVisible = true;
             Content.RootDirectory = "Content";
@@ -72,7 +76,19 @@ namespace PilesOfTiles
             _eventAggregator = new EventAggregator();
 
             _tileSize = 8;
-            _textSize = 2;
+            _textSize = 1;
+            _levelHeight = 30;
+            _levelWidth = 20;
+
+            _screenHeight = GraphicsDevice.Viewport.Height/_tileSize;
+            _screenWidth = GraphicsDevice.Viewport.Width/_tileSize;
+
+            var centeredLevelPosition = new Vector2(_screenWidth, _screenHeight) / 2 -
+                                        new Vector2(_levelWidth, _levelHeight) / 2;
+
+            var centeredBrickSpawnPosition = centeredLevelPosition + new Vector2(_levelWidth/2 - 1, 0);
+            var statisticsPosition = centeredLevelPosition + new Vector2(0, _levelHeight + 2);
+
 
             // Create a new SpriteBatch, which can be used to draw textures.
             _spriteBatch = new SpriteBatch(GraphicsDevice);
@@ -81,10 +97,10 @@ namespace PilesOfTiles
             _keyboardManager = new KeyboardManager(_eventAggregator, TimeSpan.FromMilliseconds(500));
             _inputManager = new InputManager(_eventAggregator);
             _collisionManager = new CollisionManager(_eventAggregator);
-            _levelManager = new LevelManager(_eventAggregator, _tileSize);
-            _brickManager = new BrickManager(_eventAggregator);
+            _levelManager = new LevelManager(_eventAggregator, centeredLevelPosition, _levelHeight, _levelWidth, _tileSize);
+            _brickManager = new BrickManager(_eventAggregator, centeredBrickSpawnPosition);
             _highScoreManager = new HighScoreManager(_eventAggregator);
-            _userInterfaceManager = new UserInterfaceManager(_eventAggregator, _textSize, Color.Black);
+            _userInterfaceManager = new UserInterfaceManager(_eventAggregator, statisticsPosition, _tileSize, _textSize, Color.Black);
 
             _tileTexture = GetPlain2DTexture(_tileSize);
             _textTexture = GetPlain2DTexture(_textSize);
@@ -127,10 +143,12 @@ namespace PilesOfTiles
 
             _spriteBatch.Begin();
 
+#if DEBUG
             _profileManager.Draw(_spriteBatch, _font, Vector2.Zero);
+#endif
             _levelManager.Draw(_spriteBatch, _tileTexture);
             _brickManager.Draw(_spriteBatch, _tileTexture, _tileSize);
-            _userInterfaceManager.Draw(_spriteBatch, _textTexture, new Vector2(100, 20));
+            _userInterfaceManager.Draw(_spriteBatch, _textTexture);
 
             _spriteBatch.End();
 

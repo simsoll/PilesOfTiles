@@ -45,7 +45,7 @@
     <Compile Include="Collision\Messages\BrickCollided.cs" />
     <Compile Include="Collision\Messages\GameOver.cs" />
     <Compile Include="Core\Profiler\ProfileManager.cs" />
-    <Compile Include="Game1.cs" />
+    <Compile Include="PilesOfTiles.cs" />
     <Compile Include="HighScore\HighScoreManager.cs" />
     <Compile Include="HighScore\Messages\ScoreUpdated.cs" />
     <Compile Include="Level\Messages\GameCompleted.cs" />
