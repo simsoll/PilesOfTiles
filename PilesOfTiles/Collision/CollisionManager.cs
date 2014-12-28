@@ -48,7 +48,12 @@ namespace PilesOfTiles.Collision
 
         private void CheckForGameOver()
         {
-            //TODO
+            if (_brickTiles.Any(
+                tile => _levelTiles.Any(x => x.Position.X == tile.Position.X && x.Position.Y == tile.Position.Y)))
+            {
+                _eventAggregator.PublishOnUIThread(new GameOver());
+            }
+                    
         }
 
         private void CheckBrickCollision(Action action)
