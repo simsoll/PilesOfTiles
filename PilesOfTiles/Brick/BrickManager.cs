@@ -18,7 +18,7 @@ namespace PilesOfTiles.Brick
         private IEventAggregator _eventAggregator;
 
         public Brick Brick { get; private set; }
-        public IEnumerable<BrickMap> BrickMaps { get; private set; } 
+        public IEnumerable<BrickMap> BrickMaps { get; private set; }
 
         public BrickManager(IEventAggregator eventAggregator)
         {
@@ -26,7 +26,7 @@ namespace PilesOfTiles.Brick
             _eventAggregator.Subscribe(this);
 
             _spawnPosition = new Vector2(15, 5);
-            _random = new Random(); 
+            _random = new Random();
             InitializeBrickMaps();
             SpawnRandomBrickAt(_spawnPosition);
         }
@@ -162,40 +162,40 @@ namespace PilesOfTiles.Brick
                         Direction.Up,
                         new List<Tile>
                         {
-                            Tile.Create(new Vector2(-1, 0), Color.LightBlue, State.Removable),
-                            Tile.Create(new Vector2(0, 0), Color.LightBlue, State.Removable),
-                            Tile.Create(new Vector2(1, 0), Color.LightBlue, State.Removable),
-                            Tile.Create(new Vector2(2, 0), Color.LightBlue, State.Removable)
+                            Tile.Create(new Vector2(-1, 0), Color.CornflowerBlue, State.Removable),
+                            Tile.Create(new Vector2(0, 0), Color.CornflowerBlue, State.Removable),
+                            Tile.Create(new Vector2(1, 0), Color.CornflowerBlue, State.Removable),
+                            Tile.Create(new Vector2(2, 0), Color.CornflowerBlue, State.Removable)
                         }
                     },
                     {
                         Direction.Right,
                         new List<Tile>
                         {
-                            Tile.Create(new Vector2(0, -1), Color.LightBlue, State.Removable),
-                            Tile.Create(new Vector2(0, 0), Color.LightBlue, State.Removable),
-                            Tile.Create(new Vector2(0, 1), Color.LightBlue, State.Removable),
-                            Tile.Create(new Vector2(0, 2), Color.LightBlue, State.Removable)
+                            Tile.Create(new Vector2(0, -1), Color.CornflowerBlue, State.Removable),
+                            Tile.Create(new Vector2(0, 0), Color.CornflowerBlue, State.Removable),
+                            Tile.Create(new Vector2(0, 1), Color.CornflowerBlue, State.Removable),
+                            Tile.Create(new Vector2(0, 2), Color.CornflowerBlue, State.Removable)
                         }
                     },
                     {
                         Direction.Down,
                         new List<Tile>
                         {
-                            Tile.Create(new Vector2(-1, 0), Color.LightBlue, State.Removable),
-                            Tile.Create(new Vector2(0, 0), Color.LightBlue, State.Removable),
-                            Tile.Create(new Vector2(1, 0), Color.LightBlue, State.Removable),
-                            Tile.Create(new Vector2(2, 0), Color.LightBlue, State.Removable)
+                            Tile.Create(new Vector2(-1, 0), Color.CornflowerBlue, State.Removable),
+                            Tile.Create(new Vector2(0, 0), Color.CornflowerBlue, State.Removable),
+                            Tile.Create(new Vector2(1, 0), Color.CornflowerBlue, State.Removable),
+                            Tile.Create(new Vector2(2, 0), Color.CornflowerBlue, State.Removable)
                         }
                     },
                     {
                         Direction.Left,
                         new List<Tile>
                         {
-                            Tile.Create(new Vector2(0, -1), Color.LightBlue, State.Removable),
-                            Tile.Create(new Vector2(0, 0), Color.LightBlue, State.Removable),
-                            Tile.Create(new Vector2(0, 1), Color.LightBlue, State.Removable),
-                            Tile.Create(new Vector2(0, 2), Color.LightBlue, State.Removable)
+                            Tile.Create(new Vector2(0, -1), Color.CornflowerBlue, State.Removable),
+                            Tile.Create(new Vector2(0, 0), Color.CornflowerBlue, State.Removable),
+                            Tile.Create(new Vector2(0, 1), Color.CornflowerBlue, State.Removable),
+                            Tile.Create(new Vector2(0, 2), Color.CornflowerBlue, State.Removable)
                         }
                     }
                 }),
@@ -328,7 +328,7 @@ namespace PilesOfTiles.Brick
                         }
                     }
                 }),
-new BrickMap(new Dictionary<Direction, IEnumerable<Tile>>
+                new BrickMap(new Dictionary<Direction, IEnumerable<Tile>>
                 {
                     {
                         Direction.Up,
