@@ -14,16 +14,24 @@ namespace PilesOfTiles.Level
     {
         private IEventAggregator _eventAggregator;
         private TimeSpan _moveDownThreshold;
+        private TimeSpan _moveDownThresholdDelta;
         private TimeSpan _timeSinceDownMovement;
+        private int _rowsClearedSinceDifficultyIncrease;
+        private int _difficultyIncreaseThreshold;
+        private int _difficultyLevel;
 
-        public LevelManager(IEventAggregator eventAggregator, int tileSize, TimeSpan moveDownThreshold)
+        public LevelManager(IEventAggregator eventAggregator, int tileSize)
         {
             _eventAggregator = eventAggregator;
             _eventAggregator.Subscribe(this);
 
-            _moveDownThreshold = moveDownThreshold;
             InitializeLevel(new Vector2(5, 5), 30, 20, tileSize, Color.Gray);
             _timeSinceDownMovement = TimeSpan.Zero;
+            _moveDownThreshold = TimeSpan.FromMilliseconds(500);
+            _moveDownThresholdDelta = TimeSpan.FromMilliseconds(50);
+            _rowsClearedSinceDifficultyIncrease = 0;
+            _difficultyIncreaseThreshold = 5;
+            _difficultyLevel = 1;
         }
 
         public Level Level { get; private set; }
@@ -57,10 +65,10 @@ namespace PilesOfTiles.Level
         public void Handle(BrickCollided message)
         {
             Level.AddTiles(message.Tiles);
-            CheckFullRows();
+            CheckForFullRows();
         }
 
-        public void CheckFullRows()
+        public void CheckForFullRows()
         {
             var bottom = (int)Level.Tiles.Where(tile => tile.State == State.Removable).Select(tile => tile.Position.Y).Max();
 
@@ -81,9 +89,30 @@ namespace PilesOfTiles.Level
                     {
                         Tiles = Level.Tiles
                     });
-                    CheckFullRows();
+                    _rowsClearedSinceDifficultyIncrease++;
+                    CheckForDifficultyIncrease();
+
+                    CheckForFullRows();
                     return;
                 }
+            }
+        }
+
+        private void CheckForDifficultyIncrease()
+        {
+            if (_rowsClearedSinceDifficultyIncrease < _difficultyIncreaseThreshold) return;
+
+            _difficultyLevel++;
+            _rowsClearedSinceDifficultyIncrease = 0;
+            _moveDownThreshold -= _moveDownThresholdDelta;
+            _eventAggregator.PublishOnUIThread(new DifficultyLevelChanged
+            {
+                Value = _difficultyLevel
+            });
+
+            if (_moveDownThreshold == TimeSpan.Zero)
+            {
+                _eventAggregator.PublishOnUIThread(new GameCompleted());
             }
         }
 
