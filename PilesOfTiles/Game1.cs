@@ -1,23 +1,17 @@
 ﻿#region Using Statements
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Security.Policy;
 using Caliburn.Micro;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Storage;
-using Microsoft.Xna.Framework.GamerServices;
 using PilesOfTiles.Brick;
 using PilesOfTiles.Collision;
-using PilesOfTiles.Core.Input;
 using PilesOfTiles.Core.Input.Keyboard;
-using PilesOfTiles.Core.Input.Keyboard.Messages;
 using PilesOfTiles.Core.Profiler;
+using PilesOfTiles.HighScore;
 using PilesOfTiles.Input;
 using PilesOfTiles.Level;
+using PilesOfTiles.UserInterface;
 
 #endregion
 
@@ -37,6 +31,8 @@ namespace PilesOfTiles
         private LevelManager _levelManager;
         private BrickManager _brickManager;
         private CollisionManager _collisionManager;
+        private HighScoreManager _highScoreManager;
+        private UserInterfaceManager _userInterfaceManager;
         private IEventAggregator _eventAggregator;
         private int _tileSize;
         private int _textSize;
@@ -76,7 +72,7 @@ namespace PilesOfTiles
             _eventAggregator = new EventAggregator();
 
             _tileSize = 8;
-            _textSize = 4;
+            _textSize = 2;
 
             // Create a new SpriteBatch, which can be used to draw textures.
             _spriteBatch = new SpriteBatch(GraphicsDevice);
@@ -85,9 +81,10 @@ namespace PilesOfTiles
             _keyboardManager = new KeyboardManager(_eventAggregator, TimeSpan.FromMilliseconds(500));
             _inputManager = new InputManager(_eventAggregator);
             _collisionManager = new CollisionManager(_eventAggregator);
-            _levelManager = new LevelManager(_eventAggregator, _tileSize, TimeSpan.FromMilliseconds(500));
+            _levelManager = new LevelManager(_eventAggregator, _tileSize);
             _brickManager = new BrickManager(_eventAggregator);
             _highScoreManager = new HighScoreManager(_eventAggregator);
+            _userInterfaceManager = new UserInterfaceManager(_eventAggregator, _textSize, Color.Black);
 
             _tileTexture = GetPlain2DTexture(_tileSize);
             _textTexture = GetPlain2DTexture(_textSize);
@@ -113,6 +110,7 @@ namespace PilesOfTiles
 
             _keyboardManager.Update(gameTime);
             _levelManager.Update(gameTime);
+            _highScoreManager.Update(gameTime);
 
             _profileManager.Update(gameTime);
 
@@ -132,6 +130,7 @@ namespace PilesOfTiles
             _profileManager.Draw(_spriteBatch, _font, Vector2.Zero);
             _levelManager.Draw(_spriteBatch, _tileTexture);
             _brickManager.Draw(_spriteBatch, _tileTexture, _tileSize);
+            _userInterfaceManager.Draw(_spriteBatch, _textTexture, new Vector2(100, 20));
 
             _spriteBatch.End();
 

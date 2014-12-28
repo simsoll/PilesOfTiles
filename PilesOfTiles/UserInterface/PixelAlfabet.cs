@@ -10,7 +10,7 @@ namespace PilesOfTiles.HighScore
         public int Width { get { return 7; } }
         public int Height { get { return 9; } }
 
-        public PixelAlfabet(IDictionary<string, IEnumerable<Vector2>> vectorMap)
+        public PixelAlfabet()
         {
             VectorMap = InitializePixelMap();
         }
@@ -638,7 +638,7 @@ namespace PilesOfTiles.HighScore
                         new Vector2(1,4),
                         new Vector2(1,5),
                         new Vector2(2,3),
-                        new Vector2(2,4),
+                        new Vector2(2,5),
                         new Vector2(3,2),
                         new Vector2(3,5),
                         new Vector2(4,1),
@@ -758,6 +758,28 @@ namespace PilesOfTiles.HighScore
                         new Vector2(5,4),
                         new Vector2(5,5),
                         new Vector2(5,6)
+                    }
+                },
+                {
+                    "0",
+                    new List<Vector2>
+                    {
+                        new Vector2(1,2),
+                        new Vector2(1,3),
+                        new Vector2(1,4),
+                        new Vector2(1,5),
+                        new Vector2(1,6),
+                        new Vector2(2,1),
+                        new Vector2(2,7),
+                        new Vector2(3,1),
+                        new Vector2(3,7),
+                        new Vector2(4,1),
+                        new Vector2(4,7),
+                        new Vector2(5,2),
+                        new Vector2(5,3),
+                        new Vector2(5,4),
+                        new Vector2(5,5),
+                        new Vector2(5,6)                        
                     }
                 },
             };
