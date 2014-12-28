@@ -20,12 +20,12 @@ namespace PilesOfTiles.Brick
         public Brick Brick { get; private set; }
         public IEnumerable<BrickMap> BrickMaps { get; private set; }
 
-        public BrickManager(IEventAggregator eventAggregator)
+        public BrickManager(IEventAggregator eventAggregator, Vector2 spawnPosition)
         {
             _eventAggregator = eventAggregator;
             _eventAggregator.Subscribe(this);
 
-            _spawnPosition = new Vector2(15, 5);
+            _spawnPosition = spawnPosition;
             _random = new Random();
             InitializeBrickMaps();
             SpawnRandomBrickAt(_spawnPosition);

@@ -20,12 +20,12 @@ namespace PilesOfTiles.Level
         private int _difficultyIncreaseThreshold;
         private int _difficultyLevel;
 
-        public LevelManager(IEventAggregator eventAggregator, int tileSize)
+        public LevelManager(IEventAggregator eventAggregator, Vector2 position, int width, int height, int tileSize)
         {
             _eventAggregator = eventAggregator;
             _eventAggregator.Subscribe(this);
 
-            InitializeLevel(new Vector2(5, 5), 30, 20, tileSize, Color.Gray);
+            InitializeLevel(position, width, height, tileSize, Color.Gray);
             _timeSinceDownMovement = TimeSpan.Zero;
             _moveDownThreshold = TimeSpan.FromMilliseconds(500);
             _moveDownThresholdDelta = TimeSpan.FromMilliseconds(50);
