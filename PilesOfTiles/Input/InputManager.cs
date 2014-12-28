@@ -30,7 +30,7 @@ namespace PilesOfTiles.Input
                 case Keys.Down:
                     _eventAggregator.PublishOnUIThread(new ActionRequested {Action = Action.MoveDown});
                     break;
-                case Keys.Space:
+                case Keys.Up:
                     _eventAggregator.PublishOnUIThread(new ActionRequested {Action = Action.RotateClockWise});
                     break;
             }
