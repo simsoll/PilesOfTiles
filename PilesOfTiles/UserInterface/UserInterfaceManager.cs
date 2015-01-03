@@ -16,19 +16,21 @@ namespace PilesOfTiles.UserInterface
         private IEventAggregator _eventAggregator;
         private readonly Vector2 _statisticsPosition;
         private readonly int _tileSize;
+        private Texture2D _textTexture;
         private readonly int _textSize;
         private readonly Color _highScoreTextColor;
         private PixelAlfabet _pixelAlfabet;
         private float _score;
         private int _difficultyLevel;
 
-        public UserInterfaceManager(IEventAggregator eventAggregator, Vector2 statisticsPosition, int tileSize, int textSize, Color highScoreTextColor)
+        public UserInterfaceManager(IEventAggregator eventAggregator, Vector2 statisticsPosition, int tileSize, Texture2D textTexture, int textSize, Color highScoreTextColor)
         {
             _eventAggregator = eventAggregator;
             _eventAggregator.Subscribe(this);
 
             _statisticsPosition = statisticsPosition;
             _tileSize = tileSize;
+            _textTexture = textTexture;
             _textSize = textSize;
             _highScoreTextColor = highScoreTextColor;
             _pixelAlfabet = new PixelAlfabet();
@@ -46,10 +48,10 @@ namespace PilesOfTiles.UserInterface
             _difficultyLevel = message.Value;
         }
 
-        public void Draw(SpriteBatch spriteBatch, Texture2D texture)
+        public void Draw(SpriteBatch spriteBatch)
         {
-            DrawStatistic(spriteBatch, texture, "highscore", (int) _score, Vector2.Zero);
-            DrawStatistic(spriteBatch, texture, "difficulty", _difficultyLevel, new Vector2(0, _pixelAlfabet.Height));
+            DrawStatistic(spriteBatch, _textTexture, "highscore", (int) _score, Vector2.Zero);
+            DrawStatistic(spriteBatch, _textTexture, "difficulty", _difficultyLevel, new Vector2(0, _pixelAlfabet.Height));
         }
 
         public void DrawStatistic(SpriteBatch spriteBatch, Texture2D texture, string name, int value, Vector2 offset)

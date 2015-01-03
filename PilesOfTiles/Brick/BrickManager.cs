@@ -16,16 +16,20 @@ namespace PilesOfTiles.Brick
         private Vector2 _spawnPosition;
         private readonly Random _random;
         private IEventAggregator _eventAggregator;
+        private Texture2D _tileTexture;
+        private int _tileSize;
 
         public Brick Brick { get; private set; }
         public IEnumerable<BrickMap> BrickMaps { get; private set; }
 
-        public BrickManager(IEventAggregator eventAggregator, Vector2 spawnPosition)
+        public BrickManager(IEventAggregator eventAggregator, Vector2 spawnPosition, Texture2D tileTexture, int tileSize)
         {
             _eventAggregator = eventAggregator;
             _eventAggregator.Subscribe(this);
 
             _spawnPosition = spawnPosition;
+            _tileTexture = tileTexture;
+            _tileSize = tileSize;
             _random = new Random();
             InitializeBrickMaps();
             SpawnRandomBrickAt(_spawnPosition);
@@ -48,9 +52,9 @@ namespace PilesOfTiles.Brick
             SpawnRandomBrickAt(_spawnPosition);
         }
 
-        public void Draw(SpriteBatch spriteBatch, Texture2D texture, int tileSize)
+        public void Draw(SpriteBatch spriteBatch)
         {
-            Brick.Draw(spriteBatch, texture, tileSize);
+            Brick.Draw(spriteBatch, _tileTexture, _tileSize);
         }
 
         public void SpawnRandomBrickAt(Vector2 position)
