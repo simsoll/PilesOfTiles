@@ -16,6 +16,8 @@ namespace PilesOfTiles.Input.Messages
         MoveDown,
         MoveRight,
         RotateClockWise,
-        RotateCounterClockWise
+        RotateCounterClockWise,
+        Pause,
+        Resume
     }
 }
