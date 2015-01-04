@@ -1,15 +1,13 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Caliburn.Micro;
+﻿using Caliburn.Micro;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using PilesOfTiles.Collision.Messages;
 using PilesOfTiles.Level.Messages;
+using PilesOfTiles.View.Messages;
 
-namespace PilesOfTiles.Screen
+namespace PilesOfTiles.View
 {
-    public class ViewManager : IView, IHandle<GameOver>, IHandle<GameCompleted>
+    public class ViewManager : IView, IHandle<StartGame>, IHandle<ShowHighScoreBoard>, IHandle<QuitGame>, IHandle<GameOver>, IHandle<GameCompleted>
     {
         private IEventAggregator _eventAggregator;
         private IView _startView;
@@ -35,6 +33,18 @@ namespace PilesOfTiles.Screen
             Load(startView);
         }
 
+        public void Handle(StartGame message)
+        {
+            _currentView.Unload();
+            Load(_playingView);
+        }
+
+        public void Handle(ShowHighScoreBoard message)
+        {
+            _currentView.Unload();
+            Load(_highScoreView);
+        }
+
         public void Handle(GameOver message)
         {
             _currentView.Unload();
@@ -45,6 +55,11 @@ namespace PilesOfTiles.Screen
         {
             _currentView.Unload();
             Load(_gameCompletedView);
+        }
+
+        public void Handle(QuitGame message)
+        {
+            throw new System.NotImplementedException();
         }
 
         public void Load()
