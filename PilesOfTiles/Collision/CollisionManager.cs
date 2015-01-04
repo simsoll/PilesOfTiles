@@ -4,15 +4,17 @@ using System.Linq;
 using System.Text;
 using Caliburn.Micro;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using PilesOfTiles.Brick.Messages;
 using PilesOfTiles.Collision.Messages;
 using PilesOfTiles.Input.Messages;
 using PilesOfTiles.Level.Messages;
+using PilesOfTiles.Manager;
 using Action = PilesOfTiles.Input.Messages.Action;
 
 namespace PilesOfTiles.Collision
 {
-    public class CollisionManager : IHandle<LevelCreated>, IHandle<RowCleared>, IHandle<BrickCreated>, IHandle<BrickMoved>
+    public class CollisionManager : IManager, IHandle<LevelCreated>, IHandle<RowCleared>, IHandle<BrickCreated>, IHandle<BrickMoved>
     {
         private IEventAggregator _eventAggregator;
         private IEnumerable<Tile> _levelTiles;
@@ -21,7 +23,6 @@ namespace PilesOfTiles.Collision
         public CollisionManager(IEventAggregator eventAggregator)
         {
             _eventAggregator = eventAggregator;
-            _eventAggregator.Subscribe(this);
         }
 
         public void Handle(LevelCreated message)
@@ -94,6 +95,24 @@ namespace PilesOfTiles.Collision
                         return;
                 }
             }
+        }
+
+        public void Load()
+        {
+            _eventAggregator.Subscribe(this);
+        }
+
+        public void Unload()
+        {
+            _eventAggregator.Unsubscribe(this);
+        }
+
+        public void Update(GameTime gameTime)
+        {
+        }
+
+        public void Draw(SpriteBatch spriteBatch)
+        {
         }
     }
 }

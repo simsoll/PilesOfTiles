@@ -7,11 +7,12 @@ using Microsoft.Xna.Framework.Graphics;
 using PilesOfTiles.Brick.Messages;
 using PilesOfTiles.Collision.Messages;
 using PilesOfTiles.Input.Messages;
+using PilesOfTiles.Manager;
 using Vector2 = Microsoft.Xna.Framework.Vector2;
 
 namespace PilesOfTiles.Brick
 {
-    public class BrickManager : IHandle<ActionRequested>, IHandle<BrickCollided>
+    public class BrickManager : IManager, IHandle<ActionRequested>, IHandle<BrickCollided>
     {
         private Vector2 _spawnPosition;
         private readonly Random _random;
@@ -25,7 +26,6 @@ namespace PilesOfTiles.Brick
         public BrickManager(IEventAggregator eventAggregator, Vector2 spawnPosition, Texture2D tileTexture, int tileSize)
         {
             _eventAggregator = eventAggregator;
-            _eventAggregator.Subscribe(this);
 
             _spawnPosition = spawnPosition;
             _tileTexture = tileTexture;
@@ -50,6 +50,20 @@ namespace PilesOfTiles.Brick
         public void Handle(BrickCollided message)
         {
             SpawnRandomBrickAt(_spawnPosition);
+        }
+
+        public void Load()
+        {
+            _eventAggregator.Subscribe(this);
+        }
+
+        public void Unload()
+        {
+            _eventAggregator.Unsubscribe(this);
+        }
+
+        public void Update(GameTime gameTime)
+        {
         }
 
         public void Draw(SpriteBatch spriteBatch)
