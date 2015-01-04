@@ -11,8 +11,8 @@ using PilesOfTiles.Core.Profiler;
 using PilesOfTiles.HighScore;
 using PilesOfTiles.Input;
 using PilesOfTiles.Level;
-using PilesOfTiles.Screen;
 using PilesOfTiles.UserInterface;
+using PilesOfTiles.View;
 
 #endregion
 
@@ -31,6 +31,7 @@ namespace PilesOfTiles
 
         private IEventAggregator _eventAggregator;
         private IView _viewManager;
+        private IView _startView;
         private IView _playingView;
 
         private Texture2D _tileTexture;
@@ -87,11 +88,12 @@ namespace PilesOfTiles
             _tileTexture = GetPlain2DTexture(_tileSize);
             _textTexture = GetPlain2DTexture(_textSize);
 
+            _startView = new StartView(_eventAggregator, _textTexture, _textSize, Color.Blue, Color.Red);
             _playingView = new PlayingView(_eventAggregator, _tileTexture, _tileSize, _textTexture, _textSize,
                 _levelWidth, _levelHeight, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
             var dummyView = new DummyView();
 
-            _viewManager = new ViewManager(_eventAggregator, _playingView, _playingView, dummyView, dummyView, dummyView,
+            _viewManager = new ViewManager(_eventAggregator, _startView, _playingView, dummyView, dummyView, dummyView,
                 dummyView);
             _viewManager.Load();
         }

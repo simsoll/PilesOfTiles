@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using Caliburn.Micro;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -7,9 +7,10 @@ using PilesOfTiles.Collision;
 using PilesOfTiles.HighScore;
 using PilesOfTiles.Input;
 using PilesOfTiles.Level;
+using PilesOfTiles.Manager;
 using PilesOfTiles.UserInterface;
 
-namespace PilesOfTiles.Screen
+namespace PilesOfTiles.View
 {
     public class PlayingView : IView
     {
@@ -25,12 +26,7 @@ namespace PilesOfTiles.Screen
         private int _screenWidth;
         private int _screenHeight;
 
-        private InputManager _inputManager;
-        private LevelManager _levelManager;
-        private BrickManager _brickManager;
-        private CollisionManager _collisionManager;
-        private HighScoreManager _highScoreManager;
-        private UserInterfaceManager _userInterfaceManager;
+        private IEnumerable<IManager> _managers; 
 
         public PlayingView(
             IEventAggregator eventAggregator, 
@@ -63,38 +59,58 @@ namespace PilesOfTiles.Screen
             var statisticsPosition = centeredLevelPosition + new Vector2(0, _levelHeight + 2);
 
 
-            _inputManager = new InputManager(_eventAggregator);
-            _collisionManager = new CollisionManager(_eventAggregator);
-            _levelManager = new LevelManager(_eventAggregator, centeredLevelPosition, _levelHeight, _levelWidth,
+            var inputManager = new InputManager(_eventAggregator);
+            var collisionManager = new CollisionManager(_eventAggregator);
+            var levelManager = new LevelManager(_eventAggregator, centeredLevelPosition, _levelHeight, _levelWidth,
                 _tileTexture, _tileSize);
-            _brickManager = new BrickManager(_eventAggregator, centeredBrickSpawnPosition, _tileTexture, _tileSize);
-            _highScoreManager = new HighScoreManager(_eventAggregator);
-            _userInterfaceManager = new UserInterfaceManager(_eventAggregator, statisticsPosition, _tileSize, _textTexture, _textSize,
+            var brickManager = new BrickManager(_eventAggregator, centeredBrickSpawnPosition, _tileTexture, _tileSize);
+            var highScoreManager = new HighScoreManager(_eventAggregator);
+            var userInterfaceManager = new UserInterfaceManager(_eventAggregator, statisticsPosition, _tileSize, _textTexture, _textSize,
                 Color.Black);
 
-        }
+            _managers = new List<IManager>
+            {
+                inputManager,
+                collisionManager,
+                levelManager,
+                brickManager,
+                highScoreManager,
+                userInterfaceManager
+            };
+       }
 
         public void Load()
         {
             _eventAggregator.Subscribe(this);
+            foreach (var manager in _managers)
+            {
+                manager.Load();
+            }
         }
 
         public void Unload()
         {
+            foreach (var manager in _managers)
+            {
+                manager.Unload();
+            }
             _eventAggregator.Unsubscribe(this);
         }
 
         public void Update(GameTime gameTime)
         {
-            _levelManager.Update(gameTime);
-            _highScoreManager.Update(gameTime);
+            foreach (var manager in _managers)
+            {
+                manager.Update(gameTime);
+            }
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            _levelManager.Draw(spriteBatch);
-            _brickManager.Draw(spriteBatch);
-            _userInterfaceManager.Draw(spriteBatch);
+            foreach (var manager in _managers)
+            {
+                manager.Draw(spriteBatch);
+            }
         }
     }
 }

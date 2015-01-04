@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace PilesOfTiles.Screen
+namespace PilesOfTiles.View
 {
     public class GameCompletedView : IView
     {
