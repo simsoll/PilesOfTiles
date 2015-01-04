@@ -1,19 +1,21 @@
 ﻿using Caliburn.Micro;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using PilesOfTiles.Core.Input.Keyboard.Messages;
 using PilesOfTiles.Input.Messages;
+using PilesOfTiles.Manager;
 using Action = PilesOfTiles.Input.Messages.Action;
 
 namespace PilesOfTiles.Input
 {
-    public class InputManager : IHandle<KeyPressed>, IHandle<KeyHeld>
+    public class InputManager : IManager, IHandle<KeyPressed>, IHandle<KeyHeld>
     {
         private IEventAggregator _eventAggregator;
 
         public InputManager(IEventAggregator eventAggregator)
         {
             _eventAggregator = eventAggregator;
-            _eventAggregator.Subscribe(this);
         }
 
         public void Handle(KeyPressed message)
@@ -32,6 +34,9 @@ namespace PilesOfTiles.Input
                     break;
                 case Keys.Up:
                     _eventAggregator.PublishOnUIThread(new ActionRequested {Action = Action.RotateClockWise});
+                    break;
+                case Keys.Space:
+                    _eventAggregator.PublishOnUIThread(new ActionRequested { Action = Action.Pause });
                     break;
             }
         }
@@ -52,6 +57,24 @@ namespace PilesOfTiles.Input
                     _eventAggregator.PublishOnUIThread(new ActionRequested { Action = Action.MoveDown });
                     break;
             }
+        }
+
+        public void Load()
+        {
+            _eventAggregator.Subscribe(this);
+        }
+
+        public void Unload()
+        {
+            _eventAggregator.Unsubscribe(this);
+        }
+
+        public void Update(GameTime gameTime)
+        {
+        }
+
+        public void Draw(SpriteBatch spriteBatch)
+        {
         }
     }
 }

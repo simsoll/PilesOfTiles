@@ -7,10 +7,11 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using PilesOfTiles.HighScore.Messages;
 using PilesOfTiles.Level.Messages;
+using PilesOfTiles.Manager;
 
 namespace PilesOfTiles.HighScore
 {
-    public class HighScoreManager : IHandle<RowCleared>, IHandle<DifficultyLevelChanged>
+    public class HighScoreManager : IManager, IHandle<RowCleared>, IHandle<DifficultyLevelChanged>
     {
         private IEventAggregator _eventAggregator;
 
@@ -24,7 +25,6 @@ namespace PilesOfTiles.HighScore
         public HighScoreManager(IEventAggregator eventAggregator)
         {
             _eventAggregator = eventAggregator;
-            _eventAggregator.Subscribe(this);
             
             _score = 0.0f;
             _rowsCleared = 0;
@@ -44,6 +44,16 @@ namespace PilesOfTiles.HighScore
             _difficultyLevelMultiplier += _difficultyLevelMultiplierDelta;
         }
 
+        public void Load()
+        {
+            _eventAggregator.Subscribe(this);
+        }
+
+        public void Unload()
+        {
+            _eventAggregator.Unsubscribe(this);
+        }
+
         public void Update(GameTime gameTime)
         {
             if (_rowsCleared <= 0) return;
@@ -57,6 +67,10 @@ namespace PilesOfTiles.HighScore
             });
 
             _rowsCleared = 0;
+        }
+
+        public void Draw(SpriteBatch spriteBatch)
+        {
         }
     }
 }

@@ -12,6 +12,7 @@ using PilesOfTiles.HighScore;
 using PilesOfTiles.Input;
 using PilesOfTiles.Level;
 using PilesOfTiles.UserInterface;
+using PilesOfTiles.View;
 
 #endregion
 
@@ -27,21 +28,19 @@ namespace PilesOfTiles
         private SpriteFont _font;
         private ProfileManager _profileManager;
         private KeyboardManager _keyboardManager;
-        private InputManager _inputManager;
-        private LevelManager _levelManager;
-        private BrickManager _brickManager;
-        private CollisionManager _collisionManager;
-        private HighScoreManager _highScoreManager;
-        private UserInterfaceManager _userInterfaceManager;
+
         private IEventAggregator _eventAggregator;
-        private int _tileSize;
-        private int _textSize;
+        private IView _viewManager;
+        private IView _startView;
+        private IView _playingView;
+
         private Texture2D _tileTexture;
-        private Texture2D _textTexture;
-        private int _screenWidth;
-        private int _screenHeight;
+        private int _tileSize;
         private int _levelWidth;
         private int _levelHeight;
+
+        private Texture2D _textTexture;
+        private int _textSize;
 
         public PilesOfTiles()
             : base()
@@ -80,30 +79,23 @@ namespace PilesOfTiles
             _levelHeight = 30;
             _levelWidth = 20;
 
-            _screenHeight = GraphicsDevice.Viewport.Height/_tileSize;
-            _screenWidth = GraphicsDevice.Viewport.Width/_tileSize;
-
-            var centeredLevelPosition = new Vector2(_screenWidth, _screenHeight) / 2 -
-                                        new Vector2(_levelWidth, _levelHeight) / 2;
-
-            var centeredBrickSpawnPosition = centeredLevelPosition + new Vector2(_levelWidth/2 - 1, 0);
-            var statisticsPosition = centeredLevelPosition + new Vector2(0, _levelHeight + 2);
-
-
             // Create a new SpriteBatch, which can be used to draw textures.
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             _font = Content.Load<SpriteFont>("Default");
             _profileManager = new ProfileManager(_eventAggregator);
             _keyboardManager = new KeyboardManager(_eventAggregator, TimeSpan.FromMilliseconds(500));
-            _inputManager = new InputManager(_eventAggregator);
-            _collisionManager = new CollisionManager(_eventAggregator);
-            _levelManager = new LevelManager(_eventAggregator, centeredLevelPosition, _levelHeight, _levelWidth, _tileSize);
-            _brickManager = new BrickManager(_eventAggregator, centeredBrickSpawnPosition);
-            _highScoreManager = new HighScoreManager(_eventAggregator);
-            _userInterfaceManager = new UserInterfaceManager(_eventAggregator, statisticsPosition, _tileSize, _textSize, Color.Black);
 
             _tileTexture = GetPlain2DTexture(_tileSize);
             _textTexture = GetPlain2DTexture(_textSize);
+
+            _startView = new StartView(_eventAggregator, _textTexture, _textSize, Color.Blue, Color.Red);
+            _playingView = new PlayingView(_eventAggregator, _tileTexture, _tileSize, _textTexture, _textSize,
+                _levelWidth, _levelHeight, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
+            var dummyView = new DummyView();
+
+            _viewManager = new ViewManager(_eventAggregator, _startView, _playingView, dummyView, dummyView, dummyView,
+                dummyView);
+            _viewManager.Load();
         }
 
         /// <summary>
@@ -112,6 +104,7 @@ namespace PilesOfTiles
         /// </summary>
         protected override void UnloadContent()
         {
+            _viewManager.Unload();
         }
 
         /// <summary>
@@ -125,8 +118,7 @@ namespace PilesOfTiles
                 Exit();
 
             _keyboardManager.Update(gameTime);
-            _levelManager.Update(gameTime);
-            _highScoreManager.Update(gameTime);
+            _viewManager.Update(gameTime);
 
             _profileManager.Update(gameTime);
 
@@ -143,13 +135,10 @@ namespace PilesOfTiles
 
             _spriteBatch.Begin();
 
+            _viewManager.Draw(_spriteBatch);
 #if DEBUG
             _profileManager.Draw(_spriteBatch, _font, Vector2.Zero);
 #endif
-            _levelManager.Draw(_spriteBatch, _tileTexture);
-            _brickManager.Draw(_spriteBatch, _tileTexture, _tileSize);
-            _userInterfaceManager.Draw(_spriteBatch, _textTexture);
-
             _spriteBatch.End();
 
             base.Draw(gameTime);

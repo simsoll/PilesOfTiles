@@ -1,16 +1,18 @@
 using System;
 using System.Linq;
+using System.Runtime.InteropServices;
 using Caliburn.Micro;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using PilesOfTiles.Collision.Messages;
 using PilesOfTiles.Input.Messages;
 using PilesOfTiles.Level.Messages;
+using PilesOfTiles.Manager;
 using Action = PilesOfTiles.Input.Messages.Action;
 
 namespace PilesOfTiles.Level
 {
-    public class LevelManager : IHandle<BrickCollided>
+    public class LevelManager : IManager, IHandle<BrickCollided>
     {
         private IEventAggregator _eventAggregator;
         private TimeSpan _moveDownThreshold;
@@ -19,31 +21,54 @@ namespace PilesOfTiles.Level
         private int _rowsClearedSinceDifficultyIncrease;
         private int _difficultyIncreaseThreshold;
         private int _difficultyLevel;
+        private Texture2D _tileTexture;
+        
+        private Vector2 _position;
+        private int _width;
+        private int _height;
+        private int _tileSize;
+        private Color _wallColor;
 
-        public LevelManager(IEventAggregator eventAggregator, Vector2 position, int width, int height, int tileSize)
+        public LevelManager(IEventAggregator eventAggregator, Vector2 position, int height, int width, Texture2D tileTexture, int tileSize)
         {
             _eventAggregator = eventAggregator;
-            _eventAggregator.Subscribe(this);
 
-            InitializeLevel(position, width, height, tileSize, Color.Gray);
+            _tileTexture = tileTexture;
             _timeSinceDownMovement = TimeSpan.Zero;
             _moveDownThreshold = TimeSpan.FromMilliseconds(500);
             _moveDownThresholdDelta = TimeSpan.FromMilliseconds(50);
             _rowsClearedSinceDifficultyIncrease = 0;
             _difficultyIncreaseThreshold = 5;
             _difficultyLevel = 1;
+
+            _position = position;
+            _width = width;
+            _height = height;
+            _tileSize = tileSize;
+            _wallColor = Color.Gray;
         }
 
         public Level Level { get; private set; }
 
-        public void InitializeLevel(Vector2 position, int height, int width, int tileSize, Color wallColor)
+        public void InitializeLevel()
         {
-            Level = new Level(position, height, width, tileSize, wallColor);
+            Level = new Level(_position, _height, _width, _tileSize, _wallColor);
             _eventAggregator.PublishOnUIThread(new LevelCreated
             {
                 Position = Level.Position,
                 Tiles = Level.Tiles
             });
+        }
+
+        public void Load()
+        {
+            _eventAggregator.Subscribe(this);
+            InitializeLevel();
+        }
+
+        public void Unload()
+        {
+            _eventAggregator.Unsubscribe(this);
         }
 
         public void Update(GameTime gameTime)
@@ -57,9 +82,9 @@ namespace PilesOfTiles.Level
             }
         }
 
-        public void Draw(SpriteBatch spriteBatch, Texture2D texture)
+        public void Draw(SpriteBatch spriteBatch)
         {
-            Level.Draw(spriteBatch, texture);
+            Level.Draw(spriteBatch, _tileTexture);
         }
 
         public void Handle(BrickCollided message)
