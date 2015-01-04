@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace PilesOfTiles.HighScore
 {
@@ -15,7 +17,24 @@ namespace PilesOfTiles.HighScore
             _vectorMapDictionary = InitializePixelMap();
         }
 
-        public IEnumerable<Vector2> GetVectorMap(string key)
+        public void DrawText(SpriteBatch spriteBatch, string text, Texture2D texture, Vector2 position, int size,
+            Color color)
+        {
+            var basePosition = position;
+
+            foreach (var number in text.ToArray())
+            {
+                var positionMap = GetVectorMap(number.ToString());
+                foreach (var pixelPosition in positionMap)
+                {
+                    spriteBatch.Draw(texture, basePosition + pixelPosition * size, color);
+                }
+
+                basePosition += new Vector2(Width, 0)*size;
+            }
+        }
+
+        private IEnumerable<Vector2> GetVectorMap(string key)
         {
             return _vectorMapDictionary[key.ToUpper()];
         }
