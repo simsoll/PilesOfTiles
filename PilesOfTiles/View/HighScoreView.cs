@@ -16,6 +16,9 @@ namespace PilesOfTiles.View
         private int _textSize;
         private Color _textColor;
 
+        private string _titleText;
+        private Vector2 _titleTextPosition;
+
         private Vector2 _highScoreStartPosition;
         private Vector2 _highScoreStepPosition;
 
@@ -30,7 +33,10 @@ namespace PilesOfTiles.View
 
             _pixelAlfabet = new PixelAlfabet();
 
-            _highScoreStartPosition = new Vector2(50,50);
+            _titleText = "High score board";
+            _titleTextPosition = new Vector2(50, 50);
+
+            _highScoreStartPosition = new Vector2(50, 100);
             _highScoreStepPosition = new Vector2(0, 20);
         }
 
@@ -50,6 +56,9 @@ namespace PilesOfTiles.View
 
         public void Draw(SpriteBatch spriteBatch)
         {
+            _pixelAlfabet.DrawText(spriteBatch, _titleText, _textTexture, _titleTextPosition, _textSize,
+                _textColor);
+
             var highScores = HighScoreRepository.Instance.GetAllHighScores()
                 .OrderByDescending(x => x.Score)
                 .ThenByDescending(x => x.DifficultyLevel);
