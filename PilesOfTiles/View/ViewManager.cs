@@ -1,36 +1,41 @@
 ﻿using Caliburn.Micro;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using PilesOfTiles.Collision.Messages;
+using PilesOfTiles.HighScore.Messages;
 using PilesOfTiles.Level.Messages;
 using PilesOfTiles.View.Messages;
+using GameEnded = PilesOfTiles.HighScore.Messages.GameEnded;
 
 namespace PilesOfTiles.View
 {
-    public class ViewManager : IView, IHandle<StartGame>, IHandle<ShowHighScoreBoard>, IHandle<QuitGame>, IHandle<GameOver>, IHandle<GameCompleted>
+    public class ViewManager : IView, IHandle<StartGame>, IHandle<ResumeGame>, IHandle<ShowHighScoreBoard>, IHandle<QuitGame>, IHandle<GameEnded>, IHandle<ReturnToStartMenu>, IHandle<GamePaused>
     {
         private IEventAggregator _eventAggregator;
         private IView _startView;
         private IView _playingView;
         private IView _gamePausedView;
-        private IView _gameOverView;
-        private IView _gameCompletedView;
+        private IView _gameEndedView;
         private IView _highScoreView;
         private IView _currentView;
 
         public ViewManager(IEventAggregator eventAggregator, IView startView, IView playingView,
-            IView gamePausedView, IView gameOverView, IView gameCompletedView, IView highScoreView)
+            IView gamePausedView, IView gameEndedView, IView highScoreView)
         {
             _eventAggregator = eventAggregator;
 
             _startView = startView;
             _playingView = playingView;
             _gamePausedView = gamePausedView;
-            _gameOverView = gameOverView;
-            _gameCompletedView = gameCompletedView;
+            _gameEndedView = gameEndedView;
             _highScoreView = highScoreView;
 
-            Load(startView);
+            Load(_startView);
+        }
+
+        public void Handle(ReturnToStartMenu message)
+        {
+            _currentView.Unload();
+            Load(_startView);
         }
 
         public void Handle(StartGame message)
@@ -39,22 +44,34 @@ namespace PilesOfTiles.View
             Load(_playingView);
         }
 
+        public void Handle(ResumeGame message)
+        {
+            _currentView.Unload();
+            Load(_playingView);
+        }
+
+        public void Handle(GamePaused message)
+        {
+            _currentView.Unload();
+            Load(_gamePausedView);
+        }
+
         public void Handle(ShowHighScoreBoard message)
         {
             _currentView.Unload();
             Load(_highScoreView);
         }
 
-        public void Handle(GameOver message)
+        public void Handle(GameEnded message)
         {
             _currentView.Unload();
-            Load(_gameOverView);
-        }
-
-        public void Handle(GameCompleted message)
-        {
-            _currentView.Unload();
-            Load(_gameCompletedView);
+            Load(_gameEndedView);
+            _eventAggregator.PublishOnUIThread(new Messages.GameEnded
+            {
+                CauseBy = message.CauseBy,
+                Score = message.Score,
+                DifficultyLevel = message.DifficultyLevel
+            });
         }
 
         public void Handle(QuitGame message)

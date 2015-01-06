@@ -6,13 +6,16 @@ using PilesOfTiles.Brick;
 using PilesOfTiles.Collision;
 using PilesOfTiles.HighScore;
 using PilesOfTiles.Input;
+using PilesOfTiles.Input.Messages;
 using PilesOfTiles.Level;
 using PilesOfTiles.Manager;
 using PilesOfTiles.UserInterface;
+using PilesOfTiles.View.Messages;
+using Action = PilesOfTiles.Input.Messages.Action;
 
 namespace PilesOfTiles.View
 {
-    public class PlayingView : IView
+    public class PlayingView : IView, IHandle<ActionRequested>
     {
         private IEventAggregator _eventAggregator;
 
@@ -110,6 +113,14 @@ namespace PilesOfTiles.View
             foreach (var manager in _managers)
             {
                 manager.Draw(spriteBatch);
+            }
+        }
+
+        public void Handle(ActionRequested message)
+        {
+            if (message.Action == Action.Pause)
+            {
+                _eventAggregator.PublishOnUIThread(new GamePaused());
             }
         }
     }

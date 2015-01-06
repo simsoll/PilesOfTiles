@@ -5,18 +5,22 @@ using System.Text;
 using Caliburn.Micro;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using PilesOfTiles.Collision.Messages;
 using PilesOfTiles.HighScore.Messages;
 using PilesOfTiles.Level.Messages;
 using PilesOfTiles.Manager;
+using GameOver = PilesOfTiles.Collision.Messages.GameOver;
 
 namespace PilesOfTiles.HighScore
 {
-    public class HighScoreManager : IManager, IHandle<RowCleared>, IHandle<DifficultyLevelChanged>
+    public class HighScoreManager : IManager, IHandle<BrickCollided>, IHandle<RowCleared>, IHandle<DifficultyLevelChanged>, IHandle<GameOver>, IHandle<GameCompleted>
     {
         private IEventAggregator _eventAggregator;
 
         private float _score;
         private int _rowsCleared;
+        private int _difficultyLevel;
+        private float _brickCollidedScore;
         private float _rowClearedScore;
         private float _comboMultiplierDelta;
         private float _difficultyLevelMultiplier;
@@ -28,10 +32,17 @@ namespace PilesOfTiles.HighScore
             
             _score = 0.0f;
             _rowsCleared = 0;
+            _difficultyLevel = 1;
+            _brickCollidedScore = 1.0f;
             _rowClearedScore = 10.0f;
             _comboMultiplierDelta = 0.5f;
             _difficultyLevelMultiplier = 0.0f;
             _difficultyLevelMultiplierDelta = 0.1f;
+        }
+
+        public void Handle(BrickCollided message)
+        {
+            UpdateScoreWith(_brickCollidedScore * _difficultyLevel);
         }
 
         public void Handle(RowCleared message)
@@ -41,6 +52,7 @@ namespace PilesOfTiles.HighScore
 
         public void Handle(DifficultyLevelChanged message)
         {
+            _difficultyLevel = message.Value;
             _difficultyLevelMultiplier += _difficultyLevelMultiplierDelta;
         }
 
@@ -59,18 +71,44 @@ namespace PilesOfTiles.HighScore
             if (_rowsCleared <= 0) return;
 
             var comboMultiplier = _comboMultiplierDelta*(_rowsCleared - 1);
+            var points = _rowsCleared*_rowClearedScore*(1 + _difficultyLevelMultiplier + comboMultiplier);
 
-            _score += _rowsCleared * _rowClearedScore * (1 + _difficultyLevelMultiplier + comboMultiplier);
-            _eventAggregator.PublishOnUIThread(new ScoreUpdated
-            {
-                Score = _score
-            });
+            UpdateScoreWith(points);
 
             _rowsCleared = 0;
         }
 
+        public void UpdateScoreWith(float points)
+        {
+            _score += points;
+            _eventAggregator.PublishOnUIThread(new ScoreUpdated
+            {
+                Score = _score
+            });
+        }
+
         public void Draw(SpriteBatch spriteBatch)
         {
+        }
+
+        public void Handle(GameOver message)
+        {
+            _eventAggregator.PublishOnUIThread(new GameEnded
+            {
+                CauseBy = "Game Over",
+                Score = _score,
+                DifficultyLevel = _difficultyLevel
+            });
+        }
+
+        public void Handle(GameCompleted message)
+        {
+            _eventAggregator.PublishOnUIThread(new GameEnded
+            {
+                CauseBy = "Game Completed",
+                Score = _score,
+                DifficultyLevel = _difficultyLevel
+            });
         }
     }
 }

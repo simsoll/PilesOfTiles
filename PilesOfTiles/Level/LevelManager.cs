@@ -46,6 +46,8 @@ namespace PilesOfTiles.Level
             _height = height;
             _tileSize = tileSize;
             _wallColor = Color.Gray;
+
+            InitializeLevel();
         }
 
         public Level Level { get; private set; }
@@ -53,17 +55,16 @@ namespace PilesOfTiles.Level
         public void InitializeLevel()
         {
             Level = new Level(_position, _height, _width, _tileSize, _wallColor);
-            _eventAggregator.PublishOnUIThread(new LevelCreated
-            {
-                Position = Level.Position,
-                Tiles = Level.Tiles
-            });
         }
 
         public void Load()
         {
             _eventAggregator.Subscribe(this);
-            InitializeLevel();
+            _eventAggregator.PublishOnUIThread(new LevelLoaded
+            {
+                Position = Level.Position,
+                Tiles = Level.Tiles
+            });
         }
 
         public void Unload()

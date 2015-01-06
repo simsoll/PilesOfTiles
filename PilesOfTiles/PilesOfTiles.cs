@@ -32,7 +32,10 @@ namespace PilesOfTiles
         private IEventAggregator _eventAggregator;
         private IView _viewManager;
         private IView _startView;
+        private IView _gamePausedView;
         private IView _playingView;
+        private IView _gameEndedView;
+        private IView _highScoreView;
 
         private Texture2D _tileTexture;
         private int _tileSize;
@@ -91,10 +94,11 @@ namespace PilesOfTiles
             _startView = new StartView(_eventAggregator, _textTexture, _textSize, Color.Blue, Color.Red);
             _playingView = new PlayingView(_eventAggregator, _tileTexture, _tileSize, _textTexture, _textSize,
                 _levelWidth, _levelHeight, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
-            var dummyView = new DummyView();
+            _gamePausedView = new GamePausedView(_eventAggregator, _textTexture, _textSize, Color.Blue);
+            _gameEndedView = new GameEndedView(_eventAggregator, _textTexture, _textSize, Color.Blue);
+            _highScoreView = new HighScoreView(_eventAggregator, _textTexture, _textSize, Color.Blue);
 
-            _viewManager = new ViewManager(_eventAggregator, _startView, _playingView, dummyView, dummyView, dummyView,
-                dummyView);
+            _viewManager = new ViewManager(_eventAggregator, _startView, _playingView, _gamePausedView, _gameEndedView, _highScoreView);
             _viewManager.Load();
         }
 

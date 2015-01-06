@@ -14,7 +14,7 @@ using Action = PilesOfTiles.Input.Messages.Action;
 
 namespace PilesOfTiles.Collision
 {
-    public class CollisionManager : IManager, IHandle<LevelCreated>, IHandle<RowCleared>, IHandle<BrickCreated>, IHandle<BrickMoved>
+    public class CollisionManager : IManager, IHandle<LevelLoaded>, IHandle<RowCleared>, IHandle<BrickCreated>, IHandle<BrickMoved>
     {
         private IEventAggregator _eventAggregator;
         private IEnumerable<Tile> _levelTiles;
@@ -25,7 +25,7 @@ namespace PilesOfTiles.Collision
             _eventAggregator = eventAggregator;
         }
 
-        public void Handle(LevelCreated message)
+        public void Handle(LevelLoaded message)
         {
             _levelTiles = message.Tiles;
         }
