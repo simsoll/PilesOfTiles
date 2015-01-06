@@ -9,10 +9,11 @@ using PilesOfTiles.HighScore;
 using PilesOfTiles.HighScore.Messages;
 using PilesOfTiles.Level.Messages;
 using PilesOfTiles.Manager;
+using PilesOfTiles.View.Messages;
 
 namespace PilesOfTiles.UserInterface
 {
-    public class UserInterfaceManager : IManager, IHandle<ScoreUpdated>, IHandle<DifficultyLevelChanged>
+    public class UserInterfaceManager : IManager, IHandle<GameStarted>, IHandle<ScoreUpdated>, IHandle<DifficultyLevelChanged>
     {
         private IEventAggregator _eventAggregator;
         private readonly Vector2 _statisticsPosition;
@@ -35,8 +36,6 @@ namespace PilesOfTiles.UserInterface
             _textSize = textSize;
             _highScoreTextColor = highScoreTextColor;
             _pixelAlfabet = new PixelAlfabet();
-            _score = 0;
-            _difficultyLevel = 1;
         }
 
         public void Handle(ScoreUpdated message)
@@ -78,6 +77,12 @@ namespace PilesOfTiles.UserInterface
             var text = baseText.Substring(0);
 
             _pixelAlfabet.DrawText(spriteBatch, text, _textTexture, position, _textSize, _highScoreTextColor);
+        }
+
+        public void Handle(GameStarted message)
+        {
+            _score = 0;
+            _difficultyLevel = 1;
         }
     }
 }

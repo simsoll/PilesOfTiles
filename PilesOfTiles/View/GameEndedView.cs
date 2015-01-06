@@ -15,6 +15,9 @@ namespace PilesOfTiles.View
         private int _textSize;
         private Color _textColor;
 
+        private float _score;
+        private int _difficultyLevel;
+
         private string _titleText;
         private Vector2 _titleTextPosition;
 
@@ -38,16 +41,22 @@ namespace PilesOfTiles.View
 
             _titleTextPosition = new Vector2(50, 50);
 
-            _highScoreText = "High score ";
             _highScoreTextPosition = new Vector2(50, 100);
 
-            _difficultyLevelText = "Difficulty ";
             _difficultyLevelPosition = new Vector2(50, 150);
 
-            _playerName = "";
             _playerNamePosition = new Vector2(50, 300);
 
             _pixelAlfabet = new PixelAlfabet();
+
+            ResetShownText();
+        }
+
+        private void ResetShownText()
+        {
+            _playerName = "";
+            _highScoreText = "High score ";    
+            _difficultyLevelText = "Difficulty ";
         }
 
         public void Load()
@@ -58,6 +67,7 @@ namespace PilesOfTiles.View
         public void Unload()
         {
             _eventAggregator.Unsubscribe(this);
+            ResetShownText();
         }
 
         public void Update(GameTime gameTime)
@@ -81,6 +91,9 @@ namespace PilesOfTiles.View
 
         public void Handle(GameEnded message)
         {
+            _score = message.Score;
+            _difficultyLevel = message.DifficultyLevel;
+
             _titleText = message.CauseBy;
             _highScoreText += message.Score;
             _difficultyLevelText += message.DifficultyLevel;
@@ -91,6 +104,7 @@ namespace PilesOfTiles.View
         {
             if (message.Key == Keys.Enter)
             {
+                SaveHighScore();
                 _eventAggregator.PublishOnUIThread(new ShowHighScoreBoard());
                 return;
             }
@@ -105,6 +119,16 @@ namespace PilesOfTiles.View
             {
                 _playerName += message.Key.ToString();
             }
+        }
+
+        private void SaveHighScore()
+        {
+            HighScoreRepository.Instance.StoreHighScore(new HighScoreRepository.HighScore
+            {
+                PlayerName = _playerName,
+                Score = _score,
+                DifficultyLevel = _difficultyLevel
+            });
         }
     }
 }

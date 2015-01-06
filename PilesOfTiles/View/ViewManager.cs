@@ -42,6 +42,7 @@ namespace PilesOfTiles.View
         {
             _currentView.Unload();
             Load(_playingView);
+            _eventAggregator.PublishOnUIThread(new GameStarted());
         }
 
         public void Handle(ResumeGame message)
@@ -68,7 +69,7 @@ namespace PilesOfTiles.View
             Load(_gameEndedView);
             _eventAggregator.PublishOnUIThread(new Messages.GameEnded
             {
-                CauseBy = message.CauseBy,
+                CauseBy = message.CausedBy,
                 Score = message.Score,
                 DifficultyLevel = message.DifficultyLevel
             });

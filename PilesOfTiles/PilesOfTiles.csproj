@@ -45,6 +45,7 @@
     <Compile Include="Collision\Messages\BrickCollided.cs" />
     <Compile Include="Collision\Messages\GameOver.cs" />
     <Compile Include="Core\Profiler\ProfileManager.cs" />
+    <Compile Include="HighScore\HighScoreRepository.cs" />
     <Compile Include="HighScore\Messages\GameEnded.cs" />
     <Compile Include="Manager\IManager.cs" />
     <Compile Include="PilesOfTiles.cs" />
@@ -57,6 +58,7 @@
     <Compile Include="View\IView.cs" />
     <Compile Include="View\Messages\GameEnded.cs" />
     <Compile Include="View\Messages\GamePaused.cs" />
+    <Compile Include="View\Messages\GameStarted.cs" />
     <Compile Include="View\Messages\QuitGame.cs" />
     <Compile Include="View\Messages\ResumeGame.cs" />
     <Compile Include="View\Messages\ReturnToStartMenu.cs" />

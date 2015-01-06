@@ -5,6 +5,7 @@ using Caliburn.Micro;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using PilesOfTiles.Collision.Messages;
+using PilesOfTiles.HighScore.Messages;
 using PilesOfTiles.Input.Messages;
 using PilesOfTiles.Level.Messages;
 using PilesOfTiles.Manager;
@@ -12,7 +13,7 @@ using Action = PilesOfTiles.Input.Messages.Action;
 
 namespace PilesOfTiles.Level
 {
-    public class LevelManager : IManager, IHandle<BrickCollided>
+    public class LevelManager : IManager, IHandle<BrickCollided>, IHandle<GameEnded>
     {
         private IEventAggregator _eventAggregator;
         private TimeSpan _moveDownThreshold;
@@ -92,6 +93,11 @@ namespace PilesOfTiles.Level
         {
             Level.AddTiles(message.Tiles);
             CheckForFullRows();
+        }
+
+        public void Handle(GameEnded message)
+        {
+            InitializeLevel();
         }
 
         public void CheckForFullRows()

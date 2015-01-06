@@ -9,11 +9,13 @@ using PilesOfTiles.Collision.Messages;
 using PilesOfTiles.HighScore.Messages;
 using PilesOfTiles.Level.Messages;
 using PilesOfTiles.Manager;
+using PilesOfTiles.View.Messages;
+using GameEnded = PilesOfTiles.HighScore.Messages.GameEnded;
 using GameOver = PilesOfTiles.Collision.Messages.GameOver;
 
 namespace PilesOfTiles.HighScore
 {
-    public class HighScoreManager : IManager, IHandle<BrickCollided>, IHandle<RowCleared>, IHandle<DifficultyLevelChanged>, IHandle<GameOver>, IHandle<GameCompleted>
+    public class HighScoreManager : IManager, IHandle<GameStarted>, IHandle<BrickCollided>, IHandle<RowCleared>, IHandle<DifficultyLevelChanged>, IHandle<GameOver>, IHandle<GameCompleted>
     {
         private IEventAggregator _eventAggregator;
 
@@ -30,14 +32,18 @@ namespace PilesOfTiles.HighScore
         {
             _eventAggregator = eventAggregator;
             
-            _score = 0.0f;
-            _rowsCleared = 0;
-            _difficultyLevel = 1;
             _brickCollidedScore = 1.0f;
             _rowClearedScore = 10.0f;
             _comboMultiplierDelta = 0.5f;
             _difficultyLevelMultiplier = 0.0f;
             _difficultyLevelMultiplierDelta = 0.1f;
+        }
+
+        private void InitializeScoreFields()
+        {
+            _score = 0.0f;
+            _rowsCleared = 0;
+            _difficultyLevel = 1;
         }
 
         public void Handle(BrickCollided message)
@@ -93,22 +99,27 @@ namespace PilesOfTiles.HighScore
 
         public void Handle(GameOver message)
         {
+            PublishGameEndedEvent("Game Over");
+        }
+
+        public void Handle(GameCompleted message)
+        {
+            PublishGameEndedEvent("Game Completed");
+        }
+
+        private void PublishGameEndedEvent(string causedBy)
+        {
             _eventAggregator.PublishOnUIThread(new GameEnded
             {
-                CauseBy = "Game Over",
+                CausedBy = causedBy,
                 Score = _score,
                 DifficultyLevel = _difficultyLevel
             });
         }
 
-        public void Handle(GameCompleted message)
+        public void Handle(GameStarted message)
         {
-            _eventAggregator.PublishOnUIThread(new GameEnded
-            {
-                CauseBy = "Game Completed",
-                Score = _score,
-                DifficultyLevel = _difficultyLevel
-            });
+            InitializeScoreFields();
         }
     }
 }
