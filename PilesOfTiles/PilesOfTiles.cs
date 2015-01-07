@@ -13,6 +13,7 @@ using PilesOfTiles.Input;
 using PilesOfTiles.Level;
 using PilesOfTiles.UserInterface;
 using PilesOfTiles.View;
+using PilesOfTiles.View.Messages;
 
 #endregion
 
@@ -21,7 +22,7 @@ namespace PilesOfTiles
     /// <summary>
     /// This is the main type for your game
     /// </summary>
-    public class PilesOfTiles : Game
+    public class PilesOfTiles : Game, IHandle<QuitGame>
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
@@ -76,6 +77,7 @@ namespace PilesOfTiles
         protected override void LoadContent()
         {
             _eventAggregator = new EventAggregator();
+            _eventAggregator.Subscribe(this);
 
             _tileSize = 8;
             _textSize = 1;
@@ -159,6 +161,11 @@ namespace PilesOfTiles
             texture.SetData(color);
 
             return texture;
+        }
+
+        public void Handle(QuitGame message)
+        {
+            Exit();
         }
     }
 }

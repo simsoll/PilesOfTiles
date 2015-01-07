@@ -8,7 +8,7 @@ using GameEnded = PilesOfTiles.HighScore.Messages.GameEnded;
 
 namespace PilesOfTiles.View
 {
-    public class ViewManager : IView, IHandle<StartGame>, IHandle<ResumeGame>, IHandle<ShowHighScoreBoard>, IHandle<QuitGame>, IHandle<GameEnded>, IHandle<ReturnToStartMenu>, IHandle<GamePaused>
+    public class ViewManager : IView, IHandle<StartGame>, IHandle<ResumeGame>, IHandle<ShowHighScoreBoard>, IHandle<GameEnded>, IHandle<ReturnToStartMenu>, IHandle<GamePaused>
     {
         private IEventAggregator _eventAggregator;
         private IView _startView;
@@ -73,11 +73,6 @@ namespace PilesOfTiles.View
                 Score = message.Score,
                 DifficultyLevel = message.DifficultyLevel
             });
-        }
-
-        public void Handle(QuitGame message)
-        {
-            throw new System.NotImplementedException();
         }
 
         public void Load()
