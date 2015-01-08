@@ -48,6 +48,8 @@
     <Compile Include="HighScore\HighScoreRepository.cs" />
     <Compile Include="HighScore\Messages\GameEnded.cs" />
     <Compile Include="Manager\IManager.cs" />
+    <Compile Include="Particle\Particle.cs" />
+    <Compile Include="Particle\ParticleManager.cs" />
     <Compile Include="PilesOfTiles.cs" />
     <Compile Include="HighScore\HighScoreManager.cs" />
     <Compile Include="HighScore\Messages\ScoreUpdated.cs" />
