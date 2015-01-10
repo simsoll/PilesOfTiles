@@ -12,10 +12,8 @@ namespace PilesOfTiles.Core.Profiler
     {
         private IEventAggregator _eventAggregator;
         private int _messages;
-        private int _frames;
-        private int _framesPerSecond;
+        private float _framesPerSecond;
         private int _messagesThisFrame;
-        private TimeSpan _elapsedTime;
         private StringBuilder _stringBuilder;
 
         public ProfileManager(IEventAggregator eventAggregator)
@@ -24,9 +22,7 @@ namespace PilesOfTiles.Core.Profiler
             _eventAggregator.Subscribe(this);
             _messages = 0;
             _messagesThisFrame = 0;
-            _frames = 0;
             _framesPerSecond = 0;
-            _elapsedTime = TimeSpan.Zero;
         }
 
         public void Handle(object message)
@@ -37,17 +33,7 @@ namespace PilesOfTiles.Core.Profiler
 
         public void Update(GameTime gameTime)
         {
-            _elapsedTime += gameTime.ElapsedGameTime;
-            if (TimeSpan.FromSeconds(1) < _elapsedTime)
-            {
-                _framesPerSecond = _frames;
-                _frames = 0;
-                _elapsedTime = TimeSpan.Zero;
-            }
-            else
-            {
-                _frames++;
-            }
+            _framesPerSecond = 1.0f/(float)gameTime.ElapsedGameTime.TotalSeconds;
         }
 
         public void Draw(SpriteBatch spriteBatch, SpriteFont font, Vector2 position)
