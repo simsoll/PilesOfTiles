@@ -9,6 +9,7 @@ using PilesOfTiles.Input;
 using PilesOfTiles.Input.Messages;
 using PilesOfTiles.Level;
 using PilesOfTiles.Manager;
+using PilesOfTiles.Particle;
 using PilesOfTiles.UserInterface;
 using PilesOfTiles.View.Messages;
 using Action = PilesOfTiles.Input.Messages.Action;
@@ -64,6 +65,7 @@ namespace PilesOfTiles.View
 
             var inputManager = new InputManager(_eventAggregator);
             var collisionManager = new CollisionManager(_eventAggregator);
+            var particleManager = new ParticleManager(_eventAggregator, new[] { _tileTexture });
             var levelManager = new LevelManager(_eventAggregator, centeredLevelPosition, _levelHeight, _levelWidth,
                 _tileTexture, _tileSize);
             var brickManager = new BrickManager(_eventAggregator, centeredBrickSpawnPosition, _tileTexture, _tileSize);
@@ -75,6 +77,7 @@ namespace PilesOfTiles.View
             {
                 inputManager,
                 collisionManager,
+                particleManager,
                 levelManager,
                 brickManager,
                 highScoreManager,

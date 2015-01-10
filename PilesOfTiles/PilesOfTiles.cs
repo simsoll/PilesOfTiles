@@ -30,7 +30,6 @@ namespace PilesOfTiles
         private SpriteFont _font;
         private ProfileManager _profileManager;
         private KeyboardManager _keyboardManager;
-        private ParticleManager _particleManager;
 
         private IEventAggregator _eventAggregator;
         private IView _viewManager;
@@ -105,7 +104,7 @@ namespace PilesOfTiles
             _viewManager = new ViewManager(_eventAggregator, _startView, _playingView, _gamePausedView, _gameEndedView, _highScoreView);
             _viewManager.Load();
 
-            _particleManager = new ParticleManager(new []{_tileTexture}, Vector2.Zero);
+            
         }
 
         /// <summary>
@@ -124,13 +123,8 @@ namespace PilesOfTiles
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
-
             _keyboardManager.Update(gameTime);
             _viewManager.Update(gameTime);
-            _particleManager.EmitterLocation = new Vector2(Mouse.GetState().X, Mouse.GetState().Y);
-            _particleManager.Update(gameTime);
 
             _profileManager.Update(gameTime);
 
@@ -148,7 +142,6 @@ namespace PilesOfTiles
             _spriteBatch.Begin();
 
             _viewManager.Draw(_spriteBatch);
-            _particleManager.Draw(_spriteBatch);
 #if DEBUG
             _profileManager.Draw(_spriteBatch, _font, Vector2.Zero);
 #endif
