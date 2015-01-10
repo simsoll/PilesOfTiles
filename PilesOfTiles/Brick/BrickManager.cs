@@ -38,12 +38,12 @@ namespace PilesOfTiles.Brick
         public void Handle(ActionRequested message)
         {
             Brick.Update(message.Action);
-            _eventAggregator.PublishOnUIThread(new BrickMoved
+            _eventAggregator.PublishOnUIThread(new BrickMoving
             {
                 Action = message.Action,
                 PointsAt = Brick.PointsAt,
                 Position = Brick.Position,
-                Tiles = Brick.BrickMap.GetTilesWhenPointingAt(Brick.PointsAt)
+                Tiles = Brick.BrickMap.GetTilesWhenPointingAt(Brick.PointsAt).ToList()
             });
         }
 
@@ -79,7 +79,7 @@ namespace PilesOfTiles.Brick
             {
                 PointsAt = Brick.PointsAt,
                 Position = Brick.Position,
-                Tiles = Brick.BrickMap.GetTilesWhenPointingAt(Brick.PointsAt)
+                Tiles = Brick.BrickMap.GetTilesWhenPointingAt(Brick.PointsAt).ToList()
             });
         }
 

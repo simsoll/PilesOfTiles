@@ -64,7 +64,7 @@ namespace PilesOfTiles.Level
             _eventAggregator.PublishOnUIThread(new LevelLoaded
             {
                 Position = Level.Position,
-                Tiles = Level.Tiles
+                Tiles = Level.Tiles.Select(tile => Tile.Create(tile.Position, tile.Color, tile.State))
             });
         }
 
@@ -91,7 +91,11 @@ namespace PilesOfTiles.Level
 
         public void Handle(BrickCollided message)
         {
-            Level.AddTiles(message.Tiles);
+            Level.AddTiles(message.Tiles.Select(tile => Tile.Create(tile.Position, tile.Color, tile.State)));
+            _eventAggregator.PublishOnUIThread(new LevelUpdated
+            {
+                Tiles = Level.Tiles.Select(tile => Tile.Create(tile.Position, tile.Color, tile.State))
+            });
             CheckForFullRows();
         }
 
@@ -119,7 +123,8 @@ namespace PilesOfTiles.Level
                     MovesTilesDownAboveRow(i);
                     _eventAggregator.PublishOnUIThread(new RowCleared
                     {
-                        Tiles = Level.Tiles
+                        Tiles = Level.Tiles.Select(tile => Tile.Create(tile.Position, tile.Color, tile.State)),
+                        Row = i
                     });
                     _rowsClearedSinceDifficultyIncrease++;
                     CheckForDifficultyIncrease();

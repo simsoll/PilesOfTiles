@@ -9,6 +9,6 @@ namespace PilesOfTiles.Level.Messages
     public class LevelLoaded
     {
         public Vector2 Position { get; set; }
-        public IEnumerable<Tile> Tiles { get; set; } 
+        public IEnumerable<Tile> Tiles { get; set; }
     }
 }

@@ -14,11 +14,11 @@ using Action = PilesOfTiles.Input.Messages.Action;
 
 namespace PilesOfTiles.Collision
 {
-    public class CollisionManager : IManager, IHandle<LevelLoaded>, IHandle<RowCleared>, IHandle<BrickCreated>, IHandle<BrickMoved>
+    public class CollisionManager : IManager, IHandle<LevelLoaded>, IHandle<LevelUpdated>, IHandle<RowCleared>, IHandle<BrickCreated>, IHandle<BrickMoving>
     {
         private IEventAggregator _eventAggregator;
-        private IEnumerable<Tile> _levelTiles;
-        private IEnumerable<Tile> _brickTiles;
+        private IList<Tile> _levelTiles;
+        private IList<Tile> _brickTiles;
 
         public CollisionManager(IEventAggregator eventAggregator)
         {
@@ -27,23 +27,28 @@ namespace PilesOfTiles.Collision
 
         public void Handle(LevelLoaded message)
         {
-            _levelTiles = message.Tiles;
+            _levelTiles = message.Tiles.Select(tile => Tile.Create(tile.Position, tile.Color, tile.State)).ToList();
+        }
+
+        public void Handle(LevelUpdated message)
+        {
+            _levelTiles = message.Tiles.Select(tile => Tile.Create(tile.Position, tile.Color, tile.State)).ToList();
         }
 
         public void Handle(RowCleared message)
         {
-            _levelTiles = message.Tiles;
+            _levelTiles = message.Tiles.Select(tile => Tile.Create(tile.Position, tile.Color, tile.State)).ToList();
         }
 
         public void Handle(BrickCreated message)
         {
-            _brickTiles = message.Tiles.Select(x => Tile.Create(x.Position + message.Position, x.Color, State.Removable));
+            _brickTiles = message.Tiles.Select(x => Tile.Create(x.Position + message.Position, x.Color, State.Removable)).ToList();
             CheckForGameOver();
         }
 
-        public void Handle(BrickMoved message)
+        public void Handle(BrickMoving message)
         {
-            _brickTiles = message.Tiles.Select(x => Tile.Create(x.Position + message.Position, x.Color, State.Removable));
+            _brickTiles = message.Tiles.Select(x => Tile.Create(x.Position + message.Position, x.Color, State.Removable)).ToList();
             CheckBrickCollision(message.Action);
         }
 
@@ -54,7 +59,6 @@ namespace PilesOfTiles.Collision
             {
                 _eventAggregator.PublishOnUIThread(new GameOver());
             }
-                    
         }
 
         private void CheckBrickCollision(Action action)
@@ -70,9 +74,9 @@ namespace PilesOfTiles.Collision
                     case Action.MoveDown:
                         _eventAggregator.PublishOnUIThread(new BrickCollided
                         {
-                            Tiles =
-                                _brickTiles.Select(x => Tile.Create(x.Position + new Vector2(0, -1), x.Color, State.Removable))
-                                    .ToList()
+                            Tiles = _brickTiles.Select(
+                                x => Tile.Create(x.Position + new Vector2(0, -1), x.Color, State.Removable))
+                                .ToList()
                         });
                         return;
                     case Action.MoveLeft:
