@@ -40,13 +40,15 @@
     <Compile Include="Brick\BrickManager.cs" />
     <Compile Include="Brick\BrickMap.cs" />
     <Compile Include="Brick\Messages\BrickCreated.cs" />
-    <Compile Include="Brick\Messages\BrickMoved.cs" />
+    <Compile Include="Brick\Messages\BrickMoving.cs" />
     <Compile Include="Collision\CollisionManager.cs" />
     <Compile Include="Collision\Messages\BrickCollided.cs" />
+    <Compile Include="Collision\Messages\BrickMoved.cs" />
     <Compile Include="Collision\Messages\GameOver.cs" />
     <Compile Include="Core\Profiler\ProfileManager.cs" />
     <Compile Include="HighScore\HighScoreRepository.cs" />
     <Compile Include="HighScore\Messages\GameEnded.cs" />
+    <Compile Include="Level\Messages\LevelUpdated.cs" />
     <Compile Include="Manager\IManager.cs" />
     <Compile Include="Particle\Particle.cs" />
     <Compile Include="Particle\ParticleManager.cs" />

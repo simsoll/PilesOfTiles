@@ -6,5 +6,6 @@ namespace PilesOfTiles.Level.Messages
     public class RowCleared
     {
         public IEnumerable<Tile> Tiles { get; set; }
+        public int Row { get; set; }
     }
 }
