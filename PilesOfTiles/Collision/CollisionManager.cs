@@ -99,6 +99,12 @@ namespace PilesOfTiles.Collision
                         return;
                 }
             }
+
+            //in case of no collision correction
+            _eventAggregator.PublishOnUIThread(new BrickMoved
+            {
+                Tiles = _brickTiles.Select(tile => Tile.Create(tile.Position, tile.Color, tile.State))
+            });
         }
 
         public void Load()

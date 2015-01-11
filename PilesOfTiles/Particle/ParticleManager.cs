@@ -7,13 +7,14 @@ using Microsoft.Xna.Framework.Graphics;
 using PilesOfTiles.Brick;
 using PilesOfTiles.Brick.Messages;
 using PilesOfTiles.Collision.Messages;
+using PilesOfTiles.Core.Input.Keyboard.Messages;
 using PilesOfTiles.Level.Messages;
 using PilesOfTiles.Manager;
 using PilesOfTiles.View.Messages;
 
 namespace PilesOfTiles.Particle
 {
-    public class ParticleManager : IManager, IHandle<LevelLoaded>, IHandle<LevelUpdated>, IHandle<RowCleared>, IHandle<BrickCreated>, IHandle<BrickMoving>
+    public class ParticleManager : IManager, IHandle<LevelLoaded>, IHandle<LevelUpdated>, IHandle<RowCleared>, IHandle<BrickCreated>, IHandle<BrickMoved>, IHandle<KeyHeld>
     {
         private readonly IEventAggregator _eventAggregator;
         private readonly IList<Texture2D> _textures;
@@ -63,10 +64,18 @@ namespace PilesOfTiles.Particle
             _brickTiles = message.Tiles.Select(x => Tile.Create(x.Position + message.Position, x.Color, State.Removable)).ToList();
         }
 
-        public void Handle(BrickMoving message)
+        public void Handle(BrickMoved message)
         {
-            _brickTiles = message.Tiles.Select(x => Tile.Create(x.Position + message.Position, x.Color, State.Removable)).ToList();
+            _brickTiles = message.Tiles.Select(x => Tile.Create(x.Position, x.Color, State.Removable)).ToList();
             GenerateParticlesAsBrickMoved();
+        }
+
+        public void Handle(KeyHeld message)
+        {
+            foreach (var tile in _brickTiles)
+            {
+                CheckIfTileTouchesLevelTilesFromDirection(tile, Direction.Down);
+            }
         }
 
         private void GenerateParticlesAsRowCleared(int row)
@@ -187,8 +196,8 @@ namespace PilesOfTiles.Particle
         {
             var texture = _textures[_random.Next(_textures.Count)];
             var velocity = new Vector2(
-                                    40f * (float)(_random.NextDouble() * 2 - 1),
-                                    40f * (float)(_random.NextDouble() * 2 - 1));
+                                    75f * (float)(_random.NextDouble() * 2 - 1),
+                                    75f * (float)(_random.NextDouble() * 2 - 1));
             var angle = 0;
             var angularVelocity = 10f * (float)(_random.NextDouble() * 2 - 1);
             var color = colors[_random.Next(colors.Length)];
