@@ -9,7 +9,7 @@ using PilesOfTiles.Collision.Messages;
 using PilesOfTiles.HighScore.Messages;
 using PilesOfTiles.Level.Messages;
 using PilesOfTiles.Manager;
-using PilesOfTiles.View.Messages;
+using PilesOfTiles.Screen.Messages;
 using GameEnded = PilesOfTiles.HighScore.Messages.GameEnded;
 using GameOver = PilesOfTiles.Collision.Messages.GameOver;
 

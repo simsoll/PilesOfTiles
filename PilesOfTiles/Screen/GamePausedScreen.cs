@@ -3,11 +3,11 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using PilesOfTiles.Core.Input.Keyboard.Messages;
 using PilesOfTiles.HighScore;
-using PilesOfTiles.View.Messages;
+using PilesOfTiles.Screen.Messages;
 
-namespace PilesOfTiles.View
+namespace PilesOfTiles.Screen
 {
-    public class GamePausedView : IView, IHandle<KeyPressed>
+    public class GamePausedScreen : IScreen, IHandle<KeyPressed>
     {
         private IEventAggregator _eventAggregator;
         private Texture2D _textTexture;
@@ -19,7 +19,7 @@ namespace PilesOfTiles.View
 
         private PixelAlfabet _pixelAlfabet;
 
-        public GamePausedView(IEventAggregator eventAggregator, Texture2D textTexture, int textSize, Color textColor)
+        public GamePausedScreen(IEventAggregator eventAggregator, Texture2D textTexture, int textSize, Color textColor)
         {
             _eventAggregator = eventAggregator;
             _textTexture = textTexture;

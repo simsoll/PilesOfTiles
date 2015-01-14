@@ -12,9 +12,10 @@ using PilesOfTiles.HighScore;
 using PilesOfTiles.Input;
 using PilesOfTiles.Level;
 using PilesOfTiles.Particle;
+using PilesOfTiles.Screen;
+using PilesOfTiles.Screen.Messages;
 using PilesOfTiles.UserInterface;
-using PilesOfTiles.View;
-using PilesOfTiles.View.Messages;
+using IScreen = PilesOfTiles.Screen.IScreen;
 
 #endregion
 
@@ -32,12 +33,12 @@ namespace PilesOfTiles
         private KeyboardManager _keyboardManager;
 
         private IEventAggregator _eventAggregator;
-        private IView _viewManager;
-        private IView _startView;
-        private IView _gamePausedView;
-        private IView _playingView;
-        private IView _gameEndedView;
-        private IView _highScoreView;
+        private IScreen _screenManager;
+        private IScreen _startScreen;
+        private IScreen _gamePausedScreen;
+        private IScreen _playingScreen;
+        private IScreen _gameEndedScreen;
+        private IScreen _highScoreScreen;
 
         private Texture2D _tileTexture;
         private int _tileSize;
@@ -47,13 +48,15 @@ namespace PilesOfTiles
         private Texture2D _textTexture;
         private int _textSize;
 
+        private int _sizeMultiplier = 2;
+
         public PilesOfTiles()
             : base()
         {
             _graphics = new GraphicsDeviceManager(this)
             {
-                PreferredBackBufferHeight = 568,
-                PreferredBackBufferWidth = 320
+                PreferredBackBufferHeight = _sizeMultiplier*568,
+                PreferredBackBufferWidth = _sizeMultiplier*320
             };
             IsMouseVisible = true;
             Content.RootDirectory = "Content";
@@ -80,8 +83,8 @@ namespace PilesOfTiles
             _eventAggregator = new EventAggregator();
             _eventAggregator.Subscribe(this);
 
-            _tileSize = 8;
-            _textSize = 1;
+            _tileSize = _sizeMultiplier*8;
+            _textSize = _sizeMultiplier*1;
             _levelHeight = 30;
             _levelWidth = 20;
 
@@ -94,15 +97,15 @@ namespace PilesOfTiles
             _tileTexture = GetPlain2DTexture(_tileSize);
             _textTexture = GetPlain2DTexture(_textSize);
 
-            _startView = new StartView(_eventAggregator, _textTexture, _textSize, Color.Blue, Color.Red);
-            _playingView = new PlayingView(_eventAggregator, _tileTexture, _tileSize, _textTexture, _textSize,
+            _startScreen = new StartScreen(_eventAggregator, _textTexture, _textSize, Color.Blue, Color.Red);
+            _playingScreen = new GameScreen(_eventAggregator, _tileTexture, _tileSize, _textTexture, _textSize,
                 _levelWidth, _levelHeight, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
-            _gamePausedView = new GamePausedView(_eventAggregator, _textTexture, _textSize, Color.Blue);
-            _gameEndedView = new GameEndedView(_eventAggregator, _textTexture, _textSize, Color.Blue);
-            _highScoreView = new HighScoreView(_eventAggregator, _textTexture, _textSize, Color.Blue);
+            _gamePausedScreen = new GamePausedScreen(_eventAggregator, _textTexture, _textSize, Color.Blue);
+            _gameEndedScreen = new GameEndedScreen(_eventAggregator, _textTexture, _textSize, Color.Blue);
+            _highScoreScreen = new HighScoreScreen(_eventAggregator, _textTexture, _textSize, Color.Blue);
 
-            _viewManager = new ViewManager(_eventAggregator, _startView, _playingView, _gamePausedView, _gameEndedView, _highScoreView);
-            _viewManager.Load();
+            _screenManager = new ScreenManager(_eventAggregator, _startScreen, _playingScreen, _gamePausedScreen, _gameEndedScreen, _highScoreScreen);
+            _screenManager.Load();
 
             
         }
@@ -113,7 +116,7 @@ namespace PilesOfTiles
         /// </summary>
         protected override void UnloadContent()
         {
-            _viewManager.Unload();
+            _screenManager.Unload();
         }
 
         /// <summary>
@@ -124,7 +127,7 @@ namespace PilesOfTiles
         protected override void Update(GameTime gameTime)
         {
             _keyboardManager.Update(gameTime);
-            _viewManager.Update(gameTime);
+            _screenManager.Update(gameTime);
 
             _profileManager.Update(gameTime);
 
@@ -141,7 +144,7 @@ namespace PilesOfTiles
 
             _spriteBatch.Begin();
 
-            _viewManager.Draw(_spriteBatch);
+            _screenManager.Draw(_spriteBatch);
 #if DEBUG
             _profileManager.Draw(_spriteBatch, _font, Vector2.Zero);
 #endif

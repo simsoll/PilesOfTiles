@@ -1,17 +1,14 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using Caliburn.Micro;
+﻿using Caliburn.Micro;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using PilesOfTiles.Core.Input.Keyboard.Messages;
 using PilesOfTiles.HighScore;
-using PilesOfTiles.View.Messages;
+using PilesOfTiles.Screen.Messages;
 
-namespace PilesOfTiles.View
+namespace PilesOfTiles.Screen
 {
-    public class StartView : IView, IHandle<KeyPressed>
+    public class StartScreen : IScreen, IHandle<KeyPressed>
     {
         private IEventAggregator _eventAggregator;
         private Texture2D _textTexture;
@@ -31,7 +28,7 @@ namespace PilesOfTiles.View
 
         private PixelAlfabet _pixelAlfabet;
 
-        public StartView(IEventAggregator eventAggregator, Texture2D textTexture, int textSize, Color textColorSelected,
+        public StartScreen(IEventAggregator eventAggregator, Texture2D textTexture, int textSize, Color textColorSelected,
             Color textColorUnselected)
         {
             _eventAggregator = eventAggregator;

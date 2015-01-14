@@ -9,7 +9,7 @@ using PilesOfTiles.HighScore;
 using PilesOfTiles.HighScore.Messages;
 using PilesOfTiles.Level.Messages;
 using PilesOfTiles.Manager;
-using PilesOfTiles.View.Messages;
+using PilesOfTiles.Screen.Messages;
 
 namespace PilesOfTiles.UserInterface
 {
@@ -66,7 +66,7 @@ namespace PilesOfTiles.UserInterface
         {
             DrawStatistic(spriteBatch, _textTexture, "highscore", (int) _score, Vector2.Zero);
             DrawStatistic(spriteBatch, _textTexture, "difficulty", _difficultyLevel,
-                new Vector2(0, _pixelAlfabet.Height));
+                new Vector2(0, _pixelAlfabet.Height * 2));
         }
 
         public void DrawStatistic(SpriteBatch spriteBatch, Texture2D texture, string name, int value, Vector2 offset)

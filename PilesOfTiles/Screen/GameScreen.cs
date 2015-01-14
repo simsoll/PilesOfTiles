@@ -4,19 +4,20 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using PilesOfTiles.Brick;
 using PilesOfTiles.Collision;
+using PilesOfTiles.DrawEffect;
 using PilesOfTiles.HighScore;
 using PilesOfTiles.Input;
 using PilesOfTiles.Input.Messages;
 using PilesOfTiles.Level;
 using PilesOfTiles.Manager;
 using PilesOfTiles.Particle;
+using PilesOfTiles.Screen.Messages;
 using PilesOfTiles.UserInterface;
-using PilesOfTiles.View.Messages;
 using Action = PilesOfTiles.Input.Messages.Action;
 
-namespace PilesOfTiles.View
+namespace PilesOfTiles.Screen
 {
-    public class PlayingView : IView, IHandle<ActionRequested>
+    public class GameScreen : IScreen, IHandle<ActionRequested>
     {
         private IEventAggregator _eventAggregator;
 
@@ -32,7 +33,7 @@ namespace PilesOfTiles.View
 
         private IEnumerable<IManager> _managers; 
 
-        public PlayingView(
+        public GameScreen(
             IEventAggregator eventAggregator, 
             Texture2D tileTexture, 
             int tileSize, 
@@ -72,6 +73,7 @@ namespace PilesOfTiles.View
             var highScoreManager = new HighScoreManager(_eventAggregator);
             var userInterfaceManager = new UserInterfaceManager(_eventAggregator, statisticsPosition, _tileSize, _textTexture, _textSize,
                 Color.Black);
+            var drawEffectManager = new DrawEffectManager(_eventAggregator);
 
             _managers = new List<IManager>
             {
@@ -81,7 +83,8 @@ namespace PilesOfTiles.View
                 levelManager,
                 brickManager,
                 highScoreManager,
-                userInterfaceManager
+                userInterfaceManager,
+                drawEffectManager
             };
        }
 

@@ -10,7 +10,6 @@ using PilesOfTiles.Collision.Messages;
 using PilesOfTiles.Core.Input.Keyboard.Messages;
 using PilesOfTiles.Level.Messages;
 using PilesOfTiles.Manager;
-using PilesOfTiles.View.Messages;
 
 namespace PilesOfTiles.Particle
 {

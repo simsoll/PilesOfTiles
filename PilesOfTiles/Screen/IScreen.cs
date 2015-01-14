@@ -1,9 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace PilesOfTiles.View
+namespace PilesOfTiles.Screen
 {
-    public interface IView
+    public interface IScreen
     {
         void Load();
         void Unload();

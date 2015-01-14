@@ -1,4 +1,4 @@
-﻿namespace PilesOfTiles.View.Messages
+﻿namespace PilesOfTiles.Screen.Messages
 {
     public class QuitGame
     {
