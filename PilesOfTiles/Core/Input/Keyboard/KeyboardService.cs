@@ -8,14 +8,14 @@ using PilesOfTiles.Core.Input.Keyboard.Messages;
 
 namespace PilesOfTiles.Core.Input.Keyboard
 {
-    public class KeyboardManager
+    public class KeyboardService : IController, IUpdatable
     {
         private readonly TimeSpan _heldDurationThreshold;
         private readonly IEventAggregator _eventAggregator;
         private readonly IDictionary<Keys, TimeSpan> _keyPressDurations;
         private IEnumerable<Keys> _previousPressedKeys;
 
-        public KeyboardManager(IEventAggregator eventAggregator, TimeSpan heldDurationThreshold)
+        public KeyboardService(IEventAggregator eventAggregator, TimeSpan heldDurationThreshold)
         {
             _eventAggregator = eventAggregator;
             _heldDurationThreshold = heldDurationThreshold;
@@ -66,7 +66,15 @@ namespace PilesOfTiles.Core.Input.Keyboard
 
             _previousPressedKeys = pressedKeys;
         }
+
+        public void Load()
+        {
+            _eventAggregator.Subscribe(this);
+        }
+
+        public void Unload()
+        {
+            _eventAggregator.Unsubscribe(this);
+        }
     }
-
-
 }

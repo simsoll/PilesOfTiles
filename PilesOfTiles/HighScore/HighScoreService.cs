@@ -6,16 +6,16 @@ using Caliburn.Micro;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using PilesOfTiles.Collision.Messages;
+using PilesOfTiles.Core;
 using PilesOfTiles.HighScore.Messages;
 using PilesOfTiles.Level.Messages;
-using PilesOfTiles.Manager;
 using PilesOfTiles.Screen.Messages;
 using GameEnded = PilesOfTiles.HighScore.Messages.GameEnded;
 using GameOver = PilesOfTiles.Collision.Messages.GameOver;
 
 namespace PilesOfTiles.HighScore
 {
-    public class HighScoreManager : IManager, IHandle<GameStarted>, IHandle<BrickCollided>, IHandle<RowCleared>, IHandle<DifficultyLevelChanged>, IHandle<GameOver>, IHandle<GameCompleted>
+    public class HighScoreService : IController, IUpdatable, IHandle<GameStarted>, IHandle<BrickCollided>, IHandle<RowCleared>, IHandle<DifficultyLevelChanged>, IHandle<GameOver>, IHandle<GameCompleted>
     {
         private IEventAggregator _eventAggregator;
 
@@ -28,7 +28,7 @@ namespace PilesOfTiles.HighScore
         private float _difficultyLevelMultiplier;
         private readonly float _difficultyLevelMultiplierDelta;
 
-        public HighScoreManager(IEventAggregator eventAggregator)
+        public HighScoreService(IEventAggregator eventAggregator)
         {
             _eventAggregator = eventAggregator;
             

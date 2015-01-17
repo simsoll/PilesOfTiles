@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using PilesOfTiles.Input.Messages;
@@ -9,6 +11,11 @@ namespace PilesOfTiles.Brick
         public Vector2 Position { get; private set; }
         public Direction PointsAt { get; private set; }
         public BrickMap BrickMap { get; private set; }
+
+        public IEnumerable<Tile> Tiles
+        {
+            get { return BrickMap.GetTilesWhenPointingAt(PointsAt, Position); }
+        }
 
         public Brick(Vector2 position, Direction pointsAt, BrickMap brickMap)
         {
@@ -41,9 +48,9 @@ namespace PilesOfTiles.Brick
 
         public void Draw(SpriteBatch spriteBatch, Texture2D texture, int tileSize)
         {
-            foreach (var tile in BrickMap.GetTilesWhenPointingAt(PointsAt))
+            foreach (var tile in BrickMap.GetTilesWhenPointingAt(PointsAt, Position))
             {
-                tile.Add(Position).Draw(spriteBatch, texture, tileSize);
+                tile.Draw(spriteBatch, texture, tileSize);
             }
         }
 

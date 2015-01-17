@@ -7,6 +7,6 @@ namespace PilesOfTiles.Collision.Messages
 {
     public class BrickMoved
     {
-        public IEnumerable<Tile> Tiles { get; set; }
+        public Brick.Brick Brick { get; set; }
     }
 }

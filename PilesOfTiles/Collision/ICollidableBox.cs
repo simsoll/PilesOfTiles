@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 
-namespace PilesOfTiles.Level.Messages
+namespace PilesOfTiles.Collision
 {
-    public class LevelLoaded
+    public interface ICollidableBox
     {
-        public Level Level { get; set; }
+        Rectangle BoundedBox { get; set; }
     }
 }

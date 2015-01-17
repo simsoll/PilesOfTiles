@@ -2,18 +2,18 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using PilesOfTiles.Core;
 using PilesOfTiles.Core.Input.Keyboard.Messages;
 using PilesOfTiles.Input.Messages;
-using PilesOfTiles.Manager;
 using Action = PilesOfTiles.Input.Messages.Action;
 
 namespace PilesOfTiles.Input
 {
-    public class InputManager : IManager, IHandle<KeyPressed>, IHandle<KeyHeld>
+    public class InputService : IController, IHandle<KeyPressed>, IHandle<KeyHeld>
     {
         private IEventAggregator _eventAggregator;
 
-        public InputManager(IEventAggregator eventAggregator)
+        public InputService(IEventAggregator eventAggregator)
         {
             _eventAggregator = eventAggregator;
         }
@@ -67,14 +67,6 @@ namespace PilesOfTiles.Input
         public void Unload()
         {
             _eventAggregator.Unsubscribe(this);
-        }
-
-        public void Update(GameTime gameTime)
-        {
-        }
-
-        public void Draw(SpriteBatch spriteBatch)
-        {
         }
     }
 }

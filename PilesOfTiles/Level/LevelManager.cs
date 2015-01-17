@@ -5,15 +5,16 @@ using Caliburn.Micro;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using PilesOfTiles.Collision.Messages;
-using PilesOfTiles.HighScore.Messages;
+using PilesOfTiles.Core;
 using PilesOfTiles.Input.Messages;
 using PilesOfTiles.Level.Messages;
-using PilesOfTiles.Manager;
+using PilesOfTiles.Screen.Messages;
 using Action = PilesOfTiles.Input.Messages.Action;
+using GameEnded = PilesOfTiles.HighScore.Messages.GameEnded;
 
 namespace PilesOfTiles.Level
 {
-    public class LevelManager : IManager, IHandle<BrickCollided>, IHandle<GameEnded>
+    public class LevelManager : IController, IUpdatable , IHandle<BrickCollided>, IHandle<GameStarted>, IHandle<GameEnded>
     {
         private IEventAggregator _eventAggregator;
         private TimeSpan _moveDownThreshold;
@@ -61,11 +62,6 @@ namespace PilesOfTiles.Level
         public void Load()
         {
             _eventAggregator.Subscribe(this);
-            _eventAggregator.PublishOnUIThread(new LevelLoaded
-            {
-                Position = Level.Position,
-                Tiles = Level.Tiles.Select(tile => Tile.Create(tile.Position, tile.Color, tile.State))
-            });
         }
 
         public void Unload()
@@ -84,19 +80,22 @@ namespace PilesOfTiles.Level
             }
         }
 
-        public void Draw(SpriteBatch spriteBatch)
-        {
-            Level.Draw(spriteBatch, _tileTexture);
-        }
-
         public void Handle(BrickCollided message)
         {
-            Level.AddTiles(message.Tiles.Select(tile => Tile.Create(tile.Position, tile.Color, tile.State)));
+            Level.AddTiles(message.Brick.Tiles.Select(tile => Tile.Create(tile.Position + message.Correction, tile.Color, tile.State)));
             _eventAggregator.PublishOnUIThread(new LevelUpdated
             {
-                Tiles = Level.Tiles.Select(tile => Tile.Create(tile.Position, tile.Color, tile.State))
+                Level = Level
             });
             CheckForFullRows();
+        }
+
+        public void Handle(GameStarted message)
+        {
+            _eventAggregator.PublishOnUIThread(new LevelLoaded
+            {
+                Level = Level
+            });
         }
 
         public void Handle(GameEnded message)
@@ -123,7 +122,7 @@ namespace PilesOfTiles.Level
                     MovesTilesDownAboveRow(i);
                     _eventAggregator.PublishOnUIThread(new RowCleared
                     {
-                        Tiles = Level.Tiles.Select(tile => Tile.Create(tile.Position, tile.Color, tile.State)),
+                        Level = Level,
                         Row = i
                     });
                     _rowsClearedSinceDifficultyIncrease++;

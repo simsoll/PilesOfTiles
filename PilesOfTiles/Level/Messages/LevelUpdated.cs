@@ -4,6 +4,6 @@ namespace PilesOfTiles.Level.Messages
 {
     public class LevelUpdated
     {
-        public IEnumerable<Tile> Tiles { get; set; }
+        public Level Level { get; set; }
     }
 }

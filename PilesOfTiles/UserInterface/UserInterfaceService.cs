@@ -5,15 +5,16 @@ using System.Text;
 using Caliburn.Micro;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using PilesOfTiles.Core;
 using PilesOfTiles.HighScore;
 using PilesOfTiles.HighScore.Messages;
 using PilesOfTiles.Level.Messages;
-using PilesOfTiles.Manager;
 using PilesOfTiles.Screen.Messages;
+using IDrawable = PilesOfTiles.Core.IDrawable;
 
 namespace PilesOfTiles.UserInterface
 {
-    public class UserInterfaceManager : IManager, IHandle<GameStarted>, IHandle<ScoreUpdated>, IHandle<DifficultyLevelChanged>
+    public class UserInterfaceService : IController, IDrawable, IHandle<GameStarted>, IHandle<ScoreUpdated>, IHandle<DifficultyLevelChanged>
     {
         private IEventAggregator _eventAggregator;
         private readonly Vector2 _statisticsPosition;
@@ -25,7 +26,7 @@ namespace PilesOfTiles.UserInterface
         private float _score;
         private int _difficultyLevel;
 
-        public UserInterfaceManager(IEventAggregator eventAggregator, Vector2 statisticsPosition, int tileSize,
+        public UserInterfaceService(IEventAggregator eventAggregator, Vector2 statisticsPosition, int tileSize,
             Texture2D textTexture, int textSize, Color highScoreTextColor)
         {
             _eventAggregator = eventAggregator;
@@ -56,10 +57,6 @@ namespace PilesOfTiles.UserInterface
         public void Unload()
         {
             _eventAggregator.Unsubscribe(this);
-        }
-
-        public void Update(GameTime gameTime)
-        {
         }
 
         public void Draw(SpriteBatch spriteBatch)

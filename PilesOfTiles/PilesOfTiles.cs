@@ -1,13 +1,16 @@
 ﻿#region Using Statements
 using System;
+using System.Collections.Generic;
 using Caliburn.Micro;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using PilesOfTiles.Brick;
 using PilesOfTiles.Collision;
+using PilesOfTiles.Core;
 using PilesOfTiles.Core.Input.Keyboard;
 using PilesOfTiles.Core.Profiler;
+using PilesOfTiles.DrawEffect;
 using PilesOfTiles.HighScore;
 using PilesOfTiles.Input;
 using PilesOfTiles.Level;
@@ -15,6 +18,7 @@ using PilesOfTiles.Particle;
 using PilesOfTiles.Screen;
 using PilesOfTiles.Screen.Messages;
 using PilesOfTiles.UserInterface;
+using IDrawable = PilesOfTiles.Core.IDrawable;
 using IScreen = PilesOfTiles.Screen.IScreen;
 
 #endregion
@@ -29,14 +33,14 @@ namespace PilesOfTiles
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
         private SpriteFont _font;
-        private ProfileManager _profileManager;
-        private KeyboardManager _keyboardManager;
+        private ProfileService _profileService;
+        private KeyboardService _keyboardService;
 
         private IEventAggregator _eventAggregator;
         private IScreen _screenManager;
         private IScreen _startScreen;
         private IScreen _gamePausedScreen;
-        private IScreen _playingScreen;
+        private IScreen _gameScreen;
         private IScreen _gameEndedScreen;
         private IScreen _highScoreScreen;
 
@@ -49,6 +53,11 @@ namespace PilesOfTiles
         private int _textSize;
 
         private int _sizeMultiplier = 2;
+        private IEnumerable<IController> _controllers;
+        private IEnumerable<IUpdatable> _updatables;
+        private IEnumerable<IDrawable> _drawables;
+        private int _screenHeight;
+        private int _screenWidth;
 
         public PilesOfTiles()
             : base()
@@ -91,23 +100,30 @@ namespace PilesOfTiles
             // Create a new SpriteBatch, which can be used to draw textures.
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             _font = Content.Load<SpriteFont>("Default");
-            _profileManager = new ProfileManager(_eventAggregator);
-            _keyboardManager = new KeyboardManager(_eventAggregator, TimeSpan.FromMilliseconds(500));
+            _profileService = new ProfileService(_eventAggregator);
+            _keyboardService = new KeyboardService(_eventAggregator, TimeSpan.FromMilliseconds(500));
 
             _tileTexture = GetPlain2DTexture(_tileSize);
             _textTexture = GetPlain2DTexture(_textSize);
 
+            _screenHeight = GraphicsDevice.Viewport.Width / _tileSize;
+            _screenWidth = GraphicsDevice.Viewport.Height / _tileSize;
+
+            var centeredLevelPosition = new Vector2(_screenHeight, _screenWidth) / 2 -
+                            new Vector2(_levelWidth, _levelHeight) / 2;
+
+            var centeredBrickSpawnPosition = centeredLevelPosition + new Vector2(_levelWidth / 2 - 1, 0);
+            var statisticsPosition = centeredLevelPosition + new Vector2(0, _levelHeight + 2);
+
+            _gameScreen = InitializeGameScreen(centeredLevelPosition, centeredBrickSpawnPosition, statisticsPosition);
+
             _startScreen = new StartScreen(_eventAggregator, _textTexture, _textSize, Color.Blue, Color.Red);
-            _playingScreen = new GameScreen(_eventAggregator, _tileTexture, _tileSize, _textTexture, _textSize,
-                _levelWidth, _levelHeight, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
             _gamePausedScreen = new GamePausedScreen(_eventAggregator, _textTexture, _textSize, Color.Blue);
             _gameEndedScreen = new GameEndedScreen(_eventAggregator, _textTexture, _textSize, Color.Blue);
             _highScoreScreen = new HighScoreScreen(_eventAggregator, _textTexture, _textSize, Color.Blue);
 
-            _screenManager = new ScreenManager(_eventAggregator, _startScreen, _playingScreen, _gamePausedScreen, _gameEndedScreen, _highScoreScreen);
+            _screenManager = new ScreenManager(_eventAggregator, _startScreen, _gameScreen, _gamePausedScreen, _gameEndedScreen, _highScoreScreen);
             _screenManager.Load();
-
-            
         }
 
         /// <summary>
@@ -126,10 +142,10 @@ namespace PilesOfTiles
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            _keyboardManager.Update(gameTime);
+            _keyboardService.Update(gameTime);
             _screenManager.Update(gameTime);
 
-            _profileManager.Update(gameTime);
+            _profileService.Update(gameTime);
 
             base.Update(gameTime);
         }
@@ -146,11 +162,56 @@ namespace PilesOfTiles
 
             _screenManager.Draw(_spriteBatch);
 #if DEBUG
-            _profileManager.Draw(_spriteBatch, _font, Vector2.Zero);
+            _profileService.Draw(_spriteBatch, _font, Vector2.Zero);
 #endif
             _spriteBatch.End();
 
             base.Draw(gameTime);
+        }
+
+        private GameScreen InitializeGameScreen(Vector2 centeredLevelPosition, Vector2 centeredBrickSpawnPosition,
+    Vector2 statisticsPosition)
+        {
+            var inputService = new InputService(_eventAggregator);
+            var collisionDetectionService = new CollisionDetectionService(_eventAggregator);
+            var particleEngine = new ParticleEngine(_eventAggregator, new[] { _tileTexture });
+            var levelManager = new LevelManager(_eventAggregator, centeredLevelPosition, _levelHeight, _levelWidth,
+                _tileTexture, _tileSize);
+            var brickManager = new BrickManager(_eventAggregator, centeredBrickSpawnPosition);
+            var highScoreService = new HighScoreService(_eventAggregator);
+            var userInterfaceService = new UserInterfaceService(_eventAggregator, statisticsPosition, _tileSize, _textTexture,
+                _textSize,
+                Color.Black);
+            var drawEffectService = new DrawEffectService(_eventAggregator, _tileTexture, _tileSize, _textTexture, _textSize);
+
+            _controllers = new List<IController>
+            {
+                inputService,
+                collisionDetectionService,
+                particleEngine,
+                levelManager,
+                brickManager,
+                highScoreService,
+                userInterfaceService,
+                drawEffectService
+            };
+
+            _updatables = new List<IUpdatable>
+            {
+                particleEngine,
+                levelManager,
+                drawEffectService,
+                highScoreService
+            };
+
+            _drawables = new List<IDrawable>
+            {
+                userInterfaceService,
+                drawEffectService
+            };
+
+
+            return new GameScreen(_eventAggregator, _controllers, _updatables, _drawables);
         }
 
         private Texture2D GetPlain2DTexture(int textureSize)

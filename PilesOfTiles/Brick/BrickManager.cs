@@ -6,33 +6,29 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using PilesOfTiles.Brick.Messages;
 using PilesOfTiles.Collision.Messages;
+using PilesOfTiles.Core;
 using PilesOfTiles.Input.Messages;
-using PilesOfTiles.Manager;
+using PilesOfTiles.Screen.Messages;
 using Vector2 = Microsoft.Xna.Framework.Vector2;
 
 namespace PilesOfTiles.Brick
 {
-    public class BrickManager : IManager, IHandle<ActionRequested>, IHandle<BrickCollided>
+    public class BrickManager : IController, IHandle<ActionRequested>, IHandle<BrickCollided>, IHandle<GameStarted>
     {
         private Vector2 _spawnPosition;
         private readonly Random _random;
         private IEventAggregator _eventAggregator;
-        private Texture2D _tileTexture;
-        private int _tileSize;
 
         public Brick Brick { get; private set; }
         public IEnumerable<BrickMap> BrickMaps { get; private set; }
 
-        public BrickManager(IEventAggregator eventAggregator, Vector2 spawnPosition, Texture2D tileTexture, int tileSize)
+        public BrickManager(IEventAggregator eventAggregator, Vector2 spawnPosition)
         {
             _eventAggregator = eventAggregator;
 
             _spawnPosition = spawnPosition;
-            _tileTexture = tileTexture;
-            _tileSize = tileSize;
             _random = new Random();
             InitializeBrickMaps();
-            SpawnRandomBrickAt(_spawnPosition);
         }
 
         public void Handle(ActionRequested message)
@@ -40,14 +36,17 @@ namespace PilesOfTiles.Brick
             Brick.Update(message.Action);
             _eventAggregator.PublishOnUIThread(new BrickMoving
             {
-                Action = message.Action,
-                PointsAt = Brick.PointsAt,
-                Position = Brick.Position,
-                Tiles = Brick.BrickMap.GetTilesWhenPointingAt(Brick.PointsAt).ToList()
+                Brick = Brick,
+                Action = message.Action
             });
         }
 
         public void Handle(BrickCollided message)
+        {
+            SpawnRandomBrickAt(_spawnPosition);
+        }
+
+        public void Handle(GameStarted message)
         {
             SpawnRandomBrickAt(_spawnPosition);
         }
@@ -62,24 +61,13 @@ namespace PilesOfTiles.Brick
             _eventAggregator.Unsubscribe(this);
         }
 
-        public void Update(GameTime gameTime)
-        {
-        }
-
-        public void Draw(SpriteBatch spriteBatch)
-        {
-            Brick.Draw(spriteBatch, _tileTexture, _tileSize);
-        }
-
         public void SpawnRandomBrickAt(Vector2 position)
         {
             var brickMap = BrickMaps.ElementAt(_random.Next(BrickMaps.Count()));
             Brick = new Brick(position, Direction.Up, brickMap);
             _eventAggregator.PublishOnUIThread(new BrickCreated
             {
-                PointsAt = Brick.PointsAt,
-                Position = Brick.Position,
-                Tiles = Brick.BrickMap.GetTilesWhenPointingAt(Brick.PointsAt).ToList()
+                Brick = Brick
             });
         }
 

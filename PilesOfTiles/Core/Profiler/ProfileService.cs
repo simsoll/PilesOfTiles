@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace PilesOfTiles.Core.Profiler
 {
-    public class ProfileManager : IHandle<object>
+    public class ProfileService : IHandle<object>
     {
         private IEventAggregator _eventAggregator;
         private int _messages;
@@ -16,10 +16,11 @@ namespace PilesOfTiles.Core.Profiler
         private int _messagesThisFrame;
         private StringBuilder _stringBuilder;
 
-        public ProfileManager(IEventAggregator eventAggregator)
+        public ProfileService(IEventAggregator eventAggregator)
         {
             _eventAggregator = eventAggregator;
             _eventAggregator.Subscribe(this);
+
             _messages = 0;
             _messagesThisFrame = 0;
             _framesPerSecond = 0;

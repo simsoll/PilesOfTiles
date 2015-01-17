@@ -7,13 +7,14 @@ using Microsoft.Xna.Framework.Graphics;
 using PilesOfTiles.Brick;
 using PilesOfTiles.Brick.Messages;
 using PilesOfTiles.Collision.Messages;
+using PilesOfTiles.Core;
 using PilesOfTiles.Core.Input.Keyboard.Messages;
 using PilesOfTiles.Level.Messages;
-using PilesOfTiles.Manager;
+using PilesOfTiles.Particle.Messages;
 
 namespace PilesOfTiles.Particle
 {
-    public class ParticleManager : IManager, IHandle<LevelLoaded>, IHandle<LevelUpdated>, IHandle<RowCleared>, IHandle<BrickCreated>, IHandle<BrickMoved>, IHandle<KeyHeld>
+    public class ParticleEngine : IController, IUpdatable, IHandle<LevelLoaded>, IHandle<LevelUpdated>, IHandle<RowCleared>, IHandle<BrickCreated>, IHandle<BrickMoved>, IHandle<KeyHeld>
     {
         private readonly IEventAggregator _eventAggregator;
         private readonly IList<Texture2D> _textures;
@@ -21,10 +22,10 @@ namespace PilesOfTiles.Particle
         private readonly Random _random;
         private readonly IList<Particle> _particles;
 
-        private IList<Tile> _levelTiles;
-        private IList<Tile> _brickTiles;
+        private Level.Level _level;
+        private Brick.Brick _brick;
 
-        public ParticleManager(IEventAggregator eventAggregator, IList<Texture2D> textures)
+        public ParticleEngine(IEventAggregator eventAggregator, IList<Texture2D> textures)
         {
             _eventAggregator = eventAggregator;
             _textures = textures;
@@ -44,34 +45,34 @@ namespace PilesOfTiles.Particle
 
         public void Handle(LevelLoaded message)
         {
-            _levelTiles = message.Tiles.Select(tile => Tile.Create(tile.Position, tile.Color, tile.State)).ToList();
+            _level = message.Level;
         }
 
         public void Handle(LevelUpdated message)
         {
-            _levelTiles = message.Tiles.Select(tile => Tile.Create(tile.Position, tile.Color, tile.State)).ToList();
+            _level = message.Level;
         }
 
         public void Handle(RowCleared message)
         {
             GenerateParticlesAsRowCleared(message.Row);
-            _levelTiles = message.Tiles.Select(tile => Tile.Create(tile.Position, tile.Color, tile.State)).ToList();
+            _level = message.Level;
         }
 
         public void Handle(BrickCreated message)
         {
-            _brickTiles = message.Tiles.Select(x => Tile.Create(x.Position + message.Position, x.Color, State.Removable)).ToList();
+            _brick = message.Brick;
         }
 
         public void Handle(BrickMoved message)
         {
-            _brickTiles = message.Tiles.Select(x => Tile.Create(x.Position, x.Color, State.Removable)).ToList();
+            _brick = message.Brick;
             GenerateParticlesAsBrickMoved();
         }
 
         public void Handle(KeyHeld message)
         {
-            foreach (var tile in _brickTiles)
+            foreach (var tile in _brick.Tiles)
             {
                 CheckIfTileTouchesLevelTilesFromDirection(tile, Direction.Down);
             }
@@ -79,7 +80,7 @@ namespace PilesOfTiles.Particle
 
         private void GenerateParticlesAsRowCleared(int row)
         {
-            var tiles = _levelTiles.Where(tile => tile.Position.Y == row && tile.State == State.Removable);
+            var tiles = _level.Tiles.Where(tile => tile.Position.Y == row && tile.State == State.Removable);
 
             foreach (var tile in tiles)
             {
@@ -89,7 +90,7 @@ namespace PilesOfTiles.Particle
 
         private void GenerateParticlesAsBrickMoved()
         {
-            foreach (var tile in _brickTiles)
+            foreach (var tile in _brick.Tiles)
             {
                 CheckIfTileTouchesLevelTilesFromDirection(tile, Direction.Left);
                 CheckIfTileTouchesLevelTilesFromDirection(tile, Direction.Right);
@@ -100,10 +101,10 @@ namespace PilesOfTiles.Particle
         {
             var offset = TouchingOffsetFromDirection(direction);
 
-            if (_levelTiles.Any(x => x.Position == tile.Position + offset))
+            if (_level.Tiles.Any(x => x.Position == tile.Position + offset))
             {
                 var levelTile =
-                    _levelTiles.FirstOrDefault(x => x.Position == tile.Position + offset);
+                    _level.Tiles.FirstOrDefault(x => x.Position == tile.Position + offset);
 
 
                 if (levelTile != null)
@@ -165,13 +166,6 @@ namespace PilesOfTiles.Particle
 
         public void Update(GameTime gameTime)
         {
-            //var total = 1;
-
-            //for (var i = 0; i < total; i++)
-            //{
-            //    _particles.Add(GenerateNewParticle());
-            //}
-
             for (var particle = 0; particle < _particles.Count; particle++)
             {
                 _particles[particle].Update(gameTime);
@@ -181,14 +175,11 @@ namespace PilesOfTiles.Particle
                     particle--;
                 }
             }
-        }
 
-        public void Draw(SpriteBatch spriteBatch)
-        {
-            foreach (var t in _particles)
+            _eventAggregator.PublishOnUIThread(new ParticlesMoved
             {
-                t.Draw(spriteBatch);
-            }
+                Particles = _particles
+            });
         }
 
         private Particle GenerateNewParticle(Vector2 position, Color[] colors)
