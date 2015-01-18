@@ -13,7 +13,8 @@ namespace PilesOfTiles.Core.Profiler
         private IEventAggregator _eventAggregator;
         private int _messages;
         private float _framesPerSecond;
-        private int _messagesThisFrame;
+        private int[] _messagesPerFrame;
+        private int _messagesPerFrameIndex;
         private StringBuilder _stringBuilder;
 
         public ProfileService(IEventAggregator eventAggregator)
@@ -22,14 +23,15 @@ namespace PilesOfTiles.Core.Profiler
             _eventAggregator.Subscribe(this);
 
             _messages = 0;
-            _messagesThisFrame = 0;
+            _messagesPerFrame = new int[10];
+            _messagesPerFrameIndex = 0;
             _framesPerSecond = 0;
         }
 
         public void Handle(object message)
         {
             _messages++;
-            _messagesThisFrame++;
+            _messagesPerFrame[_messagesPerFrameIndex]++;
         }
 
         public void Update(GameTime gameTime)
@@ -41,11 +43,21 @@ namespace PilesOfTiles.Core.Profiler
         {
             _stringBuilder = new StringBuilder();
             _stringBuilder.AppendLine(string.Format("Frames per second: {0}", _framesPerSecond));
-            _stringBuilder.AppendLine(string.Format("Messages per frame: {0}", _messages));
-            _stringBuilder.AppendLine(string.Format("Total messages: {0}", _messagesThisFrame));
+            _stringBuilder.AppendLine(string.Format("Messages per frame: {0:0.00}", _messagesPerFrame.Average()));
+            _stringBuilder.AppendLine(string.Format("Total messages: {0}", _messages));
 
             spriteBatch.DrawString(font, _stringBuilder.ToString(), position, Color.Black, 0.0f, Vector2.Zero, 0.75f, SpriteEffects.None, 0.0f);
-            _messages = 0;
+
+            _messagesPerFrameIndex++;
+            if (_messagesPerFrameIndex == _messagesPerFrame.Length)
+            {
+                _messagesPerFrameIndex = 0;
+            }
+
+            if (_messagesPerFrame[_messagesPerFrameIndex] > 0)
+            { 
+                _messagesPerFrame[_messagesPerFrameIndex] = 0;
+            }
         }
     }
 }
