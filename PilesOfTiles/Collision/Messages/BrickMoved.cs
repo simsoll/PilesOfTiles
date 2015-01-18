@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.Xna.Framework;
-using PilesOfTiles.Brick;
+﻿using PilesOfTiles.Bricks;
 
 namespace PilesOfTiles.Collision.Messages
 {
     public class BrickMoved
     {
-        public Brick.Brick Brick { get; set; }
+        public Brick Brick { get; set; }
     }
 }

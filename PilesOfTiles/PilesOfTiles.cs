@@ -4,22 +4,21 @@ using System.Collections.Generic;
 using Caliburn.Micro;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using PilesOfTiles.Brick;
+using PilesOfTiles.Bricks;
 using PilesOfTiles.Collision;
 using PilesOfTiles.Core;
 using PilesOfTiles.Core.Input.Keyboard;
 using PilesOfTiles.Core.Profiler;
-using PilesOfTiles.DrawEffect;
+using PilesOfTiles.DrawEffects;
 using PilesOfTiles.HighScore;
 using PilesOfTiles.Input;
-using PilesOfTiles.Level;
-using PilesOfTiles.Particle;
-using PilesOfTiles.Screen;
-using PilesOfTiles.Screen.Messages;
-using PilesOfTiles.UserInterface;
+using PilesOfTiles.Levels;
+using PilesOfTiles.Particles;
+using PilesOfTiles.Screens;
+using PilesOfTiles.Screens.Messages;
+using PilesOfTiles.UserInterfaces;
 using IDrawable = PilesOfTiles.Core.IDrawable;
-using IScreen = PilesOfTiles.Screen.IScreen;
+using IScreen = PilesOfTiles.Screens.IScreen;
 
 #endregion
 
@@ -175,8 +174,7 @@ namespace PilesOfTiles
             var inputService = new InputService(_eventAggregator);
             var collisionDetectionService = new CollisionDetectionService(_eventAggregator);
             var particleEngine = new ParticleEngine(_eventAggregator, new[] { _tileTexture });
-            var levelManager = new LevelManager(_eventAggregator, centeredLevelPosition, _levelHeight, _levelWidth,
-                _tileTexture, _tileSize);
+            var levelManager = new LevelManager(_eventAggregator, centeredLevelPosition, _levelHeight, _levelWidth);
             var brickManager = new BrickManager(_eventAggregator, centeredBrickSpawnPosition);
             var highScoreService = new HighScoreService(_eventAggregator);
             var userInterfaceService = new UserInterfaceService(_eventAggregator, statisticsPosition, _tileSize, _textTexture,

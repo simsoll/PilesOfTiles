@@ -5,11 +5,13 @@ using System.Text;
 using Caliburn.Micro;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using PilesOfTiles.Brick.Messages;
+using PilesOfTiles.Bricks;
+using PilesOfTiles.Bricks.Messages;
 using PilesOfTiles.Collision.Messages;
 using PilesOfTiles.Core;
 using PilesOfTiles.Input.Messages;
-using PilesOfTiles.Level.Messages;
+using PilesOfTiles.Levels;
+using PilesOfTiles.Levels.Messages;
 using Action = PilesOfTiles.Input.Messages.Action;
 
 namespace PilesOfTiles.Collision
@@ -17,8 +19,8 @@ namespace PilesOfTiles.Collision
     public class CollisionDetectionService : IController , IHandle<LevelLoaded>, IHandle<LevelUpdated>, IHandle<RowCleared>, IHandle<BrickCreated>, IHandle<BrickMoving>
     {
         private readonly IEventAggregator _eventAggregator;
-        private Level.Level _level;
-        private Brick.Brick _brick;
+        private Level _level;
+        private Brick _brick;
 
         public CollisionDetectionService(IEventAggregator eventAggregator)
         {
@@ -55,7 +57,7 @@ namespace PilesOfTiles.Collision
         private void CheckForGameOver()
         {
             if (_brick.Tiles.Any(
-                tile => _level.Tiles.Any(x => x.Position.X == tile.Position.X && x.Position.Y == tile.Position.Y)))
+                tile => _level.Tiles.Any(x => x.Position().X == tile.Position().X && x.Position().Y == tile.Position().Y)))
             {
                 _eventAggregator.PublishOnUIThread(new GameOver());
             }
@@ -66,7 +68,7 @@ namespace PilesOfTiles.Collision
             foreach (
                 var tile in
                     _brick.Tiles.Where(
-                        tile => _level.Tiles.Any(x => x.Position.X == tile.Position.X && x.Position.Y == tile.Position.Y))
+                        tile => _level.Tiles.Any(x => x.Position().X == tile.Position().X && x.Position().Y == tile.Position().Y))
                 )
             {
                 switch (action)

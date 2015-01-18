@@ -8,8 +8,8 @@ using Microsoft.Xna.Framework.Graphics;
 using PilesOfTiles.Collision.Messages;
 using PilesOfTiles.Core;
 using PilesOfTiles.HighScore.Messages;
-using PilesOfTiles.Level.Messages;
-using PilesOfTiles.Screen.Messages;
+using PilesOfTiles.Levels.Messages;
+using PilesOfTiles.Screens.Messages;
 using GameEnded = PilesOfTiles.HighScore.Messages.GameEnded;
 using GameOver = PilesOfTiles.Collision.Messages.GameOver;
 
