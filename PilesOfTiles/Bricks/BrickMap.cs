@@ -8,14 +8,14 @@ namespace PilesOfTiles.Bricks
 {
     public class BrickMap
     {
-        public IDictionary<Direction, IEnumerable<Tile>> DirectionToTilesMapper { get; private set; }
+        public IDictionary<Direction, IEnumerable<ITile>> DirectionToTilesMapper { get; private set; }
 
-        public BrickMap(IDictionary<Direction, IEnumerable<Tile>> directionToTilesMapper)
+        public BrickMap(IDictionary<Direction, IEnumerable<ITile>> directionToTilesMapper)
         {
             DirectionToTilesMapper = directionToTilesMapper;
         }
 
-        public IEnumerable<Tile> GetTilesWhenPointingAt(Direction direction, Vector2 position)
+        public IEnumerable<ITile> GetTilesWhenPointingAt(Direction direction, Vector2 position)
         {
             if (!DirectionToTilesMapper.ContainsKey(direction))
             {
@@ -23,12 +23,12 @@ namespace PilesOfTiles.Bricks
             }
 
             var tiles = DirectionToTilesMapper[direction]
-                    .Select(tile => new Tile(tile.Position(), tile.Color(), tile.State()))
+                    .Select(tile => new Tile(tile.Position, tile.Color, tile.State))
                     .ToList();
 
             foreach (var tile in tiles)
             {
-                tile.Set(tile.Position() + position);
+                tile.Position += position;
             }
 
             return tiles;

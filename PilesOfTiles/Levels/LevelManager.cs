@@ -77,7 +77,7 @@ namespace PilesOfTiles.Levels
 
         public void Handle(BrickCollided message)
         {
-            Level.AddTiles(message.Brick.Tiles.Select(tile => new Tile(tile.Position() + message.Correction, tile.Color(), tile.State())));
+            Level.AddTiles(message.Brick.Tiles.Select(tile => new Tile(tile.Position + message.Correction, tile.Color, tile.State)));
             _eventAggregator.PublishOnUIThread(new LevelUpdated
             {
                 Level = Level
@@ -100,12 +100,12 @@ namespace PilesOfTiles.Levels
 
         public void CheckForFullRows()
         {
-            var bottom = (int)Level.Tiles.Where(tile => tile.State() == State.Removable).Select(tile => tile.Position().Y).Max();
+            var bottom = (int)Level.Tiles.Where(tile => tile.State == State.Removable).Select(tile => tile.Position.Y).Max();
 
             for (var i = bottom; 0 <= i; i--)
             {
-                var tiles = Level.Tiles.Where(tile => tile.Position().Y == i && tile.State() == State.Removable).ToList();
-                var numberOfSolidTiles = Level.Tiles.Count(tile => tile.Position().Y == i && tile.State() == State.Solid);
+                var tiles = Level.Tiles.Where(tile => tile.Position.Y == i && tile.State == State.Removable).ToList();
+                var numberOfSolidTiles = Level.Tiles.Count(tile => tile.Position.Y == i && tile.State == State.Solid);
 
                 if (tiles.Count() == Level.Width - numberOfSolidTiles)
                 {
@@ -149,13 +149,13 @@ namespace PilesOfTiles.Levels
 
         private void MovesTilesDownAboveRow(int i)
         {
-            var resultList = Level.Tiles.Where(tile => tile.State() == State.Solid).ToList();
+            var resultList = Level.Tiles.Where(tile => tile.State == State.Solid).ToList();
 
-            resultList.AddRange(Level.Tiles.Where(tile => tile.Position().Y > i && tile.State() != State.Solid));
+            resultList.AddRange(Level.Tiles.Where(tile => tile.Position.Y > i && tile.State != State.Solid));
 
             resultList.AddRange(
-                Level.Tiles.Where(tile => tile.Position().Y < i && tile.State() != State.Solid)
-                    .Select(tile => new Tile(tile.Position() + new Vector2(0, 1), tile.Color(), State.Removable)));
+                Level.Tiles.Where(tile => tile.Position.Y < i && tile.State != State.Solid)
+                    .Select(tile => new Tile(tile.Position + new Vector2(0, 1), tile.Color, State.Removable)));
 
             Level.ResetTiles(resultList);
         }

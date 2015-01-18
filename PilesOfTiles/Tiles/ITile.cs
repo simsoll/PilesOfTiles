@@ -5,11 +5,10 @@ namespace PilesOfTiles.Tiles
 {
     public interface ITile
     {
-        void Draw(SpriteBatch spriteBatch, Texture2D texture, int tileSize);
-        void Set(Vector2 position);
+        void Update(GameTime gameTime);
 
-        Vector2 Position();
-        Color Color();
-        State State();
+        Vector2 Position { get; set; }
+        Color Color { get; }
+        State State { get; }
     }
 }

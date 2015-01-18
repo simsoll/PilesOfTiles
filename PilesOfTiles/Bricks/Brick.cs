@@ -11,7 +11,7 @@ namespace PilesOfTiles.Bricks
         public Direction PointsAt { get; private set; }
         public BrickMap BrickMap { get; private set; }
 
-        public IEnumerable<Tile> Tiles
+        public IEnumerable<ITile> Tiles
         {
             get { return BrickMap.GetTilesWhenPointingAt(PointsAt, Position); }
         }

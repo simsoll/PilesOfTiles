@@ -20,25 +20,25 @@ namespace PilesOfTiles.Levels
         public int Height { get; private set; }
         public int Width { get; private set; }
         public Color WallColor { get; private set; }
-        public List<Tile> Tiles { get; private set; }
+        public List<ITile> Tiles { get; private set; }
 
 
-        public void AddTiles(IEnumerable<Tile> tiles)
+        public void AddTiles(IEnumerable<ITile> tiles)
         {
             Tiles.AddRange(tiles);
         }
 
-        public void RemoveTile(Tile tile)
+        public void RemoveTile(ITile tile)
         {
             Tiles.Remove(tile);
         }
 
-        public void ResetTiles(IEnumerable<Tile> tiles)
+        public void ResetTiles(IEnumerable<ITile> tiles)
         {
             Tiles = tiles.ToList();
         }
 
-        private IEnumerable<Tile> AddWalls()
+        private IEnumerable<ITile> AddWalls()
         {
             //add bottom
             for (var x = 0; x < Width - 1; x++)

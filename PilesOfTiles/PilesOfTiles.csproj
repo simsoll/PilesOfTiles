@@ -49,13 +49,10 @@
     <Compile Include="Core\IController.cs" />
     <Compile Include="Core\Profiler\ProfileService.cs" />
     <Compile Include="DrawEffects\DrawEffectService.cs" />
-    <Compile Include="DrawEffects\Effect\PositionEffect.cs" />
-    <Compile Include="DrawEffects\Messages\SimpleDrawRequested.cs" />
     <Compile Include="HighScore\HighScoreRepository.cs" />
     <Compile Include="HighScore\Messages\GameEnded.cs" />
     <Compile Include="Levels\Messages\LevelUpdated.cs" />
     <Compile Include="Core\IDrawable.cs" />
-    <Compile Include="DrawEffects\Messages\AdvancedDrawRequested.cs" />
     <Compile Include="Core\IUpdatable.cs" />
     <Compile Include="Particles\Messages\ParticlesMoved.cs" />
     <Compile Include="Particles\Particle.cs" />
@@ -81,6 +78,7 @@
     <Compile Include="Screens\GameScreen.cs" />
     <Compile Include="Screens\ScreenManager.cs" />
     <Compile Include="Screens\StartScreen.cs" />
+    <Compile Include="Tiles\DynamicPositionedTile.cs" />
     <Compile Include="Tiles\ITile.cs" />
     <Compile Include="UserInterfaces\PixelAlfabet.cs" />
     <Compile Include="Input\InputService.cs" />

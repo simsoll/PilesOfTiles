@@ -9,30 +9,32 @@ using PilesOfTiles.Bricks.Messages;
 using PilesOfTiles.Collision.Messages;
 using PilesOfTiles.Core;
 using PilesOfTiles.Core.Input.Keyboard.Messages;
+using PilesOfTiles.HighScore.Messages;
 using PilesOfTiles.Levels;
 using PilesOfTiles.Levels.Messages;
 using PilesOfTiles.Particles.Messages;
+using PilesOfTiles.Randomizers;
 using PilesOfTiles.Tiles;
 
 namespace PilesOfTiles.Particles
 {
-    public class ParticleEngine : IController, IUpdatable, IHandle<LevelLoaded>, IHandle<LevelUpdated>, IHandle<RowCleared>, IHandle<BrickCreated>, IHandle<BrickMoved>, IHandle<KeyHeld>
+    public class ParticleEngine : IController, IUpdatable, IHandle<LevelLoaded>, IHandle<LevelUpdated>, IHandle<RowCleared>, IHandle<BrickCreated>, IHandle<BrickMoved>, IHandle<KeyHeld>, IHandle<GameOver>
     {
         private readonly IEventAggregator _eventAggregator;
+        private readonly IRandomizer _randomizer;
         private readonly IList<Texture2D> _textures;
 
-        private readonly Random _random;
-        private readonly IList<Particle> _particles;
+        private IList<Particle> _particles;
 
         private Level _level;
         private Brick _brick;
 
-        public ParticleEngine(IEventAggregator eventAggregator, IList<Texture2D> textures)
+        public ParticleEngine(IEventAggregator eventAggregator, IRandomizer randomizer, IList<Texture2D> textures)
         {
             _eventAggregator = eventAggregator;
+            _randomizer = randomizer;
             _textures = textures;
             _particles = new List<Particle>();
-            _random = new Random();
         }
 
         public void Load()
@@ -80,13 +82,18 @@ namespace PilesOfTiles.Particles
             }
         }
 
+        public void Handle(GameOver message)
+        {
+            _particles = new List<Particle>();
+        }
+
         private void GenerateParticlesAsRowCleared(int row)
         {
-            var tiles = _level.Tiles.Where(tile => tile.Position().Y == row && tile.State() == State.Removable);
+            var tiles = _level.Tiles.Where(tile => tile.Position.Y == row && tile.State == State.Removable);
 
             foreach (var tile in tiles)
             {
-                GenerateParticlesAlong(tile.Position() + Vector2.One * 0.5f, tile.Position() + Vector2.One * 0.5f, new[] { tile.Color() }, 5);
+                GenerateParticlesAlong(tile.Position + Vector2.One * 0.5f, tile.Position + Vector2.One * 0.5f, new[] { tile.Color }, 5);
             }
         }
 
@@ -99,21 +106,21 @@ namespace PilesOfTiles.Particles
             }
         }
 
-        private void CheckIfTileTouchesLevelTilesFromDirection(Tile tile, Direction direction)
+        private void CheckIfTileTouchesLevelTilesFromDirection(ITile tile, Direction direction)
         {
             var offset = TouchingOffsetFromDirection(direction);
 
-            if (_level.Tiles.Any(x => x.Position() == tile.Position() + offset))
+            if (_level.Tiles.Any(x => x.Position == tile.Position + offset))
             {
                 var levelTile =
-                    _level.Tiles.FirstOrDefault(x => x.Position() == tile.Position() + offset);
+                    _level.Tiles.FirstOrDefault(x => x.Position == tile.Position + offset);
 
 
                 if (levelTile != null)
                 {
-                    var endPointPositions = ParticleEndPointPositionsFromDirection(tile.Position(), direction);
+                    var endPointPositions = ParticleEndPointPositionsFromDirection(tile.Position, direction);
                     GenerateParticlesAlong(endPointPositions.Item1, endPointPositions.Item2,
-                        new[] { tile.Color(), levelTile.Color() }, _random.Next(5));
+                        new[] { tile.Color, levelTile.Color }, _randomizer.Next(5));
                 }
             }
         }
@@ -126,7 +133,7 @@ namespace PilesOfTiles.Particles
             {
                 var lowerBoundY = Math.Min(startPosition.Y, endPosition.Y);
                 var upperBoundY = Math.Max(startPosition.Y, endPosition.Y);
-                var y = _random.Next((int) lowerBoundY, (int) upperBoundY);
+                var y = _randomizer.Next((int)lowerBoundY, (int)upperBoundY);
 
                 _particles.Add(GenerateNewParticle(new Vector2(x, y), colors));
             }
@@ -186,15 +193,15 @@ namespace PilesOfTiles.Particles
 
         private Particle GenerateNewParticle(Vector2 position, Color[] colors)
         {
-            var texture = _textures[_random.Next(_textures.Count)];
+            var texture = _textures[_randomizer.Next(_textures.Count)];
             var velocity = new Vector2(
-                                    75f * (float)(_random.NextDouble() * 2 - 1),
-                                    75f * (float)(_random.NextDouble() * 2 - 1));
+                                    75f * (float)(_randomizer.NextDouble() * 2 - 1),
+                                    75f * (float)(_randomizer.NextDouble() * 2 - 1));
             var angle = 0;
-            var angularVelocity = 10f * (float)(_random.NextDouble() * 2 - 1);
-            var color = colors[_random.Next(colors.Length)];
-            var size = (float)_random.NextDouble();
-            var timeToLive = TimeSpan.FromMilliseconds(2000 + _random.Next(4000));
+            var angularVelocity = 10f * (float)(_randomizer.NextDouble() * 2 - 1);
+            var color = colors[_randomizer.Next(colors.Length)];
+            var size = (float)_randomizer.NextDouble();
+            var timeToLive = TimeSpan.FromMilliseconds(2000 + _randomizer.Next(4000));
 
             return new Particle(texture, position*texture.Height, velocity, angle, angularVelocity, color, size, timeToLive);
         }

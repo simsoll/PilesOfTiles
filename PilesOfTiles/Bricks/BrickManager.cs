@@ -74,11 +74,11 @@ namespace PilesOfTiles.Bricks
         {
             BrickMaps = new List<BrickMap>
             {
-                new BrickMap(new Dictionary<Direction, IEnumerable<Tile>>
+                new BrickMap(new Dictionary<Direction, IEnumerable<ITile>>
                 {
                     {
                         Direction.Up,
-                        new List<Tile>
+                        new List<ITile>
                         {
                             new Tile(new Vector2(0, 1), Color.MediumPurple, State.Removable),
                             new Tile(new Vector2(1, 0), Color.MediumPurple, State.Removable),
@@ -88,7 +88,7 @@ namespace PilesOfTiles.Bricks
                     },
                     {
                         Direction.Right,
-                        new List<Tile>
+                        new List<ITile>
                         {
                             new Tile(new Vector2(1, 0), Color.MediumPurple, State.Removable),
                             new Tile(new Vector2(1, 1), Color.MediumPurple, State.Removable),
@@ -98,7 +98,7 @@ namespace PilesOfTiles.Bricks
                     },
                     {
                         Direction.Down,
-                        new List<Tile>
+                        new List<ITile>
                         {
                             new Tile(new Vector2(0, 1), Color.MediumPurple, State.Removable),
                             new Tile(new Vector2(1, 1), Color.MediumPurple, State.Removable),
@@ -108,7 +108,7 @@ namespace PilesOfTiles.Bricks
                     },
                     {
                         Direction.Left,
-                        new List<Tile>
+                        new List<ITile>
                         {
                             new Tile(new Vector2(1, 0), Color.MediumPurple, State.Removable),
                             new Tile(new Vector2(0, 1), Color.MediumPurple, State.Removable),
@@ -118,11 +118,11 @@ namespace PilesOfTiles.Bricks
                     }
 
                 }),
-                new BrickMap(new Dictionary<Direction, IEnumerable<Tile>>
+                new BrickMap(new Dictionary<Direction, IEnumerable<ITile>>
                 {
                     {
                         Direction.Up,
-                        new List<Tile>
+                        new List<ITile>
                         {
                             new Tile(new Vector2(0, 0), Color.Yellow, State.Removable),
                             new Tile(new Vector2(1, 0), Color.Yellow, State.Removable),
@@ -132,7 +132,7 @@ namespace PilesOfTiles.Bricks
                     },
                     {
                         Direction.Right,
-                        new List<Tile>
+                        new List<ITile>
                         {
                             new Tile(new Vector2(0, 0), Color.Yellow, State.Removable),
                             new Tile(new Vector2(1, 0), Color.Yellow, State.Removable),
@@ -142,7 +142,7 @@ namespace PilesOfTiles.Bricks
                     },
                     {
                         Direction.Down,
-                        new List<Tile>
+                        new List<ITile>
                         {
                             new Tile(new Vector2(0, 0), Color.Yellow, State.Removable),
                             new Tile(new Vector2(1, 0), Color.Yellow, State.Removable),
@@ -152,7 +152,7 @@ namespace PilesOfTiles.Bricks
                     },
                     {
                         Direction.Left,
-                        new List<Tile>
+                        new List<ITile>
                         {
                             new Tile(new Vector2(0, 0), Color.Yellow, State.Removable),
                             new Tile(new Vector2(1, 0), Color.Yellow, State.Removable),
@@ -161,11 +161,11 @@ namespace PilesOfTiles.Bricks
                         }
                     }
                 }),
-                new BrickMap(new Dictionary<Direction, IEnumerable<Tile>>
+                new BrickMap(new Dictionary<Direction, IEnumerable<ITile>>
                 {
                     {
                         Direction.Up,
-                        new List<Tile>
+                        new List<ITile>
                         {
                             new Tile(new Vector2(-1, 0), Color.CornflowerBlue, State.Removable),
                             new Tile(new Vector2(0, 0), Color.CornflowerBlue, State.Removable),
@@ -175,7 +175,7 @@ namespace PilesOfTiles.Bricks
                     },
                     {
                         Direction.Right,
-                        new List<Tile>
+                        new List<ITile>
                         {
                             new Tile(new Vector2(0, -1), Color.CornflowerBlue, State.Removable),
                             new Tile(new Vector2(0, 0), Color.CornflowerBlue, State.Removable),
@@ -185,7 +185,7 @@ namespace PilesOfTiles.Bricks
                     },
                     {
                         Direction.Down,
-                        new List<Tile>
+                        new List<ITile>
                         {
                             new Tile(new Vector2(-1, 0), Color.CornflowerBlue, State.Removable),
                             new Tile(new Vector2(0, 0), Color.CornflowerBlue, State.Removable),
@@ -195,7 +195,7 @@ namespace PilesOfTiles.Bricks
                     },
                     {
                         Direction.Left,
-                        new List<Tile>
+                        new List<ITile>
                         {
                             new Tile(new Vector2(0, -1), Color.CornflowerBlue, State.Removable),
                             new Tile(new Vector2(0, 0), Color.CornflowerBlue, State.Removable),
@@ -204,11 +204,11 @@ namespace PilesOfTiles.Bricks
                         }
                     }
                 }),
-                new BrickMap(new Dictionary<Direction, IEnumerable<Tile>>
+                new BrickMap(new Dictionary<Direction, IEnumerable<ITile>>
                 {
                     {
                         Direction.Up,
-                        new List<Tile>
+                        new List<ITile>
                         {
                             new Tile(new Vector2(0, -1), Color.Orange, State.Removable),
                             new Tile(new Vector2(0, 0), Color.Orange, State.Removable),
@@ -218,7 +218,7 @@ namespace PilesOfTiles.Bricks
                     },
                     {
                         Direction.Right,
-                        new List<Tile>
+                        new List<ITile>
                         {
                             new Tile(new Vector2(-1, 0), Color.Orange, State.Removable),
                             new Tile(new Vector2(0, 0), Color.Orange, State.Removable),
@@ -228,7 +228,7 @@ namespace PilesOfTiles.Bricks
                     },
                     {
                         Direction.Down,
-                        new List<Tile>
+                        new List<ITile>
                         {
                             new Tile(new Vector2(0, -1), Color.Orange, State.Removable),
                             new Tile(new Vector2(0, 0), Color.Orange, State.Removable),
@@ -238,7 +238,7 @@ namespace PilesOfTiles.Bricks
                     },
                     {
                         Direction.Left,
-                        new List<Tile>
+                        new List<ITile>
                         {
                             new Tile(new Vector2(-1, 0), Color.Orange, State.Removable),
                             new Tile(new Vector2(0, 0), Color.Orange, State.Removable),
@@ -247,11 +247,11 @@ namespace PilesOfTiles.Bricks
                         }
                     }
                 }),
-                new BrickMap(new Dictionary<Direction, IEnumerable<Tile>>
+                new BrickMap(new Dictionary<Direction, IEnumerable<ITile>>
                 {
                     {
                         Direction.Up,
-                        new List<Tile>
+                        new List<ITile>
                         {
                             new Tile(new Vector2(1, -1), Color.Blue, State.Removable),
                             new Tile(new Vector2(1, 0), Color.Blue, State.Removable),
@@ -261,7 +261,7 @@ namespace PilesOfTiles.Bricks
                     },
                     {
                         Direction.Right,
-                        new List<Tile>
+                        new List<ITile>
                         {
                             new Tile(new Vector2(0, 1), Color.Blue, State.Removable),
                             new Tile(new Vector2(1, 1), Color.Blue, State.Removable),
@@ -271,7 +271,7 @@ namespace PilesOfTiles.Bricks
                     },
                     {
                         Direction.Down,
-                        new List<Tile>
+                        new List<ITile>
                         {
                             new Tile(new Vector2(1, -1), Color.Blue, State.Removable),
                             new Tile(new Vector2(1, 0), Color.Blue, State.Removable),
@@ -281,7 +281,7 @@ namespace PilesOfTiles.Bricks
                     },
                     {
                         Direction.Left,
-                        new List<Tile>
+                        new List<ITile>
                         {
                             new Tile(new Vector2(0, 1), Color.Blue, State.Removable),
                             new Tile(new Vector2(1, 1), Color.Blue, State.Removable),
@@ -290,11 +290,11 @@ namespace PilesOfTiles.Bricks
                         }
                     }
                 }),
-                new BrickMap(new Dictionary<Direction, IEnumerable<Tile>>
+                new BrickMap(new Dictionary<Direction, IEnumerable<ITile>>
                 {
                     {
                         Direction.Up,
-                        new List<Tile>
+                        new List<ITile>
                         {
                             new Tile(new Vector2(2, 0), Color.Green, State.Removable),
                             new Tile(new Vector2(1, 0), Color.Green, State.Removable),
@@ -304,7 +304,7 @@ namespace PilesOfTiles.Bricks
                     },
                     {
                         Direction.Right,
-                        new List<Tile>
+                        new List<ITile>
                         {
                             new Tile(new Vector2(0, 0), Color.Green, State.Removable),
                             new Tile(new Vector2(1, 2), Color.Green, State.Removable),
@@ -314,7 +314,7 @@ namespace PilesOfTiles.Bricks
                     },
                     {
                         Direction.Down,
-                        new List<Tile>
+                        new List<ITile>
                         {
                             new Tile(new Vector2(0, 0), Color.Green, State.Removable),
                             new Tile(new Vector2(1, 0), Color.Green, State.Removable),
@@ -324,7 +324,7 @@ namespace PilesOfTiles.Bricks
                     },
                     {
                         Direction.Left,
-                        new List<Tile>
+                        new List<ITile>
                         {
                             new Tile(new Vector2(0, 0), Color.Green, State.Removable),
                             new Tile(new Vector2(1, 0), Color.Green, State.Removable),
@@ -333,11 +333,11 @@ namespace PilesOfTiles.Bricks
                         }
                     }
                 }),
-                new BrickMap(new Dictionary<Direction, IEnumerable<Tile>>
+                new BrickMap(new Dictionary<Direction, IEnumerable<ITile>>
                 {
                     {
                         Direction.Up,
-                        new List<Tile>
+                        new List<ITile>
                         {
                             new Tile(new Vector2(0, 0), Color.Red, State.Removable),
                             new Tile(new Vector2(-1, 0), Color.Red, State.Removable),
@@ -347,7 +347,7 @@ namespace PilesOfTiles.Bricks
                     },
                     {
                         Direction.Right,
-                        new List<Tile>
+                        new List<ITile>
                         {
                             new Tile(new Vector2(0, 0), Color.Red, State.Removable),
                             new Tile(new Vector2(1, 0), Color.Red, State.Removable),
@@ -357,7 +357,7 @@ namespace PilesOfTiles.Bricks
                     },
                     {
                         Direction.Down,
-                        new List<Tile>
+                        new List<ITile>
                         {
                             new Tile(new Vector2(0, 0), Color.Red, State.Removable),
                             new Tile(new Vector2(1, 0), Color.Red, State.Removable),
@@ -367,7 +367,7 @@ namespace PilesOfTiles.Bricks
                     },
                     {
                         Direction.Left,
-                        new List<Tile>
+                        new List<ITile>
                         {
                             new Tile(new Vector2(0, 2), Color.Red, State.Removable),
                             new Tile(new Vector2(1, 0), Color.Red, State.Removable),

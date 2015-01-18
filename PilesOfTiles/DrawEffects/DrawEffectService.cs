@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Caliburn.Micro;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -6,56 +7,59 @@ using PilesOfTiles.Bricks;
 using PilesOfTiles.Bricks.Messages;
 using PilesOfTiles.Collision.Messages;
 using PilesOfTiles.Core;
-using PilesOfTiles.DrawEffects.Effect;
 using PilesOfTiles.Levels;
 using PilesOfTiles.Levels.Messages;
 using PilesOfTiles.Particles;
 using PilesOfTiles.Particles.Messages;
+using PilesOfTiles.Randomizers;
+using PilesOfTiles.Screens.Messages;
 using PilesOfTiles.Tiles;
 using IDrawable = PilesOfTiles.Core.IDrawable;
 
 namespace PilesOfTiles.DrawEffects
 {
-    public class DrawEffectService : IController, IUpdatable, IDrawable, IHandle<LevelLoaded>, IHandle<LevelUpdated>, IHandle<RowCleared>, IHandle<BrickCreated>, IHandle<BrickMoved>, IHandle<ParticlesMoved>
+    public class DrawEffectService : IController, IUpdatable, IDrawable, IHandle<LevelLoaded>, IHandle<LevelUpdated>, IHandle<RowCleared>, IHandle<BrickCreated>, IHandle<BrickMoved>, IHandle<ParticlesMoved>, IHandle<GameOver>
     {
         private readonly IEventAggregator _eventAggregator;
+        private readonly IRandomizer _randomizer;
         private readonly Texture2D _tileTexture;
         private readonly int _tileSize;
         private readonly Texture2D _textTexture;
         private readonly int _textSize;
-        private Level _level;
-        private IDictionary<Tile,PositionEffect> _positionEffects; 
         private Brick _brick;
-        private IEnumerable<Particle> _particles; 
+        private IEnumerable<ITile> _levelTiles; 
+        private IEnumerable<Particle> _particles;
 
-        public DrawEffectService(IEventAggregator eventAggregator, Texture2D tileTexture, int tileSize, Texture2D textTexture, int textSize)
+        public DrawEffectService(IEventAggregator eventAggregator, IRandomizer randomizer, Texture2D tileTexture,
+            int tileSize, Texture2D textTexture, int textSize)
         {
             _eventAggregator = eventAggregator;
+            _randomizer = randomizer;
             _tileTexture = tileTexture;
             _tileSize = tileSize;
             _textTexture = textTexture;
             _textSize = textSize;
 
-            _positionEffects = new Dictionary<Tile, PositionEffect>();
+            _levelTiles = new List<ITile>();
         }
 
         public void Handle(LevelLoaded message)
         {
-            _level = message.Level;
-            foreach (var tile in _level.Tiles)
-            {
-                _positionEffects.Add(tile, new PositionEffect(tile.Position()));
-            }
+            _levelTiles =
+                message.Level.Tiles.Select(
+                    tile => new DynamicPositionedTile(new Tile(tile.Position, tile.Color, tile.State), _randomizer)).ToList();
         }
 
         public void Handle(LevelUpdated message)
         {
-            _level = message.Level;
+            _levelTiles =
+                message.Level.Tiles.Select(tile => new Tile(tile.Position, tile.Color, tile.State));
         }
 
         public void Handle(RowCleared message)
         {
-            _level = message.Level;
+            _levelTiles =
+                message.Level.Tiles.Select(tile => new Tile(tile.Position, tile.Color, tile.State));
         }
 
         public void Handle(BrickCreated message)
@@ -80,16 +84,14 @@ namespace PilesOfTiles.DrawEffects
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            foreach (var tile in _level.Tiles)
+            foreach (var tile in _levelTiles)
             {
-                //var position = _positionEffects[tile].Position;
-
-                tile.Draw(spriteBatch, _tileTexture, _tileSize);
+                spriteBatch.Draw(_tileTexture, tile.Position * _tileSize, tile.Color);
             }
 
             foreach (var tile in _brick.Tiles)
             {
-                tile.Draw(spriteBatch, _tileTexture, _tileSize);
+                spriteBatch.Draw(_tileTexture, tile.Position * _tileSize, tile.Color);
             }
 
             foreach (var particle in _particles)
@@ -100,15 +102,20 @@ namespace PilesOfTiles.DrawEffects
 
         public void Update(GameTime gameTime)
         {
-            foreach (var positionEffect in _positionEffects)
+            foreach (var tile in _levelTiles)
             {
-                positionEffect.Value.Update(gameTime);
+                tile.Update(gameTime);
             }
         }
 
         public void Handle(ParticlesMoved message)
         {
             _particles = message.Particles;
+        }
+
+        public void Handle(GameOver message)
+        {
+            _particles = new List<Particle>();
         }
     }
 }

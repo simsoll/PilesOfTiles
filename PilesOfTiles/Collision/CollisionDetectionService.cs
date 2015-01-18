@@ -57,7 +57,7 @@ namespace PilesOfTiles.Collision
         private void CheckForGameOver()
         {
             if (_brick.Tiles.Any(
-                tile => _level.Tiles.Any(x => x.Position().X == tile.Position().X && x.Position().Y == tile.Position().Y)))
+                tile => _level.Tiles.Any(x => x.Position.X == tile.Position.X && x.Position.Y == tile.Position.Y)))
             {
                 _eventAggregator.PublishOnUIThread(new GameOver());
             }
@@ -68,7 +68,7 @@ namespace PilesOfTiles.Collision
             foreach (
                 var tile in
                     _brick.Tiles.Where(
-                        tile => _level.Tiles.Any(x => x.Position().X == tile.Position().X && x.Position().Y == tile.Position().Y))
+                        tile => _level.Tiles.Any(x => x.Position.X == tile.Position.X && x.Position.Y == tile.Position.Y))
                 )
             {
                 switch (action)
