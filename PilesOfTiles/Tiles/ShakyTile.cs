@@ -1,11 +1,10 @@
 using System;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using PilesOfTiles.Randomizers;
 
 namespace PilesOfTiles.Tiles
 {
-    public class DynamicPositionedTile : ITile
+    public class ShakyTile : ITile
     {
         private ITile _tile;
         private IRandomizer _randomizer;
@@ -19,27 +18,32 @@ namespace PilesOfTiles.Tiles
         public Color Color { get { return _tile.Color; } }
         public State State { get { return _tile.State; } }
 
-        public DynamicPositionedTile(ITile tile, IRandomizer randomizer)
+        public ShakyTile(ITile tile, IRandomizer randomizer)
         {
             _tile = tile;
             _randomizer = randomizer;
 
             _targetPosition = tile.Position;
-            _sourcePosition = new Vector2(_randomizer.Next(50) * 2 - 50, _randomizer.Next(50) * 2 - 50);
-            _duration = TimeSpan.FromSeconds(_randomizer.NextDouble() * 2);
+            _duration = TimeSpan.FromMilliseconds(400 + _randomizer.NextDouble() * 200 - 10);
             _lifeTime = TimeSpan.Zero;
 
-            Position = _sourcePosition;
+            Position = _targetPosition;
         }
 
         public void Update(GameTime gameTime)
         {
             _lifeTime += gameTime.ElapsedGameTime;
 
-            var cappedDuration = _lifeTime < _duration ? _lifeTime : _duration;
-            var interpolator = cappedDuration.Ticks / (float) _duration.Ticks;
+            var isActive = _lifeTime < _duration;
 
-            Position = _sourcePosition * (1 - interpolator) + _targetPosition * interpolator;
+            if (isActive)
+            {
+                Position = _targetPosition + new Vector2((float)_randomizer.NextDouble() - 0.5f, (float)_randomizer.NextDouble() - 0.5f);
+            }
+            else
+            {
+                Position = _targetPosition;
+            }
 
             _tile.Update(gameTime);
         }

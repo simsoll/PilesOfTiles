@@ -1,24 +1,25 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Caliburn.Micro;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using PilesOfTiles.Bricks;
 using PilesOfTiles.Bricks.Messages;
 using PilesOfTiles.Collision.Messages;
 using PilesOfTiles.Core;
-using PilesOfTiles.Levels;
+using PilesOfTiles.Core.Input.Keyboard.Messages;
 using PilesOfTiles.Levels.Messages;
 using PilesOfTiles.Particles;
 using PilesOfTiles.Particles.Messages;
 using PilesOfTiles.Randomizers;
-using PilesOfTiles.Screens.Messages;
 using PilesOfTiles.Tiles;
 using IDrawable = PilesOfTiles.Core.IDrawable;
 
 namespace PilesOfTiles.DrawEffects
 {
-    public class DrawEffectService : IController, IUpdatable, IDrawable, IHandle<LevelLoaded>, IHandle<LevelUpdated>, IHandle<RowCleared>, IHandle<BrickCreated>, IHandle<BrickMoved>, IHandle<ParticlesMoved>, IHandle<GameOver>
+    public class DrawEffectService : IController, IUpdatable, IDrawable, IHandle<LevelLoaded>, IHandle<LevelUpdated>, IHandle<RowCleared>, IHandle<BrickCreated>, IHandle<BrickMoved>, IHandle<ParticlesMoved>, IHandle<GameOver>, IHandle<KeyHeld>
     {
         private readonly IEventAggregator _eventAggregator;
         private readonly IRandomizer _randomizer;
@@ -29,6 +30,8 @@ namespace PilesOfTiles.DrawEffects
         private Brick _brick;
         private IEnumerable<ITile> _levelTiles; 
         private IEnumerable<Particle> _particles;
+        private TimeSpan _downKeyHeldThreshold;
+        private TimeSpan _timeSinceLastDownKeyHeld;
 
         public DrawEffectService(IEventAggregator eventAggregator, IRandomizer randomizer, Texture2D tileTexture,
             int tileSize, Texture2D textTexture, int textSize)
@@ -41,6 +44,9 @@ namespace PilesOfTiles.DrawEffects
             _textSize = textSize;
 
             _levelTiles = new List<ITile>();
+
+            _downKeyHeldThreshold = TimeSpan.FromMilliseconds(500);
+            _timeSinceLastDownKeyHeld = TimeSpan.Zero;
         }
 
         public void Handle(LevelLoaded message)
@@ -52,8 +58,18 @@ namespace PilesOfTiles.DrawEffects
 
         public void Handle(LevelUpdated message)
         {
-            _levelTiles =
-                message.Level.Tiles.Select(tile => new Tile(tile.Position, tile.Color, tile.State));
+            if (_timeSinceLastDownKeyHeld < _downKeyHeldThreshold)
+            {
+                _levelTiles =
+                    message.Level.Tiles.Select(
+                        tile => new ShakyTile(new Tile(tile.Position, tile.Color, tile.State), new Randomizer()))
+                        .ToList();
+            }
+            else
+            {
+                _levelTiles =
+                    message.Level.Tiles.Select(tile => new Tile(tile.Position, tile.Color, tile.State));
+            }
         }
 
         public void Handle(RowCleared message)
@@ -97,7 +113,7 @@ namespace PilesOfTiles.DrawEffects
             foreach (var particle in _particles)
             {
                 particle.Draw(spriteBatch);
-            }   
+            }
         }
 
         public void Update(GameTime gameTime)
@@ -106,6 +122,8 @@ namespace PilesOfTiles.DrawEffects
             {
                 tile.Update(gameTime);
             }
+
+            _timeSinceLastDownKeyHeld += gameTime.ElapsedGameTime;
         }
 
         public void Handle(ParticlesMoved message)
@@ -116,6 +134,14 @@ namespace PilesOfTiles.DrawEffects
         public void Handle(GameOver message)
         {
             _particles = new List<Particle>();
+        }
+
+        public void Handle(KeyHeld message)
+        {
+            if (message.Key == Keys.Down)
+            {
+                _timeSinceLastDownKeyHeld = TimeSpan.Zero;
+            }
         }
     }
 }

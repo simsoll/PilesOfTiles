@@ -80,6 +80,7 @@
     <Compile Include="Screens\StartScreen.cs" />
     <Compile Include="Tiles\DynamicPositionedTile.cs" />
     <Compile Include="Tiles\ITile.cs" />
+    <Compile Include="Tiles\ShakyTile.cs" />
     <Compile Include="UserInterfaces\PixelAlfabet.cs" />
     <Compile Include="Input\InputService.cs" />
     <Compile Include="Core\Input\Keyboard\KeyboardService.cs" />
