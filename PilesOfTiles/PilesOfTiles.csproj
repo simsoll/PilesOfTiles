@@ -98,6 +98,7 @@
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tiles\Tile.cs" />
+    <Compile Include="UserInterfaces\PixelPlot.cs" />
     <Compile Include="UserInterfaces\UserInterfaceService.cs" />
   </ItemGroup>
   <ItemGroup>
