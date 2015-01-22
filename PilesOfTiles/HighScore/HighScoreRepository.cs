@@ -1,45 +1,42 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Deployment.Internal;
+using System.IO;
 using System.Linq;
 using System.Text;
 using OpenTK.Graphics.OpenGL;
 
 namespace PilesOfTiles.HighScore
 {
-    public class HighScoreRepository
+    public class HighScoreRepository : IHighScoreRepository
     {
-        private readonly IList<HighScore> _repository;
+        private readonly string _highScoreFilePath;
 
-        private HighScoreRepository()
+        public HighScoreRepository(string highScoreFilePath)
         {
-            _repository = new List<HighScore>();
+            _highScoreFilePath = highScoreFilePath;
+
+            if (!File.Exists(_highScoreFilePath))
+            {
+                File.Create(_highScoreFilePath);
+            }
         }
 
-        private static HighScoreRepository highScoreRepository;
-
-        public static HighScoreRepository Instance
+        public void Store(HighScore highScore)
         {
-            get { return highScoreRepository ?? (highScoreRepository = new HighScoreRepository()); }
+            File.AppendAllText(_highScoreFilePath, highScore + Environment.NewLine);
         }
 
-        public void StoreHighScore(HighScore highScore)
+        public IEnumerable<HighScore> GetAllHighScores()
         {
-            _repository.Add(highScore);
-        }
-
-        public IList<HighScore> GetAllHighScores()
-        {
-            return _repository;
-        }
-
-        public class HighScore
-        {
-            public string PlayerName { get; set; }
-            public float Score { get; set; }
-            public int DifficultyLevel { get; set; }
+            return File.ReadLines(_highScoreFilePath)
+                .Select(line => line.Split(';'))
+                .Select(highScoreAttributes => new HighScore
+                {
+                    PlayerName = highScoreAttributes[0],
+                    Score = Convert.ToSingle(highScoreAttributes[1]),
+                    DifficultyLevel = Convert.ToInt32(highScoreAttributes[2])
+                }).ToList();
         }
     }
-
-
 }

@@ -13,6 +13,7 @@ namespace PilesOfTiles.Screens
     public class HighScoreScreen : IScreen, IHandle<KeyPressed>
     {
         private IEventAggregator _eventAggregator;
+        private readonly IHighScoreRepository _highScoreRepository;
         private Texture2D _textTexture;
         private int _textSize;
         private Color _textColor;
@@ -25,9 +26,10 @@ namespace PilesOfTiles.Screens
 
         private PixelAlfabet _pixelAlfabet;
 
-        public HighScoreScreen(IEventAggregator eventAggregator, Texture2D textTexture, int textSize, Color textColor)
+        public HighScoreScreen(IEventAggregator eventAggregator, IHighScoreRepository highScoreRepository, Texture2D textTexture, Vector2 centeredTextPosition, int textSize, Color textColor)
         {
             _eventAggregator = eventAggregator;
+            _highScoreRepository = highScoreRepository;
             _textTexture = textTexture;
             _textSize = textSize;
             _textColor = textColor;
@@ -60,7 +62,7 @@ namespace PilesOfTiles.Screens
             _pixelAlfabet.DrawText(spriteBatch, _titleText, _textTexture, _titleTextPosition, _textSize,
                 _textColor);
 
-            var highScores = HighScoreRepository.Instance.GetAllHighScores()
+            var highScores = _highScoreRepository.GetAllHighScores()
                 .OrderByDescending(x => x.Score)
                 .ThenByDescending(x => x.DifficultyLevel);
 

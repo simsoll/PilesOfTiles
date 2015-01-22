@@ -44,6 +44,10 @@ namespace PilesOfTiles.HighScore
             _score = 0.0f;
             _rowsCleared = 0;
             _difficultyLevel = 1;
+            _eventAggregator.PublishOnUIThread(new ScoreUpdated
+            {
+                Score = _score
+            });
         }
 
         public void Handle(BrickCollided message)
@@ -91,10 +95,6 @@ namespace PilesOfTiles.HighScore
             {
                 Score = _score
             });
-        }
-
-        public void Draw(SpriteBatch spriteBatch)
-        {
         }
 
         public void Handle(GameOver message)

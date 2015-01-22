@@ -12,6 +12,7 @@ namespace PilesOfTiles.Screens
     public class GameEndedScreen : IScreen, IHandle<GameEnded>, IHandle<KeyPressed>
     {
         private IEventAggregator _eventAggregator;
+        private readonly IHighScoreRepository _highScoreRepository;
         private Texture2D _textTexture;
         private int _textSize;
         private Color _textColor;
@@ -33,9 +34,10 @@ namespace PilesOfTiles.Screens
 
         private PixelAlfabet _pixelAlfabet;
 
-        public GameEndedScreen(IEventAggregator eventAggregator, Texture2D textTexture, int textSize, Color textColor)
+        public GameEndedScreen(IEventAggregator eventAggregator, IHighScoreRepository highScoreRepository, Texture2D textTexture, Vector2 centeredTextPosition, int textSize, Color textColor)
         {
             _eventAggregator = eventAggregator;
+            _highScoreRepository = highScoreRepository;
             _textTexture = textTexture;
             _textSize = textSize;
             _textColor = textColor;
@@ -124,9 +126,9 @@ namespace PilesOfTiles.Screens
 
         private void SaveHighScore()
         {
-            HighScoreRepository.Instance.StoreHighScore(new HighScoreRepository.HighScore
+            _highScoreRepository.Store(new HighScore.HighScore
             {
-                PlayerName = _playerName,
+                PlayerName = _playerName == "" ? _defaultPlayerName: _playerName,
                 Score = _score,
                 DifficultyLevel = _difficultyLevel
             });

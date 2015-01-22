@@ -44,12 +44,15 @@
     <Compile Include="Collision\CollisionDetectionService.cs" />
     <Compile Include="Collision\ICollidableBox.cs" />
     <Compile Include="Collision\Messages\BrickCollided.cs" />
+    <Compile Include="Collision\Messages\BrickCorrected.cs" />
     <Compile Include="Collision\Messages\BrickMoved.cs" />
     <Compile Include="Collision\Messages\GameOver.cs" />
     <Compile Include="Core\IController.cs" />
     <Compile Include="Core\Profiler\ProfileService.cs" />
     <Compile Include="DrawEffects\DrawEffectService.cs" />
+    <Compile Include="HighScore\HighScore.cs" />
     <Compile Include="HighScore\HighScoreRepository.cs" />
+    <Compile Include="HighScore\IHighScoreRepository.cs" />
     <Compile Include="HighScore\Messages\GameEnded.cs" />
     <Compile Include="Levels\Messages\LevelUpdated.cs" />
     <Compile Include="Core\IDrawable.cs" />

@@ -47,19 +47,12 @@ namespace PilesOfTiles
         private IRandomizer _randomizer;
         
         private Texture2D _tileTexture;
-        private int _tileSize;
-        private int _levelWidth;
-        private int _levelHeight;
-
         private Texture2D _textTexture;
-        private int _textSize;
 
         private int _sizeMultiplier = 2;
         private IEnumerable<IController> _controllers;
         private IEnumerable<IUpdatable> _updatables;
         private IEnumerable<IDrawable> _drawables;
-        private int _screenHeight;
-        private int _screenWidth;
 
         public PilesOfTiles()
             : base()
@@ -96,10 +89,13 @@ namespace PilesOfTiles
 
             _randomizer = new Randomizer();
 
-            _tileSize = _sizeMultiplier*8;
-            _textSize = _sizeMultiplier*1;
-            _levelHeight = 30;
-            _levelWidth = 20;
+            var tileSize = _sizeMultiplier*8;
+            var textSize = _sizeMultiplier*1;
+            var levelHeight = 30;
+            var levelWidth = 20;
+            var textColor = Color.Black;
+            var unSelectedTextColor = Color.Gray;
+            var highScoreFilePath = "Highscore.txt";
 
             // Create a new SpriteBatch, which can be used to draw textures.
             _spriteBatch = new SpriteBatch(GraphicsDevice);
@@ -107,27 +103,36 @@ namespace PilesOfTiles
             _profileService = new ProfileService(_eventAggregator);
             _keyboardService = new KeyboardService(_eventAggregator, TimeSpan.FromMilliseconds(500));
 
-            _tileTexture = GetPlain2DTexture(_tileSize);
-            _textTexture = GetPlain2DTexture(_textSize);
+            _tileTexture = GetPlain2DTexture(tileSize);
+            _textTexture = GetPlain2DTexture(textSize);
 
-            _screenHeight = GraphicsDevice.Viewport.Width / _tileSize;
-            _screenWidth = GraphicsDevice.Viewport.Height / _tileSize;
+            var centeredLevelPosition = CenteredPosition(levelWidth, levelHeight, tileSize);
+            var centeredBrickSpawnPosition = centeredLevelPosition + new Vector2(levelWidth/2.0f - 1, 0);
+            var centeredTextPosition = CenteredPosition(levelWidth, levelHeight, textSize) + new Vector2(10, 0);
+            var statisticsPosition = centeredTextPosition + new Vector2(0, levelHeight + 125);
 
-            var centeredLevelPosition = new Vector2(_screenHeight, _screenWidth) / 2 -
-                            new Vector2(_levelWidth, _levelHeight) / 2;
+            _gameScreen = InitializeGameScreen(_randomizer, levelWidth, levelHeight, tileSize, textSize,
+                centeredLevelPosition, centeredBrickSpawnPosition, statisticsPosition);
 
-            var centeredBrickSpawnPosition = centeredLevelPosition + new Vector2(_levelWidth / 2 - 1, 0);
-            var statisticsPosition = centeredLevelPosition + new Vector2(0, _levelHeight + 2);
+            var highScoreRepository = new HighScoreRepository(highScoreFilePath);
 
-            _gameScreen = InitializeGameScreen(_randomizer, centeredLevelPosition, centeredBrickSpawnPosition, statisticsPosition);
+            _startScreen = new StartScreen(_eventAggregator, _textTexture, centeredTextPosition, textSize, textColor, unSelectedTextColor);
+            _gamePausedScreen = new GamePausedScreen(_eventAggregator, _textTexture, centeredTextPosition, textSize, textColor);
+            _gameEndedScreen = new GameEndedScreen(_eventAggregator, highScoreRepository, _textTexture, centeredTextPosition, textSize, textColor);
+            _highScoreScreen = new HighScoreScreen(_eventAggregator, highScoreRepository, _textTexture, centeredTextPosition, textSize, textColor);
 
-            _startScreen = new StartScreen(_eventAggregator, _textTexture, _textSize, Color.Blue, Color.Red);
-            _gamePausedScreen = new GamePausedScreen(_eventAggregator, _textTexture, _textSize, Color.Blue);
-            _gameEndedScreen = new GameEndedScreen(_eventAggregator, _textTexture, _textSize, Color.Blue);
-            _highScoreScreen = new HighScoreScreen(_eventAggregator, _textTexture, _textSize, Color.Blue);
-
-            _screenManager = new ScreenManager(_eventAggregator, _startScreen, _gameScreen, _gamePausedScreen, _gameEndedScreen, _highScoreScreen);
+            _screenManager = new ScreenManager(_eventAggregator, _startScreen, _gameScreen, _gamePausedScreen,
+                _gameEndedScreen, _highScoreScreen);
             _screenManager.Load();
+        }
+
+        private Vector2 CenteredPosition(int levelWidth, int levelHeight, int tileSize)
+        {
+            var screenHeight = GraphicsDevice.Viewport.Height/(float)tileSize;
+            var screenWidth = GraphicsDevice.Viewport.Width / (float)tileSize;
+
+            return new Vector2(screenWidth, screenHeight)/2.0f -
+                   new Vector2(levelWidth, levelHeight)/2.0f;
         }
 
         /// <summary>
@@ -165,26 +170,26 @@ namespace PilesOfTiles
             _spriteBatch.Begin();
 
             _screenManager.Draw(_spriteBatch);
-#if DEBUG
-            _profileService.Draw(_spriteBatch, _font, Vector2.Zero);
-#endif
+//#if DEBUG
+//            _profileService.Draw(_spriteBatch, _font, Vector2.Zero);
+//#endif
             _spriteBatch.End();
 
             base.Draw(gameTime);
         }
 
-        private GameScreen InitializeGameScreen(IRandomizer randomizer, Vector2 centeredLevelPosition, Vector2 centeredBrickSpawnPosition, Vector2 statisticsPosition)
+        private GameScreen InitializeGameScreen(IRandomizer randomizer, int levelWidth, int levelHeight, int tileSize, int textSize, Vector2 centeredLevelPosition, Vector2 centeredBrickSpawnPosition, Vector2 statisticsPosition)
         {
             var inputService = new InputService(_eventAggregator);
             var collisionDetectionService = new CollisionDetectionService(_eventAggregator);
             var particleEngine = new ParticleEngine(_eventAggregator, randomizer, new[] { _tileTexture });
-            var levelManager = new LevelManager(_eventAggregator, centeredLevelPosition, _levelHeight, _levelWidth);
+            var levelManager = new LevelManager(_eventAggregator, centeredLevelPosition, levelHeight, levelWidth);
             var brickManager = new BrickManager(_eventAggregator, centeredBrickSpawnPosition);
             var highScoreService = new HighScoreService(_eventAggregator);
-            var userInterfaceService = new UserInterfaceService(_eventAggregator, statisticsPosition, _tileSize, _textTexture,
-                _textSize,
+            var userInterfaceService = new UserInterfaceService(_eventAggregator, statisticsPosition, _textTexture,
+                textSize,
                 Color.Black);
-            var drawEffectService = new DrawEffectService(_eventAggregator, randomizer, _tileTexture, _tileSize, _textTexture, _textSize);
+            var drawEffectService = new DrawEffectService(_eventAggregator, randomizer, _tileTexture, tileSize, _textTexture, textSize);
 
             _controllers = new List<IController>
             {
