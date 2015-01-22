@@ -19,7 +19,7 @@ using IDrawable = PilesOfTiles.Core.IDrawable;
 
 namespace PilesOfTiles.DrawEffects
 {
-    public class DrawEffectService : IController, IUpdatable, IDrawable, IHandle<LevelLoaded>, IHandle<LevelUpdated>, IHandle<RowCleared>, IHandle<BrickCreated>, IHandle<BrickMoved>, IHandle<ParticlesMoved>, IHandle<GameOver>, IHandle<KeyHeld>
+    public class DrawEffectService : IController, IUpdatable, IDrawable, IHandle<LevelLoaded>, IHandle<LevelUpdated>, IHandle<RowCleared>, IHandle<BrickCreated>, IHandle<BrickMoved>, IHandle<BrickCorrected>, IHandle<ParticlesMoved>, IHandle<GameOver>, IHandle<KeyHeld>
     {
         private readonly IEventAggregator _eventAggregator;
         private readonly IRandomizer _randomizer;
@@ -75,7 +75,9 @@ namespace PilesOfTiles.DrawEffects
         public void Handle(RowCleared message)
         {
             _levelTiles =
-                message.Level.Tiles.Select(tile => new Tile(tile.Position, tile.Color, tile.State));
+                message.Level.Tiles.Select(
+                    tile => new ShakyTile(new Tile(tile.Position, tile.Color, tile.State), new Randomizer()))
+                    .ToList();
         }
 
         public void Handle(BrickCreated message)
@@ -86,6 +88,14 @@ namespace PilesOfTiles.DrawEffects
         public void Handle(BrickMoved message)
         {
             _brick = message.Brick;
+        }
+
+        public void Handle(BrickCorrected message)
+        {
+            _levelTiles =
+                message.Level.Tiles.Select(
+                    tile => new ShakyTile(new Tile(tile.Position, tile.Color, tile.State), new Randomizer()))
+                    .ToList();
         }
 
         public void Load()

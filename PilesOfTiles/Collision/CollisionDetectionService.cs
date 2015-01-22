@@ -71,6 +71,12 @@ namespace PilesOfTiles.Collision
                         tile => _level.Tiles.Any(x => x.Position.X == tile.Position.X && x.Position.Y == tile.Position.Y))
                 )
             {
+                _eventAggregator.PublishOnUIThread(new BrickCorrected
+                {
+                    Brick = _brick,
+                    Level = _level
+                });
+
                 switch (action)
                 {
                     case Action.MoveDown:
