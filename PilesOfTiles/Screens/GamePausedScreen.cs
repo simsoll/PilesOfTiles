@@ -12,23 +12,23 @@ namespace PilesOfTiles.Screens
     {
         private IEventAggregator _eventAggregator;
         private Texture2D _textTexture;
+        private readonly Vector2 _centeredTextPosition;
         private int _textSize;
         private Color _textColor;
 
         private string _titleText;
-        private Vector2 _titleTextPosition;
 
         private PixelAlfabet _pixelAlfabet;
 
-        public GamePausedScreen(IEventAggregator eventAggregator, Texture2D textTexture, int textSize, Color textColor)
+        public GamePausedScreen(IEventAggregator eventAggregator, Texture2D textTexture, Vector2 centeredTextPosition, int textSize, Color textColor)
         {
             _eventAggregator = eventAggregator;
             _textTexture = textTexture;
+            _centeredTextPosition = centeredTextPosition;
             _textSize = textSize;
             _textColor = textColor;
 
             _titleText = "Game Paused";
-            _titleTextPosition = new Vector2(50, 50);
 
             _pixelAlfabet = new PixelAlfabet();
         }
@@ -49,7 +49,7 @@ namespace PilesOfTiles.Screens
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            _pixelAlfabet.DrawText(spriteBatch, _titleText, _textTexture, _titleTextPosition, _textSize,
+            _pixelAlfabet.DrawTextCentered(spriteBatch, _titleText, _textTexture, _centeredTextPosition, _textSize,
                 _textColor);
         }
 

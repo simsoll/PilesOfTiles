@@ -13,6 +13,7 @@ namespace PilesOfTiles.Screens
     {
         private IEventAggregator _eventAggregator;
         private Texture2D _textTexture;
+        private readonly Vector2 _centeredTextPosition;
         private int _textSize;
         private Color _textColorSelected;
         private Color _textColorUnselected;
@@ -21,7 +22,6 @@ namespace PilesOfTiles.Screens
         private int _selectedButtonIndex;
 
         private string _titleText;
-        private Vector2 _titleTextPosition;
 
         private const string StartGameButtonTitle = "Start Game";
         private const string HighScoreBoardButtonTitle = "High Score Board";
@@ -29,36 +29,33 @@ namespace PilesOfTiles.Screens
 
         private PixelAlfabet _pixelAlfabet;
 
-        public StartScreen(IEventAggregator eventAggregator, Texture2D textTexture, int textSize, Color textColorSelected,
+        public StartScreen(IEventAggregator eventAggregator, Texture2D textTexture, Vector2 centeredTextPosition, int textSize, Color textColorSelected,
             Color textColorUnselected)
         {
             _eventAggregator = eventAggregator;
             _textTexture = textTexture;
+            _centeredTextPosition = centeredTextPosition;
             _textSize = textSize;
             _textColorSelected = textColorSelected;
             _textColorUnselected = textColorUnselected;
 
             _titleText = "Piles of tiles";
-            _titleTextPosition = new Vector2(50,50);
 
             _buttons = new[]
             {
                 new Button
                 {
                     Title = StartGameButtonTitle,
-                    Position = new Vector2(50, 100),
                     IsSelected = true
                 },
                 new Button
                 {
                     Title = HighScoreBoardButtonTitle,
-                    Position = new Vector2(50, 150),
                     IsSelected = false
                 },
                 new Button
                 {
                     Title = QuitButtonTitle,
-                    Position = new Vector2(50, 200),
                     IsSelected = false
                 }
             };
@@ -84,14 +81,21 @@ namespace PilesOfTiles.Screens
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            _pixelAlfabet.DrawText(spriteBatch, _titleText, _textTexture, _titleTextPosition, _textSize,
+            _pixelAlfabet.DrawTextCentered(spriteBatch, _titleText, _textTexture, _centeredTextPosition + new Vector2(0, -75), _textSize,
                 _textColorSelected);
+
+            var offset = new Vector2(0, 25);
+            var buttonIndex = 1;
 
             foreach (var button in _buttons)
             {
+                var buttonPositionOffset = offset * buttonIndex;
+
                 var color = button.IsSelected ? _textColorSelected : _textColorUnselected;
-                _pixelAlfabet.DrawText(spriteBatch, button.Title, _textTexture, button.Position, _textSize,
+                _pixelAlfabet.DrawTextCentered(spriteBatch, button.Title, _textTexture, _centeredTextPosition + buttonPositionOffset, _textSize,
                     color);
+
+                buttonIndex++;
             }
         }
 
@@ -161,7 +165,6 @@ namespace PilesOfTiles.Screens
         internal class Button
         {
             public string Title { get; set; }
-            public Vector2 Position { get; set; }
             public bool IsSelected { get; set; }
         }
     }

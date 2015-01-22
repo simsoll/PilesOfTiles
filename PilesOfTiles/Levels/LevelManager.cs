@@ -91,6 +91,13 @@ namespace PilesOfTiles.Levels
             {
                 Level = Level
             });
+
+            _difficultyLevel = 1;
+
+            _eventAggregator.PublishOnUIThread(new DifficultyLevelChanged
+            {
+                Value = _difficultyLevel
+            });
         }
 
         public void Handle(GameEnded message)

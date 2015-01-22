@@ -37,9 +37,9 @@ namespace PilesOfTiles.Screens
             _pixelAlfabet = new PixelAlfabet();
 
             _titleText = "High score board";
-            _titleTextPosition = new Vector2(50, 50);
+            _titleTextPosition = centeredTextPosition + new Vector2(0, -150);
 
-            _highScoreStartPosition = new Vector2(50, 100);
+            _highScoreStartPosition = centeredTextPosition + new Vector2(0, -75);
             _highScoreStepPosition = new Vector2(0, 20);
         }
 
@@ -59,7 +59,7 @@ namespace PilesOfTiles.Screens
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            _pixelAlfabet.DrawText(spriteBatch, _titleText, _textTexture, _titleTextPosition, _textSize,
+            _pixelAlfabet.DrawTextCentered(spriteBatch, _titleText, _textTexture, _titleTextPosition, _textSize,
                 _textColor);
 
             var highScores = _highScoreRepository.GetAllHighScores()
@@ -70,10 +70,10 @@ namespace PilesOfTiles.Screens
 
             foreach (var highScore in highScores)
             {
-                var text = string.Format("Score {0} Difficulty {1} Player {2}", highScore.Score,
-                    highScore.DifficultyLevel, highScore.PlayerName);
+                var text = string.Format("{0} - Score {1} Difficulty {2}", highScore.PlayerName, highScore.Score,
+                    highScore.DifficultyLevel);
 
-                _pixelAlfabet.DrawText(spriteBatch, text, _textTexture, basePosition, _textSize,
+                _pixelAlfabet.DrawTextCentered(spriteBatch, text, _textTexture, basePosition, _textSize,
                     _textColor);
 
                 basePosition += _highScoreStepPosition;

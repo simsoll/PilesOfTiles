@@ -29,7 +29,11 @@ namespace PilesOfTiles.Screens
         private string _difficultyLevelText;
         private Vector2 _difficultyLevelPosition;
 
+        private string _actionDescription;
+        private Vector2 _actionDescriptionPosition;
+
         private string _playerName;
+        private string _defaultPlayerName;
         private Vector2 _playerNamePosition;
 
         private PixelAlfabet _pixelAlfabet;
@@ -42,15 +46,18 @@ namespace PilesOfTiles.Screens
             _textSize = textSize;
             _textColor = textColor;
 
-            _titleTextPosition = new Vector2(50, 50);
+            _titleTextPosition = centeredTextPosition + new Vector2(0, -150);
 
-            _highScoreTextPosition = new Vector2(50, 100);
+            _highScoreTextPosition = centeredTextPosition + new Vector2(0, 0);
 
-            _difficultyLevelPosition = new Vector2(50, 150);
+            _difficultyLevelPosition = centeredTextPosition + new Vector2(0, 50);
 
-            _playerNamePosition = new Vector2(50, 300);
+            _actionDescriptionPosition = centeredTextPosition + new Vector2(0, 100);
+
+            _playerNamePosition = centeredTextPosition + new Vector2(0, 125);
 
             _pixelAlfabet = new PixelAlfabet();
+            _defaultPlayerName = "Anonymous";
 
             ResetShownText();
         }
@@ -60,6 +67,7 @@ namespace PilesOfTiles.Screens
             _playerName = "";
             _highScoreText = "High score ";    
             _difficultyLevelText = "Difficulty ";
+            _actionDescription = "Enter player name...";
         }
 
         public void Load()
@@ -79,16 +87,19 @@ namespace PilesOfTiles.Screens
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            _pixelAlfabet.DrawText(spriteBatch, _titleText, _textTexture, _titleTextPosition, _textSize,
+            _pixelAlfabet.DrawTextCentered(spriteBatch, _titleText, _textTexture, _titleTextPosition, _textSize,
                 _textColor);
 
-            _pixelAlfabet.DrawText(spriteBatch, _highScoreText, _textTexture, _highScoreTextPosition, _textSize,
+            _pixelAlfabet.DrawTextCentered(spriteBatch, _highScoreText, _textTexture, _highScoreTextPosition, _textSize,
     _textColor);
 
-            _pixelAlfabet.DrawText(spriteBatch, _difficultyLevelText, _textTexture, _difficultyLevelPosition, _textSize,
+            _pixelAlfabet.DrawTextCentered(spriteBatch, _difficultyLevelText, _textTexture, _difficultyLevelPosition, _textSize,
     _textColor);
 
-            _pixelAlfabet.DrawText(spriteBatch, _playerName, _textTexture, _playerNamePosition, _textSize,
+            _pixelAlfabet.DrawTextCentered(spriteBatch, _actionDescription, _textTexture, _actionDescriptionPosition, _textSize,
+    _textColor);
+
+            _pixelAlfabet.DrawTextCentered(spriteBatch, _playerName, _textTexture, _playerNamePosition, _textSize,
     _textColor);
         }
 

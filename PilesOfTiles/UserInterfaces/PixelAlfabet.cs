@@ -34,7 +34,7 @@ namespace PilesOfTiles.UserInterfaces
 
             foreach (
                 var pixelPlot in
-                    text.Select(letter => _vectorMapDictionary[letter.ToString(CultureInfo.InvariantCulture)]))
+                    text.Select(letter => _vectorMapDictionary[letter.ToString(CultureInfo.InvariantCulture).ToUpperInvariant()]))
             {
                 width += pixelPlot.Width;
                 height = Math.Max(height, pixelPlot.Height);
@@ -66,6 +66,14 @@ namespace PilesOfTiles.UserInterfaces
             }
         }
 
+        public void DrawTextCentered(SpriteBatch spriteBatch, string text, Texture2D texture, Vector2 position, int size,
+            Color color)
+        {
+            var textPixelPlot = TextPixelPlot(text);
+            var offSet = new Vector2(textPixelPlot.Width/2.0f, textPixelPlot.Height/2.0f);
+            DrawText(spriteBatch, text, texture, (position - offSet)*size, size, color);
+        }
+
         private PixelPlot GetPixelPlot(string key)
         {
             return _vectorMapDictionary[key.ToUpper()];
@@ -83,8 +91,20 @@ namespace PilesOfTiles.UserInterfaces
                         Height = 9,
                         Pixels = new List<Vector2>()
                     }
-
-
+                },
+                {
+                    "-",
+                    new PixelPlot
+                    {
+                        Width = 5,
+                        Height = 9,
+                        Pixels = new List<Vector2>
+                        {
+                            new Vector2(1, 4),
+                            new Vector2(2, 4),
+                            new Vector2(3, 4)
+                        }
+                    }
                 },
                 {
                     ".",

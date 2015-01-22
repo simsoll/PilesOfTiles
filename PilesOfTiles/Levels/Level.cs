@@ -22,7 +22,6 @@ namespace PilesOfTiles.Levels
         public Color WallColor { get; private set; }
         public List<ITile> Tiles { get; private set; }
 
-
         public void AddTiles(IEnumerable<ITile> tiles)
         {
             Tiles.AddRange(tiles);

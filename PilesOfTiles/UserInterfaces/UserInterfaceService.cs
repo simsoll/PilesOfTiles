@@ -9,11 +9,10 @@ using IDrawable = PilesOfTiles.Core.IDrawable;
 
 namespace PilesOfTiles.UserInterfaces
 {
-    public class UserInterfaceService : IController, IDrawable, IHandle<GameStarted>, IHandle<ScoreUpdated>, IHandle<DifficultyLevelChanged>
+    public class UserInterfaceService : IController, IDrawable, IHandle<ScoreUpdated>, IHandle<DifficultyLevelChanged>
     {
         private IEventAggregator _eventAggregator;
         private readonly Vector2 _statisticsPosition;
-        private readonly int _tileSize;
         private Texture2D _textTexture;
         private readonly int _textSize;
         private readonly Color _highScoreTextColor;
@@ -21,13 +20,12 @@ namespace PilesOfTiles.UserInterfaces
         private float _score;
         private int _difficultyLevel;
 
-        public UserInterfaceService(IEventAggregator eventAggregator, Vector2 statisticsPosition, int tileSize,
+        public UserInterfaceService(IEventAggregator eventAggregator, Vector2 statisticsPosition,
             Texture2D textTexture, int textSize, Color highScoreTextColor)
         {
             _eventAggregator = eventAggregator;
 
             _statisticsPosition = statisticsPosition;
-            _tileSize = tileSize;
             _textTexture = textTexture;
             _textSize = textSize;
             _highScoreTextColor = highScoreTextColor;
@@ -56,25 +54,17 @@ namespace PilesOfTiles.UserInterfaces
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            DrawStatistic(spriteBatch, _textTexture, "highscore", (int) _score, Vector2.Zero);
-            DrawStatistic(spriteBatch, _textTexture, "difficulty", _difficultyLevel,
-                new Vector2(0, _pixelAlfabet.Height * 2));
+            DrawText(spriteBatch, _textTexture, "highscore", Vector2.Zero);
+            DrawText(spriteBatch, _textTexture, _score.ToString(), new Vector2(0, _pixelAlfabet.Height * 2));
+            DrawText(spriteBatch, _textTexture, "difficulty", new Vector2(0, _pixelAlfabet.Height * 4));
+            DrawText(spriteBatch, _textTexture, _difficultyLevel.ToString(), new Vector2(0, _pixelAlfabet.Height * 6));
         }
 
-        public void DrawStatistic(SpriteBatch spriteBatch, Texture2D texture, string name, int value, Vector2 offset)
+        public void DrawText(SpriteBatch spriteBatch, Texture2D texture, string text, Vector2 offset)
         {
-            var position = _statisticsPosition*_tileSize + offset;
-            var baseValue = "0000000" + value;
-            var baseText = baseValue.Substring(baseValue.Length - 7) + " " + name;
-            var text = baseText.Substring(0);
-
+            var position = _statisticsPosition*_textSize + offset -
+                           new Vector2(_pixelAlfabet.TextPixelPlot(text).Width/2.0f, 0)*_textSize;
             _pixelAlfabet.DrawText(spriteBatch, text, _textTexture, position, _textSize, _highScoreTextColor);
-        }
-
-        public void Handle(GameStarted message)
-        {
-            _score = 0;
-            _difficultyLevel = 1;
         }
     }
 }

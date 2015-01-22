@@ -26,7 +26,7 @@ namespace PilesOfTiles.Particles
 
         private IList<Particle> _particles;
 
-        private Level _level;
+        private IList<Tile> _levelTiles;
         private Brick _brick;
 
         public ParticleEngine(IEventAggregator eventAggregator, IRandomizer randomizer, IList<Texture2D> textures)
@@ -49,18 +49,18 @@ namespace PilesOfTiles.Particles
 
         public void Handle(LevelLoaded message)
         {
-            _level = message.Level;
+            _levelTiles = message.Level.Tiles.Select(x => new Tile(x.Position, x.Color, x.State)).ToList();
         }
 
         public void Handle(LevelUpdated message)
         {
-            _level = message.Level;
+            _levelTiles = message.Level.Tiles.Select(x => new Tile(x.Position, x.Color, x.State)).ToList();
         }
 
         public void Handle(RowCleared message)
         {
             GenerateParticlesAsRowCleared(message.Row);
-            _level = message.Level;
+            _levelTiles = message.Level.Tiles.Select(x => new Tile(x.Position, x.Color, x.State)).ToList();
         }
 
         public void Handle(BrickCreated message)
@@ -89,7 +89,7 @@ namespace PilesOfTiles.Particles
 
         private void GenerateParticlesAsRowCleared(int row)
         {
-            var tiles = _level.Tiles.Where(tile => tile.Position.Y == row && tile.State == State.Removable);
+            var tiles = _levelTiles.Where(tile => tile.Position.Y == row && tile.State == State.Removable);
 
             foreach (var tile in tiles)
             {
@@ -110,10 +110,10 @@ namespace PilesOfTiles.Particles
         {
             var offset = TouchingOffsetFromDirection(direction);
 
-            if (_level.Tiles.Any(x => x.Position == tile.Position + offset))
+            if (_levelTiles.Any(x => x.Position == tile.Position + offset))
             {
                 var levelTile =
-                    _level.Tiles.FirstOrDefault(x => x.Position == tile.Position + offset);
+                    _levelTiles.FirstOrDefault(x => x.Position == tile.Position + offset);
 
 
                 if (levelTile != null)
