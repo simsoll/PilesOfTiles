@@ -10,6 +10,7 @@ using PilesOfTiles.Bricks.Messages;
 using PilesOfTiles.Collision.Messages;
 using PilesOfTiles.Core;
 using PilesOfTiles.Core.Input.Keyboard.Messages;
+using PilesOfTiles.DrawEffects.Messages;
 using PilesOfTiles.Levels.Messages;
 using PilesOfTiles.Particles;
 using PilesOfTiles.Particles.Messages;
@@ -64,6 +65,7 @@ namespace PilesOfTiles.DrawEffects
                     message.Level.Tiles.Select(
                         tile => new ShakyTile(new Tile(tile.Position, tile.Color, tile.State), new Randomizer()))
                         .ToList();
+                _eventAggregator.PublishOnUIThread(new ScreenIsShaking());
             }
             else
             {
@@ -78,6 +80,7 @@ namespace PilesOfTiles.DrawEffects
                 message.Level.Tiles.Select(
                     tile => new ShakyTile(new Tile(tile.Position, tile.Color, tile.State), new Randomizer()))
                     .ToList();
+            _eventAggregator.PublishOnUIThread(new ScreenIsShaking());
         }
 
         public void Handle(BrickCreated message)
@@ -96,6 +99,7 @@ namespace PilesOfTiles.DrawEffects
                 message.Level.Tiles.Select(
                     tile => new ShakyTile(new Tile(tile.Position, tile.Color, tile.State), new Randomizer()))
                     .ToList();
+            _eventAggregator.PublishOnUIThread(new ScreenIsShaking());
         }
 
         public void Load()

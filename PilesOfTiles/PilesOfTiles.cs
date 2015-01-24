@@ -3,7 +3,9 @@ using System;
 using System.Collections.Generic;
 using Caliburn.Micro;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Media;
 using PilesOfTiles.Bricks;
 using PilesOfTiles.Collision;
 using PilesOfTiles.Core;
@@ -17,6 +19,7 @@ using PilesOfTiles.Particles;
 using PilesOfTiles.Randomizers;
 using PilesOfTiles.Screens;
 using PilesOfTiles.Screens.Messages;
+using PilesOfTiles.Sound;
 using PilesOfTiles.UserInterfaces;
 using IDrawable = PilesOfTiles.Core.IDrawable;
 using IScreen = PilesOfTiles.Screens.IScreen;
@@ -32,9 +35,9 @@ namespace PilesOfTiles
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
-        private SpriteFont _font;
         private ProfileService _profileService;
         private KeyboardService _keyboardService;
+        private SoundService _soundService;
 
         private IEventAggregator _eventAggregator;
         private IScreen _screenManager;
@@ -84,6 +87,11 @@ namespace PilesOfTiles
         /// </summary>
         protected override void LoadContent()
         {
+            var backgroundMusic = Content.Load<Song>("Sounds/background.wav");  // Put the name of your song in instead of "song_title"
+            var shakeEffect = Content.Load<SoundEffect>("Sounds/shaky.wav");
+            var particleEffect = Content.Load<SoundEffect>("Sounds/particle.wav");
+            var rowClearedEffect = Content.Load<SoundEffect>("Sounds/row_cleared.wav");
+
             _eventAggregator = new EventAggregator();
             _eventAggregator.Subscribe(this);
 
@@ -99,9 +107,10 @@ namespace PilesOfTiles
 
             // Create a new SpriteBatch, which can be used to draw textures.
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-            _font = Content.Load<SpriteFont>("Default");
             _profileService = new ProfileService(_eventAggregator);
             _keyboardService = new KeyboardService(_eventAggregator, TimeSpan.FromMilliseconds(500));
+            _soundService = new SoundService(_eventAggregator, backgroundMusic, shakeEffect, particleEffect, rowClearedEffect);
+            _soundService.Load();
 
             _tileTexture = GetPlain2DTexture(tileSize);
             _textTexture = GetPlain2DTexture(textSize);
@@ -142,6 +151,7 @@ namespace PilesOfTiles
         protected override void UnloadContent()
         {
             _screenManager.Unload();
+            _soundService.Unload();
         }
 
         /// <summary>
@@ -153,8 +163,8 @@ namespace PilesOfTiles
         {
             _keyboardService.Update(gameTime);
             _screenManager.Update(gameTime);
-
             _profileService.Update(gameTime);
+            _soundService.Update(gameTime);
 
             base.Update(gameTime);
         }

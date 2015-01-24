@@ -118,6 +118,8 @@ namespace PilesOfTiles.Particles
 
                 if (levelTile != null)
                 {
+                    _eventAggregator.PublishOnUIThread(new ParticleCreated());
+
                     var endPointPositions = ParticleEndPointPositionsFromDirection(tile.Position, direction);
                     GenerateParticlesAlong(endPointPositions.Item1, endPointPositions.Item2,
                         new[] { tile.Color, levelTile.Color }, _randomizer.Next(5));
