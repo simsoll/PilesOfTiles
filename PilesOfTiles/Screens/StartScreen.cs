@@ -21,8 +21,6 @@ namespace PilesOfTiles.Screens
         private Button[] _buttons;
         private int _selectedButtonIndex;
 
-        private string _titleText;
-
         private const string StartGameButtonTitle = "Start Game";
         private const string HighScoreBoardButtonTitle = "High Score Board";
         private const string QuitButtonTitle = "Quit";
@@ -38,8 +36,6 @@ namespace PilesOfTiles.Screens
             _textSize = textSize;
             _textColorSelected = textColorSelected;
             _textColorUnselected = textColorUnselected;
-
-            _titleText = "Piles of tiles";
 
             _buttons = new[]
             {
@@ -81,9 +77,6 @@ namespace PilesOfTiles.Screens
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            _pixelAlfabet.DrawTextCentered(spriteBatch, _titleText, _textTexture, _centeredTextPosition + new Vector2(0, -75), _textSize,
-                _textColorSelected);
-
             var offset = new Vector2(0, 25);
             var buttonIndex = 1;
 

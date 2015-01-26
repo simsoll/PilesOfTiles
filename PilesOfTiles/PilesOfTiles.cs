@@ -48,9 +48,12 @@ namespace PilesOfTiles
         private IScreen _highScoreScreen;
 
         private IRandomizer _randomizer;
-        
+
+        private PixelAlfabet _pixelAlfabet;
         private Texture2D _tileTexture;
         private Texture2D _textTexture;
+
+        private Vector2 _centeredTextPosition;
 
         private int _sizeMultiplier = 2;
         private IEnumerable<IController> _controllers;
@@ -96,6 +99,8 @@ namespace PilesOfTiles
             _eventAggregator.Subscribe(this);
 
             _randomizer = new Randomizer();
+            _pixelAlfabet = new PixelAlfabet();
+
 
             var tileSize = _sizeMultiplier*8;
             var textSize = _sizeMultiplier*1;
@@ -117,18 +122,18 @@ namespace PilesOfTiles
 
             var centeredLevelPosition = CenteredPosition(levelWidth, levelHeight, tileSize);
             var centeredBrickSpawnPosition = centeredLevelPosition + new Vector2(levelWidth/2.0f - 1, 0);
-            var centeredTextPosition = CenteredPosition(levelWidth, levelHeight, textSize) + new Vector2(10, 0);
-            var statisticsPosition = centeredTextPosition + new Vector2(0, levelHeight + 125);
+            _centeredTextPosition = CenteredPosition(levelWidth, levelHeight, textSize) + new Vector2(10, 0);
+            var statisticsPosition = _centeredTextPosition + new Vector2(0, levelHeight + 125);
 
             _gameScreen = InitializeGameScreen(_randomizer, levelWidth, levelHeight, tileSize, textSize,
                 centeredLevelPosition, centeredBrickSpawnPosition, statisticsPosition);
 
             var highScoreRepository = new HighScoreRepository(highScoreFilePath);
 
-            _startScreen = new StartScreen(_eventAggregator, _textTexture, centeredTextPosition, textSize, textColor, unSelectedTextColor);
-            _gamePausedScreen = new GamePausedScreen(_eventAggregator, _textTexture, centeredTextPosition, textSize, textColor);
-            _gameEndedScreen = new GameEndedScreen(_eventAggregator, highScoreRepository, _textTexture, centeredTextPosition, textSize, textColor);
-            _highScoreScreen = new HighScoreScreen(_eventAggregator, highScoreRepository, _textTexture, centeredTextPosition, textSize, textColor);
+            _startScreen = new StartScreen(_eventAggregator, _textTexture, _centeredTextPosition, textSize, textColor, unSelectedTextColor);
+            _gamePausedScreen = new GamePausedScreen(_eventAggregator, _textTexture, _centeredTextPosition, textSize, textColor);
+            _gameEndedScreen = new GameEndedScreen(_eventAggregator, highScoreRepository, _textTexture, _centeredTextPosition, textSize, textColor);
+            _highScoreScreen = new HighScoreScreen(_eventAggregator, highScoreRepository, _textTexture, _centeredTextPosition, textSize, textColor);
 
             _screenManager = new ScreenManager(_eventAggregator, _startScreen, _gameScreen, _gamePausedScreen,
                 _gameEndedScreen, _highScoreScreen);
@@ -178,6 +183,8 @@ namespace PilesOfTiles
             GraphicsDevice.Clear(Color.LightGray);
 
             _spriteBatch.Begin();
+
+            _pixelAlfabet.DrawTextCentered(_spriteBatch, "Piles of tiles", _textTexture, _centeredTextPosition - new Vector2(0, 150), 2, Color.Black);
 
             _screenManager.Draw(_spriteBatch);
 //#if DEBUG

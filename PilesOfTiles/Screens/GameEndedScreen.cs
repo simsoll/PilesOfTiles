@@ -46,7 +46,7 @@ namespace PilesOfTiles.Screens
             _textSize = textSize;
             _textColor = textColor;
 
-            _titleTextPosition = centeredTextPosition + new Vector2(0, -150);
+            _titleTextPosition = centeredTextPosition + new Vector2(0, -100);
 
             _highScoreTextPosition = centeredTextPosition + new Vector2(0, 0);
 

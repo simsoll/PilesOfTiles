@@ -37,7 +37,7 @@ namespace PilesOfTiles.Screens
             _pixelAlfabet = new PixelAlfabet();
 
             _titleText = "High score board";
-            _titleTextPosition = centeredTextPosition + new Vector2(0, -150);
+            _titleTextPosition = centeredTextPosition + new Vector2(0, -100);
 
             _highScoreStartPosition = centeredTextPosition + new Vector2(0, -75);
             _highScoreStepPosition = new Vector2(0, 20);
